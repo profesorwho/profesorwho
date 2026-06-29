@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reto PRL: ¿Es nuestra oficina un lugar seguro? - Administración y Finanzas</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para iconos profesionales -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f4f5; /* zinc-100 */
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f4f4f5;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d4d4d8;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #a1a1aa;
+        }
+        /* Estilos específicos para que el conector atraviese los nodos exactamente por el medio */
+        .timeline-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            height: 48px;
+        }
+        .timeline-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background-color: #e4e4e7; /* zinc-200 */
+            transform: translateY(-50%);
+            z-index: 10;
+            border-radius: 2px;
+        }
+        .timeline-progress {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 4px;
+            background-color: #075985; /* sky-800 */
+            transform: translateY(-50%);
+            z-index: 11;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 2px;
+        }
+        .timeline-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            position: relative;
+            z-index: 20;
+        }
+    </style>
+</head>
+<body class="bg-zinc-50 text-zinc-800 min-h-screen flex flex-col antialiased">
+
+    <header class="bg-white border-b border-zinc-200 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row justify-between items-center py-4 space-y-4 lg:space-y-0">
+                <!-- Branding del reto del alumnado -->
+                <div class="flex items-center space-x-4 w-full lg:w-auto">
+                    <div class="p-2.5 bg-sky-950 text-white rounded-xl shadow-md">
+                        <i class="fa-solid fa-shield-halved text-2xl"></i>
+                    </div>
+                    <div class="flex flex-col border-l border-zinc-200 pl-4">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-[10px] font-extrabold tracking-wider text-sky-900 uppercase">Ciclo Formativo de Grado Superior</span>
+                            <span class="px-2 py-0.5 text-[9px] font-bold bg-zinc-100 text-zinc-600 rounded-full">Curso 2026-2027</span>
+                        </div>
+                        <h1 class="text-base font-extrabold text-zinc-900 tracking-tight flex items-center gap-1.5">
+                            <span>Reto: ¿Es nuestra oficina un lugar seguro?</span>
+                        </h1>
+                        <p class="text-[11px] text-zinc-500 font-medium">1º Administración y Finanzas &bull; IPE I &bull; 40 Horas (20 Sesiones)</p>
+                    </div>
+                </div>
+
+                <!-- Navegación: Tres pestañas simplificadas -->
+                <nav class="flex space-x-1 bg-zinc-100 p-1 rounded-xl w-full lg:w-auto overflow-x-auto custom-scrollbar">
+                    <button onclick="switchTab('mision')" id="tab-mision" class="tab-btn px-5 py-2.5 text-xs font-bold rounded-lg transition-all duration-200 bg-white text-sky-950 shadow-xs flex items-center space-x-2 whitespace-nowrap">
+                        <i class="fa-solid fa-compass text-sky-900"></i>
+                        <span>Misión del Reto</span>
+                    </button>
+                    <button onclick="switchTab('cronograma')" id="tab-cronograma" class="tab-btn px-5 py-2.5 text-xs font-bold rounded-lg transition-all duration-200 text-zinc-650 hover:text-sky-950 flex items-center space-x-2 whitespace-nowrap">
+                        <i class="fa-solid fa-calendar-days text-zinc-550"></i>
+                        <span>Ruta del Reto</span>
+                    </button>
+                    <button onclick="switchTab('evaluacion')" id="tab-evaluacion" class="tab-btn px-5 py-2.5 text-xs font-bold rounded-lg transition-all duration-200 text-zinc-650 hover:text-sky-950 flex items-center space-x-2 whitespace-nowrap">
+                        <i class="fa-solid fa-graduation-cap text-zinc-550"></i>
+                        <span>Evaluación y Evidencias</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- TAB 1: MISION DEL RETO -->
+        <section id="content-mision" class="tab-content block space-y-6">
+            <div class="bg-white border border-zinc-200 rounded-2xl p-6 sm:p-8 shadow-sm relative overflow-hidden">
+                <div class="absolute right-0 top-0 h-full w-1/3 bg-gradient-to-l from-sky-50/50 to-transparent pointer-events-none hidden lg:block"></div>
+                <div class="w-full">
+                    <span class="text-xs font-extrabold text-sky-950 tracking-wider uppercase bg-sky-100/70 px-3 py-1 rounded-md">Proyecto de Prevención Activa</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-zinc-900 tracking-tight mt-3 mb-4">¿Estáis preparados para ser Agentes del Cambio?</h2>
+                    <p class="text-zinc-650 text-sm leading-relaxed mb-6">
+                        Como estudiantes de <strong>Administración y Finanzas</strong>, os convertiréis en técnicos de prevención de vuestro centro. Vuestra misión principal es realizar una <strong>auditoría física de riesgos laborales</strong> en los espacios de trabajo, evaluando la probabilidad e impacto de daños, analizando la cultura preventiva y proponiendo un <strong>Plan de Prevención</strong> adaptado, viable y estructurado conforme a la normativa vigente.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="flex items-center space-x-2.5 px-3 py-2.5 bg-zinc-50 border border-zinc-100 rounded-lg text-xs font-semibold text-zinc-700">
+                            <i class="fa-solid fa-user-group text-sky-900 text-base shrink-0"></i>
+                            <span>Equipos Cooperativos (4 Personas)</span>
+                        </div>
+                        <div class="flex items-center space-x-2.5 px-3 py-2.5 bg-zinc-50 border border-zinc-100 rounded-lg text-xs font-semibold text-zinc-700">
+                            <i class="fa-solid fa-clock text-sky-900 text-base shrink-0"></i>
+                            <span>40 Horas / 20 Sesiones Totales</span>
+                        </div>
+                        <div class="flex items-center space-x-2.5 px-3 py-2.5 bg-zinc-50 border border-zinc-100 rounded-lg text-xs font-semibold text-zinc-700">
+                            <i class="fa-solid fa-file-invoice text-sky-900 text-base shrink-0"></i>
+                            <span>Pondera 40% de la Nota de IPE I</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Oficina del desastre - Portada de Cómic -->
+            <div class="bg-white border border-zinc-200 rounded-2xl p-5 shadow-sm">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-sm font-bold text-zinc-900 flex items-center gap-1.5">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-600"></i>
+                        <span>Oficinas del Desastre S.A. (Homenaje a Ibáñez y Vázquez)</span>
+                    </h3>
+                    <span class="text-[10px] font-bold text-zinc-400 bg-zinc-100 px-2 py-0.5 rounded">Inspiración del Reto</span>
+                </div>
+                <div class="rounded-xl overflow-hidden border border-zinc-100 relative bg-zinc-100">
+                    <img src="https://i.postimg.cc/bNHb5Pr5/2027-AFI-1-IPE1-Imagen-portada-larga.png" alt="Oficinas del Desastre S.A." class="w-full h-auto object-cover" onerror="this.src='https://placehold.co/1200x500/0c4a6e/ffffff?text=Oficinas+del+Desastre+S.A.'">
+                    <div class="absolute bottom-2 right-2 bg-zinc-900/80 text-white text-[10px] px-2.5 py-1 rounded font-mono">
+                        Identificad los riesgos reales en vuestro entorno administrativo
+                    </div>
+                </div>
+                <p class="text-zinc-550 text-[11px] mt-2.5 italic">
+                    ¿Reconocéis los fallos ergonómicos, eléctricos o de seguridad representados en la oficina caótica? Caídas de archivadores, tendidos eléctricos saturados, posturas incorrectas... Vuestra tarea es documentar y corregir situaciones parecidas mediante técnicas y normativas reales de PRL.
+                </p>
+            </div>
+        </section>
+
+        <!-- TAB 2: RUTA DEL RETO -->
+        <section id="content-cronograma" class="tab-content hidden space-y-6">
+            <div class="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+                
+                <!-- Cabecera del Itinerario -->
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center border-b border-zinc-100 pb-4 mb-6">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-zinc-900">Itinerario de Aprendizaje (10 Semanas)</h2>
+                        <p class="text-xs text-zinc-550 mt-1">Sigue el flujo de trabajo síncrono diseñado para estructurar el proyecto sin sorpresas.</p>
+                    </div>
+                    <span class="mt-2 lg:mt-0 px-3 py-1 bg-sky-50 text-sky-950 border border-sky-200 rounded-lg text-xs font-bold flex items-center gap-1.5">
+                        <i class="fa-solid fa-clock"></i>
+                        <span>4 sesiones semanales</span>
+                    </span>
+                </div>
+
+                <!-- LÍNEA DE TIEMPO HORIZONTAL SUPERIOR (Nodos perfectamente atravesados por el medio, 10 hitos completos) -->
+                <div class="mb-8 px-4 relative">
+                    <div class="timeline-wrapper">
+                        <!-- Conectores horizontales de fondo -->
+                        <div class="timeline-line"></div>
+                        <div class="timeline-progress" id="timeline-prog-bar" style="width: 0%;"></div>
+                        
+                        <!-- Nodos circulares indexados (Se desglosan de forma individual del 1 al 10 sin agrupar) -->
+                        <div class="timeline-container">
+                            <button onclick="selectWeek(1)" id="node-wk-1" class="w-10 h-10 rounded-full bg-sky-950 text-white font-extrabold text-xs flex items-center justify-center border-4 border-white shadow-md transition-all duration-350 transform hover:scale-110 focus:outline-none">S1</button>
+                            <button onclick="selectWeek(2)" id="node-wk-2" class="w-10 h-10 rounded-full bg-white text-zinc-500 font-extrabold text-xs flex items-center justify-center border-4 border-zinc-200 shadow-sm transition-all duration-350 transform hover:scale-110 focus:outline-none">S2</button>
+                            <button onclick="selectWeek(3)" id="node-wk-3" class="w-10 h-10 rounded-full bg-white text-zinc-500 font-extrabold text-xs flex items-center justify-center border-4 border-zinc-200 shadow-sm transition-all duration-350 transform hover:scale-110 focus:outline-none">S3</button>
+                            <button onclick="selectWeek(4)" id="node-wk-4" class="w-10 h-10 rounded-full bg-white text-zinc-500 font-extrabold text-xs flex items-center justify-center border-4 border-zinc-200 shadow-sm transition-all duration-350 transform hover:scale-110 focus:outline-none">S4</button>
+                            <button onclick="selectWeek(5)" id="node-wk-5" class="w-10 h-10 rounded-full bg-white text-zinc-500 font-extrabold text-xs flex items-center justify-center border-4 border-zinc-200 shadow-sm transition-all duration-350 transform hover:scale-110 focus:outline-none">S5</button>
+                            <button onclick="selectWeek(6)" id="node-wk-6" class="w-10 h-10 rounded-full bg-white text-zinc-500 font-extrabold text-xs flex items-center justify-center border-4 border-zinc-200 shadow-sm transition-all duration-350 transform hover:scale-110 focus:outline-none">S6</button>
+                            <button onclick="selectWeek(7)" id="node-wk-7" class="w-10 h-10 rounded-full bg-white text-zinc-500 font-extrabold text-xs flex items-center justify-center border-4 border-zinc-200 shadow-sm transition-all duration-350 transform hover:scale-110 focus:outline-none">S7</button>
+                            <button onclick="selectWeek(8)" id="node-wk-8" class="w-10 h-10 rounded-full bg-white text-zinc-500 font-extrabold text-xs flex items-center justify-center border-4 border-zinc-200 shadow-sm transition-all duration-350 transform hover:scale-110 focus:outline-none">S8</button>
+                            <button onclick="selectWeek(9)" id="node-wk-9" class="w-10 h-10 rounded-full bg-white text-zinc-500 font-extrabold text-xs flex items-center justify-center border-4 border-zinc-200 shadow-sm transition-all duration-350 transform hover:scale-110 focus:outline-none">S9</button>
+                            <button onclick="selectWeek(10)" id="node-wk-10" class="w-10 h-10 rounded-full bg-white text-zinc-500 font-extrabold text-xs flex items-center justify-center border-4 border-zinc-200 shadow-sm transition-all duration-350 transform hover:scale-110 focus:outline-none">S10</button>
+                        </div>
+                    </div>
+                    <!-- Etiquetas bajo los nodos de la línea de tiempo -->
+                    <div class="flex justify-between text-[9px] font-bold text-zinc-400 px-1 mt-2 select-none">
+                        <span class="w-12 text-center text-sky-950 font-extrabold" id="node-txt-1">Presentación</span>
+                        <span class="w-12 text-center" id="node-txt-2">Parámetros</span>
+                        <span class="w-12 text-center" id="node-txt-3">Información</span>
+                        <span class="w-12 text-center" id="node-txt-4">Matriz</span>
+                        <span class="w-12 text-center" id="node-txt-5">Alternativas</span>
+                        <span class="w-12 text-center" id="node-txt-6">Auditoría I</span>
+                        <span class="w-12 text-center" id="node-txt-7">Auditoría II</span>
+                        <span class="w-12 text-center" id="node-txt-8">Redacción I</span>
+                        <span class="w-12 text-center" id="node-txt-9">Redacción II</span>
+                        <span class="w-12 text-center" id="node-txt-10">Resultados</span>
+                    </div>
+                </div>
+
+                <!-- Estructura: Listado Izquierda + Detalle Derecha -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-4 border-t border-zinc-100">
+                    <!-- Botonera Lateral de Semanas -->
+                    <div class="lg:col-span-4 space-y-2 max-h-[460px] overflow-y-auto pr-2 custom-scrollbar">
+                        <button onclick="selectWeek(1)" id="btn-wk-1" class="week-btn w-full text-left p-4 rounded-xl border border-sky-300 bg-sky-50/70 transition-all flex items-start gap-3">
+                            <div class="w-7 h-7 rounded-full bg-sky-950 text-white font-extrabold text-xs flex items-center justify-center shrink-0 mt-0.5">S1</div>
+                            <div>
+                                <span class="text-[9px] font-extrabold text-sky-900 uppercase tracking-wider block">Presentación e Identificación</span>
+                                <span class="text-xs font-bold text-zinc-800 block">Formación del Equipo y Misión</span>
+                            </div>
+                        </button>
+                        <button onclick="selectWeek(2)" id="btn-wk-2" class="week-btn w-full text-left p-4 rounded-xl border border-zinc-200 bg-white hover:border-sky-200 transition-all flex items-start gap-3">
+                            <div class="w-7 h-7 rounded-full bg-zinc-200 text-zinc-700 font-extrabold text-xs flex items-center justify-center shrink-0 mt-0.5">S2</div>
+                            <div>
+                                <span class="text-[9px] font-extrabold text-zinc-500 uppercase tracking-wider block">Parámetros de Medición</span>
+                                <span class="text-xs font-bold text-zinc-800 block">¿Qué sabemos y qué medimos?</span>
+                            </div>
+                        </button>
+                        <button onclick="selectWeek(3)" id="btn-wk-3" class="week-btn w-full text-left p-4 rounded-xl border border-zinc-200 bg-white hover:border-sky-200 transition-all flex items-start gap-3">
+                            <div class="w-7 h-7 rounded-full bg-zinc-200 text-zinc-700 font-extrabold text-xs flex items-center justify-center shrink-0 mt-0.5">S3</div>
+                            <div>
+                                <span class="text-[9px] font-extrabold text-zinc-500 uppercase tracking-wider block">Obtener y Organizar</span>
+                                <span class="text-xs font-bold text-zinc-800 block">Investigación de Campo e IA</span>
+                            </div>
+                        </button>
+                        <button onclick="selectWeek(4)" id="btn-wk-4" class="week-btn w-full text-left p-4 rounded-xl border border-zinc-200 bg-white hover:border-sky-200 transition-all flex items-start gap-3">
+                            <div class="w-7 h-7 rounded-full bg-zinc-200 text-zinc-700 font-extrabold text-xs flex items-center justify-center shrink-0 mt-0.5">S4</div>
+                            <div>
+                                <span class="text-[9px] font-extrabold text-zinc-500 uppercase tracking-wider block">Métodos Técnicos</span>
+                                <span class="text-xs font-bold text-zinc-800 block">Establecer Matriz de Gravedad</span>
+                            </div>
+                        </button>
+                        <button onclick="selectWeek(5)" id="btn-wk-5" class="week-btn w-full text-left p-4 rounded-xl border border-zinc-200 bg-white hover:border-sky-200 transition-all flex items-start gap-3">
+                            <div class="w-7 h-7 rounded-full bg-zinc-200 text-zinc-700 font-extrabold text-xs flex items-center justify-center shrink-0 mt-0.5">S5</div>
+                            <div>
+                                <span class="text-[9px] font-extrabold text-zinc-500 uppercase tracking-wider block">Alternativas y Consenso</span>
+                                <span class="text-xs font-bold text-zinc-800 block">Generar Alternativas de Formato</span>
+                            </div>
+                        </button>
+                        <button onclick="selectWeek(6)" id="btn-wk-6" class="week-btn w-full text-left p-4 rounded-xl border border-zinc-200 bg-white hover:border-sky-200 transition-all flex items-start gap-3">
+                            <div class="w-7 h-7 rounded-full bg-zinc-200 text-zinc-700 font-extrabold text-xs flex items-center justify-center shrink-0 mt-0.5">S6</div>
+                            <div>
+                                <span class="text-[9px] font-extrabold text-zinc-500 uppercase tracking-wider block">Auditoría de Campo (I)</span>
+                                <span class="text-xs font-bold text-zinc-800 block">Inspección de las Instalaciones</span>
+                            </div>
+                        </button>
+                        <button onclick="selectWeek(7)" id="btn-wk-7" class="week-btn w-full text-left p-4 rounded-xl border border-zinc-200 bg-white hover:border-sky-200 transition-all flex items-start gap-3">
+                            <div class="w-7 h-7 rounded-full bg-zinc-200 text-zinc-700 font-extrabold text-xs flex items-center justify-center shrink-0 mt-0.5">S7</div>
+                            <div>
+                                <span class="text-[9px] font-extrabold text-zinc-500 uppercase tracking-wider block">Auditoría de Campo (II)</span>
+                                <span class="text-xs font-bold text-zinc-800 block">Toma de Mediciones Físicas</span>
+                            </div>
+                        </button>
+                        <button onclick="selectWeek(8)" id="btn-wk-8" class="week-btn w-full text-left p-4 rounded-xl border border-zinc-200 bg-white hover:border-sky-200 transition-all flex items-start gap-3">
+                            <div class="w-7 h-7 rounded-full bg-zinc-200 text-zinc-700 font-extrabold text-xs flex items-center justify-center shrink-0 mt-0.5">S8</div>
+                            <div>
+                                <span class="text-[9px] font-extrabold text-zinc-500 uppercase tracking-wider block">Planificación y Redacción (I)</span>
+                                <span class="text-xs font-bold text-zinc-800 block">Estructura del Informe de Auditoría</span>
+                            </div>
+                        </button>
+                        <button onclick="selectWeek(9)" id="btn-wk-9" class="week-btn w-full text-left p-4 rounded-xl border border-zinc-200 bg-white hover:border-sky-200 transition-all flex items-start gap-3">
+                            <div class="w-7 h-7 rounded-full bg-zinc-200 text-zinc-700 font-extrabold text-xs flex items-center justify-center shrink-0 mt-0.5">S9</div>
+                            <div>
+                                <span class="text-[9px] font-extrabold text-zinc-500 uppercase tracking-wider block">Planificación y Redacción (II)</span>
+                                <span class="text-xs font-bold text-zinc-800 block">Finalización del Plan de Prevención</span>
+                            </div>
+                        </button>
+                        <button onclick="selectWeek(10)" id="btn-wk-10" class="week-btn w-full text-left p-4 rounded-xl border border-zinc-200 bg-white hover:border-sky-200 transition-all flex items-start gap-3">
+                            <div class="w-7 h-7 rounded-full bg-zinc-200 text-zinc-700 font-extrabold text-xs flex items-center justify-center shrink-0 mt-0.5">S10</div>
+                            <div>
+                                <span class="text-[9px] font-extrabold text-zinc-500 uppercase tracking-wider block">Resultados y Calificación</span>
+                                <span class="text-xs font-bold text-zinc-800 block">Presentación y Autoevaluación</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Panel de Detalles Derecho -->
+                    <div class="lg:col-span-8 bg-zinc-50 border border-zinc-200 rounded-xl p-6 flex flex-col justify-between min-h-[420px]" id="week-detail-panel">
+                        <div>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="px-2.5 py-1 bg-sky-100 text-sky-950 text-[10px] font-extrabold rounded uppercase tracking-wider" id="wk-badge">Semana 1</span>
+                                <span class="text-xs text-zinc-400 font-semibold" id="wk-sessions">4 Sesiones</span>
+                            </div>
+                            <h3 class="text-base font-extrabold text-zinc-900 mb-2" id="wk-title">Fase 0 y 1: Activar el Equipo e Identificación</h3>
+                            <p class="text-zinc-650 text-xs leading-relaxed mb-6" id="wk-desc">
+                                Primer acercamiento a la siniestralidad laboral mediante análisis grupal. Formamos equipos equilibrados de 4 personas con la dinámica de colores de personalidad y firmamos el contrato de equipo para regular compromisos y pautas de convivencia.
+                            </p>
+
+                            <div class="space-y-3 mb-6">
+                                <h4 class="text-[10px] font-extrabold text-zinc-400 uppercase tracking-wider">Actividades Programadas:</h4>
+                                <ul class="space-y-2 text-xs text-zinc-750" id="wk-activities">
+                                    <li class="flex items-start gap-2">
+                                        <i class="fa-solid fa-circle-check text-sky-700 mt-0.5 shrink-0"></i>
+                                        <span>Presentación de la infografía interactiva y la guía del reto.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-zinc-200 pt-4 mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="bg-white p-3.5 rounded-lg border border-zinc-150">
+                                <span class="text-[9px] font-extrabold text-zinc-400 uppercase tracking-wider block mb-1">Recursos Utilizados</span>
+                                <span class="text-xs text-zinc-750 font-medium" id="wk-resources">Fichas de adjetivos, Contrato de equipo.</span>
+                            </div>
+                            <div class="bg-white p-3.5 rounded-lg border border-zinc-150">
+                                <span class="text-[9px] font-extrabold text-zinc-400 uppercase tracking-wider block mb-1">Evidencia Requerida</span>
+                                <span class="text-xs text-sky-900 font-bold" id="wk-evidences">Contrato de Equipo formalizado (Moodle).</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: EVALUACIÓN Y EVIDENCIAS (image_a1f3ac.png exacto) -->
+        <section id="content-evaluacion" class="tab-content hidden space-y-6">
+            
+            <!-- Contenedor Dinámico Interno para Evaluación o Simulador -->
+            <div id="eval-main-view" class="space-y-6 block">
+                <!-- Cabecera de Evaluación -->
+                <div class="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+                    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+                        <div>
+                            <h2 class="text-xl font-extrabold text-zinc-900">¿Cómo serás Evaluado?</h2>
+                            <p class="text-xs text-zinc-550 mt-1">Bajo el modelo ETHAZI, valoramos tanto tus entregas técnicas (80% del reto) como tus competencias y actitud diarias.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1.5 bg-zinc-100 text-zinc-750 rounded-lg text-xs font-bold border border-zinc-200">RA2: 40% Nota del Módulo</span>
+                            <span class="px-3 py-1.5 bg-sky-50 text-sky-950 border border-sky-150 rounded-lg text-xs font-bold">Mínimo obligatorio superar todos los RA</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ejes Formativos de Evaluación -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- EJE G -->
+                    <div class="bg-white border border-zinc-200 rounded-2xl p-6 shadow-xs flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center border-b border-zinc-150 pb-3 mb-4">
+                                <h3 class="font-extrabold text-zinc-900 flex items-center gap-2">
+                                    <span class="w-6 h-6 bg-sky-100 text-sky-900 rounded-lg flex items-center justify-center text-xs font-extrabold">G</span>
+                                    <span>EJE G: Auditoría y Gestión de Riesgos</span>
+                                </h3>
+                                <span class="text-[10px] font-extrabold text-zinc-400 uppercase tracking-wider">Foco Técnico</span>
+                            </div>
+                            <p class="text-zinc-650 text-xs mb-4 text-center italic">Centrado en el análisis de campo, la identificación del peligro en oficinas y la medición real.</p>
+                            
+                            <div class="space-y-3">
+                                <div class="p-3.5 bg-zinc-50 border border-zinc-150 rounded-xl">
+                                    <span class="text-[9px] font-extrabold text-zinc-400 block uppercase">Nivel 1 &bull; CONOCER</span>
+                                    <p class="text-xs text-zinc-750 font-semibold mt-0.5">Identifica peligros físicos evidentes en el aula/oficina de forma asistida.</p>
+                                </div>
+                                <div class="p-3.5 bg-zinc-50 border border-zinc-150 rounded-xl">
+                                    <span class="text-[9px] font-extrabold text-zinc-400 block uppercase">Nivel 2 &bull; COMPRENDER</span>
+                                    <p class="text-xs text-zinc-750 font-semibold mt-0.5">Explica las causas y consecuencias de los riesgos de cara al fomento preventivo.</p>
+                                </div>
+                                <div class="p-3.5 bg-zinc-50 border border-zinc-150 rounded-xl">
+                                    <span class="text-[9px] font-extrabold text-zinc-400 block uppercase">Nivel 3 &bull; APLICAR</span>
+                                    <p class="text-xs text-zinc-750 font-semibold mt-0.5">Realiza de forma autónoma la auditoría física del centro aplicando el checklist.</p>
+                                </div>
+                                <div class="p-3.5 bg-zinc-50 border border-zinc-150 rounded-xl">
+                                    <span class="text-[9px] font-extrabold text-zinc-400 block uppercase">Nivel 4 &bull; EVALUAR</span>
+                                    <p class="text-xs text-zinc-750 font-semibold mt-0.5">Prioriza la gravedad de los riesgos mediante matrices (NTP-330 / INSST).</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-zinc-150 pt-4 mt-6">
+                            <span class="text-[10px] font-extrabold text-sky-950 uppercase tracking-wider block mb-2">EVIDENCIAS CLAVE DEL EJE G</span>
+                            <div class="grid grid-cols-2 gap-2 text-[11px] text-zinc-650">
+                                <span class="flex items-center gap-1.5"><i class="fa-solid fa-camera text-sky-850"></i> Ev. G.4 Registro fotográfico (N1)</span>
+                                <span class="flex items-center gap-1.5"><i class="fa-solid fa-chart-pie text-sky-850"></i> Ev. G.3 Infografía de riesgos (N2)</span>
+                                <span class="flex items-center gap-1.5"><i class="fa-solid fa-list-check text-sky-850"></i> Ev. G.1 Checklist completo (N3)</span>
+                                <span class="flex items-center gap-1.5"><i class="fa-solid fa-calculator text-sky-850"></i> Ev. G.2 Matriz NTP-330 (N4)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- EJE H -->
+                    <div class="bg-white border border-zinc-200 rounded-2xl p-6 shadow-xs flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center border-b border-zinc-150 pb-3 mb-4">
+                                <h3 class="font-extrabold text-zinc-900 flex items-center gap-2">
+                                    <span class="w-6 h-6 bg-sky-100 text-sky-900 rounded-lg flex items-center justify-center text-xs font-extrabold">H</span>
+                                    <span>EJE H: Planificación y Justificación</span>
+                                </h3>
+                                <span class="text-[10px] font-extrabold text-zinc-400 uppercase tracking-wider">Foco Estratégico</span>
+                            </div>
+                            <p class="text-zinc-650 text-xs mb-4 text-center italic">Centrado en la viabilidad de las soluciones correctoras, ergonomía, legalidad y defensa en público.</p>
+                            
+                            <div class="space-y-3">
+                                <div class="p-3.5 bg-zinc-50 border border-zinc-150 rounded-xl">
+                                    <span class="text-[9px] font-extrabold text-zinc-400 block uppercase">Nivel 1 &bull; CONOCER</span>
+                                    <p class="text-xs text-zinc-750 font-semibold mt-0.5">Describe la señalización y actuación básica ante emergencias y evacuación.</p>
+                                </div>
+                                <div class="p-3.5 bg-zinc-50 border border-zinc-150 rounded-xl">
+                                    <span class="text-[9px] font-extrabold text-zinc-400 block uppercase">Nivel 2 &bull; COMPRENDER</span>
+                                    <p class="text-xs text-zinc-750 font-semibold mt-0.5">Relaciona las mejoras propuestas con el confort físico, mental y clima organizativo.</p>
+                                </div>
+                                <div class="p-3.5 bg-zinc-50 border border-zinc-150 rounded-xl">
+                                    <span class="text-[9px] font-extrabold text-zinc-400 block uppercase">Nivel 3 &bull; APLICAR</span>
+                                    <p class="text-xs text-zinc-750 font-semibold mt-0.5">Diseña un Plan de Prevención estructurado asegurando la viabilidad en el centro.</p>
+                                </div>
+                                <div class="p-3.5 bg-zinc-50 border border-zinc-150 rounded-xl">
+                                    <span class="text-[9px] font-extrabold text-zinc-400 block uppercase">Nivel 4 &bull; EVALUAR</span>
+                                    <p class="text-xs text-zinc-750 font-semibold mt-0.5">Defiende de forma ética y justificada sus decisiones de prevención ante un jurado.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-zinc-150 pt-4 mt-6">
+                            <span class="text-[10px] font-extrabold text-sky-950 uppercase tracking-wider block mb-2">EVIDENCIAS CLAVE DEL EJE H</span>
+                            <div class="grid grid-cols-2 gap-2 text-[11px] text-zinc-650">
+                                <span class="flex items-center gap-1.5"><i class="fa-solid fa-pencil text-sky-850"></i> Ev. H.1 Ponderación borrador (N1)</span>
+                                <span class="flex items-center gap-1.5"><i class="fa-solid fa-list-ol text-sky-850"></i> Ev. H.2 Lista de epígrafes (N2)</span>
+                                <span class="flex items-center gap-1.5"><i class="fa-solid fa-file-contract text-sky-850"></i> Ev. H.3 Plan de Prevención (N3)</span>
+                                <span class="flex items-center gap-1.5"><i class="fa-solid fa-comment text-sky-850"></i> Ev. H.4 Elevator Pitch (N4)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botón para alternar e iniciar el Simulador de Nota -->
+                <div class="flex justify-center my-6">
+                    <button onclick="toggleSimulator(true)" class="group relative px-8 py-4 bg-sky-950 hover:bg-sky-900 text-white rounded-xl font-bold text-sm shadow-md transition-all transform hover:-translate-y-0.5 flex items-center space-x-3">
+                        <i class="fa-solid fa-calculator text-lg text-sky-200 group-hover:rotate-12 transition-transform"></i>
+                        <span>Simula tu nota</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+
+                <!-- Paneles de Advertencia (image_a1f3ac.png exacto) -->
+                <div class="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="space-y-2">
+                        <h4 class="font-extrabold text-zinc-900 text-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-triangle-exclamation text-amber-600"></i>
+                            <span>Pérdida de Puntos</span>
+                        </h4>
+                        <p class="text-zinc-550 text-xs leading-relaxed">
+                            <strong>El factor de asistencia:</strong> La nota del reto grupal se multiplica individualmente por vuestro porcentaje de asistencia directa en las sesiones de trabajo. Por ejemplo, si tu grupo obtiene un <strong>7.0</strong> pero has asistido al <strong>80%</strong>, tu nota individual será de <strong>5.6</strong>.
+                        </p>
+                    </div>
+                    <div class="space-y-2">
+                        <h4 class="font-extrabold text-zinc-900 text-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-repeat text-sky-900"></i>
+                            <span>Recuperaciones</span>
+                        </h4>
+                        <p class="text-zinc-550 text-xs leading-relaxed">
+                            Si no se supera la evaluación continua, podréis entregar el proyecto corregido en la <strong>1ª No Continuada</strong>. De persistir el suspenso, se deberá realizar un examen individual completo y un trabajo práctico en la <strong>2ª No Continuada</strong>.
+                        </p>
+                    </div>
+                    <div class="space-y-2">
+                        <h4 class="font-extrabold text-zinc-900 text-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-clipboard-check text-sky-900"></i>
+                            <span>Procedimiento de Revisión</span>
+                        </h4>
+                        <p class="text-zinc-550 text-xs leading-relaxed">
+                            Podréis solicitar la revisión de vuestra nota de evaluación continua en un plazo de <strong>48 horas</strong> hábiles tras su publicación en Moodle, exclusivamente para comprobar errores materiales de suma o ponderaciones.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VISTA INTEGRADA DEL SIMULADOR (Se carga de forma limpia al pulsar "Simula tu nota") -->
+            <div id="eval-simulator-view" class="space-y-6 hidden">
+                <div class="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm flex justify-between items-center">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-zinc-900">Simulador de Éxito del Reto</h2>
+                        <p class="text-xs text-zinc-550 mt-1">Evalúa cada una de tus 8 evidencias para simular con precisión tu calificación final ponderada.</p>
+                    </div>
+                    <button onclick="toggleSimulator(false)" class="px-4 py-2 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold text-xs rounded-lg transition-colors flex items-center space-x-1.5">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Volver a la Rúbrica</span>
+                    </button>
+                </div>
+
+                <!-- Aviso de factores de actitud y comportamiento cualitativo -->
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3 text-xs text-amber-900 shadow-xs">
+                    <i class="fa-solid fa-circle-info text-amber-600 text-lg shrink-0 mt-0.5"></i>
+                    <div>
+                        <strong class="font-bold block mb-1">Aviso de Evaluación Cualitativa:</strong>
+                        <p class="text-amber-800/95 leading-relaxed">
+                            Esta herramienta es una calculadora orientativa. Recuerda que la nota oficial definitiva de tus evidencias puede ser ponderada por factores como el <strong>trabajo diario en el aula, tu actitud e implicación, y la coevaluación de tus compañeros de equipo</strong>.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Zona de Sliders para las 8 Evidencias con rango de 0 a 10 -->
+                    <div class="lg:col-span-8 space-y-6">
+                        
+                        <!-- EJE G: 4 Evidencias de la imagen image_a25d09.png -->
+                        <div class="bg-white border border-zinc-200 rounded-xl p-6 shadow-sm space-y-5">
+                            <h3 class="font-extrabold text-sm text-sky-950 border-b border-zinc-150 pb-2 flex items-center gap-2">
+                                <span class="w-5 h-5 rounded bg-sky-950 text-white text-[11px] font-bold flex items-center justify-center">G</span>
+                                <span>Evidencias del Eje G (Gestión y Auditoría)</span>
+                            </h3>
+
+                            <!-- Ev. G.4 (Nivel 1) -->
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between text-xs font-bold">
+                                    <span class="text-zinc-700">Ev G.4: Registro fotográfico (N1 - Peso: 20%)</span>
+                                    <span class="text-sky-950 font-extrabold" id="lbl-val-g4">5.0 / 10</span>
+                                </div>
+                                <input type="range" min="0" max="10" step="0.5" value="5" oninput="updateCalculator()" id="range-g4" class="w-full h-2 bg-zinc-100 rounded-lg appearance-none cursor-pointer accent-sky-900">
+                                <span class="text-[10px] text-zinc-400 block italic leading-relaxed">Evidencias físicas capturadas en el trabajo de campo.</span>
+                            </div>
+
+                            <!-- Ev. G.3 (Nivel 2) -->
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between text-xs font-bold">
+                                    <span class="text-zinc-700">Ev G.3: Infografía de condiciones (N2 - Peso: 20%)</span>
+                                    <span class="text-sky-950 font-extrabold" id="lbl-val-g3">5.0 / 10</span>
+                                </div>
+                                <input type="range" min="0" max="10" step="0.5" value="5" oninput="updateCalculator()" id="range-g3" class="w-full h-2 bg-zinc-100 rounded-lg appearance-none cursor-pointer accent-sky-900">
+                                <span class="text-[10px] text-zinc-400 block italic leading-relaxed">Presentación visual de riesgos típicos identificados.</span>
+                            </div>
+
+                            <!-- Ev. G.1 (Nivel 3) -->
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between text-xs font-bold">
+                                    <span class="text-zinc-700">Ev G.1: Checklist de auditoría completo (N3 - Peso: 30%)</span>
+                                    <span class="text-sky-950 font-extrabold" id="lbl-val-g1">5.0 / 10</span>
+                                </div>
+                                <input type="range" min="0" max="10" step="0.5" value="5" oninput="updateCalculator()" id="range-g1" class="w-full h-2 bg-zinc-100 rounded-lg appearance-none cursor-pointer accent-sky-900">
+                                <span class="text-[10px] text-zinc-400 block italic leading-relaxed">Lista de comprobación con las mediciones reales de las instalaciones.</span>
+                            </div>
+
+                            <!-- Ev. G.2 (Nivel 4) -->
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between text-xs font-bold">
+                                    <span class="text-zinc-700">Ev G.2: Matriz NTP-330 (N4 - Peso: 30%)</span>
+                                    <span class="text-sky-950 font-extrabold" id="lbl-val-g2">5.0 / 10</span>
+                                </div>
+                                <input type="range" min="0" max="10" step="0.5" value="5" oninput="updateCalculator()" id="range-g2" class="w-full h-2 bg-zinc-100 rounded-lg appearance-none cursor-pointer accent-sky-900">
+                                <span class="text-[10px] text-zinc-400 block italic leading-relaxed">Hoja automatizada de cálculo de probabilidad, gravedad e impacto.</span>
+                            </div>
+                        </div>
+
+                        <!-- EJE H: 4 Evidencias de la imagen image_a25d09.png -->
+                        <div class="bg-white border border-zinc-200 rounded-xl p-6 shadow-sm space-y-5">
+                            <h3 class="font-extrabold text-sm text-sky-950 border-b border-zinc-150 pb-2 flex items-center gap-2">
+                                <span class="w-5 h-5 rounded bg-sky-950 text-white text-[11px] font-bold flex items-center justify-center">H</span>
+                                <span>Evidencias del Eje H (Planificación y Defensa)</span>
+                            </h3>
+
+                            <!-- Ev. H.1 (Nivel 1) -->
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between text-xs font-bold">
+                                    <span class="text-zinc-700">Ev H.1: Ponderación de borrador (N1 - Peso: 20%)</span>
+                                    <span class="text-sky-950 font-extrabold" id="lbl-val-h1">5.0 / 10</span>
+                                </div>
+                                <input type="range" min="0" max="10" step="0.5" value="5" oninput="updateCalculator()" id="range-h1" class="w-full h-2 bg-zinc-100 rounded-lg appearance-none cursor-pointer accent-sky-900">
+                                <span class="text-[10px] text-zinc-400 block italic leading-relaxed">Matriz inicial de ponderación del formato grupal.</span>
+                            </div>
+
+                            <!-- Ev. H.2 (Nivel 2) -->
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between text-xs font-bold">
+                                    <span class="text-zinc-700">Ev H.2: Lista de epígrafes del plan (N2 - Peso: 20%)</span>
+                                    <span class="text-sky-950 font-extrabold" id="lbl-val-h2">5.0 / 10</span>
+                                </div>
+                                <input type="range" min="0" max="10" step="0.5" value="5" oninput="updateCalculator()" id="range-h2" class="w-full h-2 bg-zinc-100 rounded-lg appearance-none cursor-pointer accent-sky-900">
+                                <span class="text-[10px] text-zinc-400 block italic leading-relaxed">Estructura y epígrafes indispensables del plan de prevención.</span>
+                            </div>
+
+                            <!-- Ev. H.3 (Nivel 3) -->
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between text-xs font-bold">
+                                    <span class="text-zinc-700">Ev H.3: Plan de Prevención (N3 - Peso: 30%)</span>
+                                    <span class="text-sky-950 font-extrabold" id="lbl-val-h3">5.0 / 10</span>
+                                </div>
+                                <input type="range" min="0" max="10" step="0.5" value="5" oninput="updateCalculator()" id="range-h3" class="w-full h-2 bg-zinc-100 rounded-lg appearance-none cursor-pointer accent-sky-900">
+                                <span class="text-[10px] text-zinc-400 block italic leading-relaxed">Documento final: Informe de auditoría y plan de prevención completo.</span>
+                            </div>
+
+                            <!-- Ev. H.4 (Nivel 4) -->
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between text-xs font-bold">
+                                    <span class="text-zinc-700">Ev H.4: Elevator Pitch (N4 - Peso: 30%)</span>
+                                    <span class="text-sky-950 font-extrabold" id="lbl-val-h4">5.0 / 10</span>
+                                </div>
+                                <input type="range" min="0" max="10" step="0.5" value="5" oninput="updateCalculator()" id="range-h4" class="w-full h-2 bg-zinc-100 rounded-lg appearance-none cursor-pointer accent-sky-900">
+                                <span class="text-[10px] text-zinc-400 block italic leading-relaxed">Defensa oral de tu propuesta de prevención ante el tribunal.</span>
+                            </div>
+                        </div>
+
+                        <!-- Ponderación de Asistencia -->
+                        <div class="bg-white border border-zinc-200 rounded-xl p-6 shadow-sm space-y-3">
+                            <h3 class="font-extrabold text-sm text-zinc-900">Asistencia Individual Estimada</h3>
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between text-xs font-bold">
+                                    <span class="text-zinc-700">Asistencia Real del Alumno</span>
+                                    <span class="text-sky-950 font-extrabold" id="lbl-val-attendance">100%</span>
+                                </div>
+                                <input type="range" min="50" max="100" step="1" value="100" oninput="updateCalculator()" id="range-attendance" class="w-full h-2 bg-zinc-100 rounded-lg appearance-none cursor-pointer accent-sky-900">
+                                <span class="text-[10px] text-amber-700 font-medium block">
+                                    <i class="fa-solid fa-triangle-exclamation"></i> Tu porcentaje de asistencia actúa directamente como un multiplicador final de tu nota de grupo.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resultados Finales -->
+                    <div class="lg:col-span-4 space-y-6">
+                        <div class="bg-white border border-zinc-200 rounded-xl p-6 shadow-sm flex flex-col justify-between sticky top-24">
+                            <div>
+                                <h3 class="font-extrabold text-sm text-zinc-900 border-b border-zinc-150 pb-2 mb-6">Nota Estimada por Niveles</h3>
+                                
+                                <div class="space-y-4">
+                                    <!-- Nivel 1 (20%) -->
+                                    <div class="p-3 bg-zinc-50 rounded-lg border border-zinc-100">
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-[9px] font-extrabold text-zinc-500 uppercase tracking-wider block">Media Nivel 1 (20%)</span>
+                                            <span class="text-xs font-black text-zinc-750" id="lbl-avg-n1">5.00</span>
+                                        </div>
+                                        <span class="text-[8px] text-zinc-400 block mt-0.5">Promedio de Ev. G.4 y Ev. H.1</span>
+                                    </div>
+
+                                    <!-- Nivel 2 (20%) -->
+                                    <div class="p-3 bg-zinc-50 rounded-lg border border-zinc-100">
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-[9px] font-extrabold text-zinc-500 uppercase tracking-wider block">Media Nivel 2 (20%)</span>
+                                            <span class="text-xs font-black text-zinc-750" id="lbl-avg-n2">5.00</span>
+                                        </div>
+                                        <span class="text-[8px] text-zinc-400 block mt-0.5">Promedio de Ev. G.3 y Ev. H.2</span>
+                                    </div>
+
+                                    <!-- Nivel 3 (30%) -->
+                                    <div class="p-3 bg-zinc-50 rounded-lg border border-zinc-100">
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-[9px] font-extrabold text-zinc-500 uppercase tracking-wider block">Media Nivel 3 (30%)</span>
+                                            <span class="text-xs font-black text-zinc-750" id="lbl-avg-n3">5.00</span>
+                                        </div>
+                                        <span class="text-[8px] text-zinc-400 block mt-0.5">Promedio de Ev. G.1 y Ev. H.3</span>
+                                    </div>
+
+                                    <!-- Nivel 4 (30%) -->
+                                    <div class="p-3 bg-zinc-50 rounded-lg border border-zinc-100">
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-[9px] font-extrabold text-zinc-500 uppercase tracking-wider block">Media Nivel 4 (30%)</span>
+                                            <span class="text-xs font-black text-zinc-750" id="lbl-avg-n4">5.00</span>
+                                        </div>
+                                        <span class="text-[8px] text-zinc-400 block mt-0.5">Promedio de Ev. G.2 y Ev. H.4</span>
+                                    </div>
+
+                                    <!-- Nota de Grupo -->
+                                    <div class="border-t border-zinc-100 pt-4">
+                                        <span class="text-[9px] font-extrabold text-zinc-400 uppercase tracking-wider block">Nota Grupal del Reto (RA2 Ponderado)</span>
+                                        <div class="text-3xl font-black text-zinc-900 tracking-tight" id="lbl-group-grade">5.00</div>
+                                        <span class="text-[10px] text-zinc-500 leading-relaxed block mt-1">Suma ponderada de niveles (N1*20% + N2*20% + N3*30% + N4*30%).</span>
+                                    </div>
+
+                                    <!-- Multiplicador de Asistencia -->
+                                    <div>
+                                        <span class="text-[9px] font-extrabold text-zinc-400 uppercase tracking-wider block">Factor de Asistencia</span>
+                                        <div class="text-xl font-bold text-sky-900" id="lbl-multiplier-factor">x 1.00</div>
+                                    </div>
+
+                                    <!-- Nota Final Individual -->
+                                    <div class="p-4 bg-sky-50 rounded-xl border border-sky-150">
+                                        <span class="text-[9px] font-extrabold text-sky-900 uppercase tracking-wider block">Nota Individual Final (RA2)</span>
+                                        <div class="text-5xl font-black text-sky-950 tracking-tight" id="lbl-final-grade">5.00</div>
+                                        <span class="text-[10px] text-sky-900 block mt-1 font-bold" id="lbl-status-message">Superado con éxito</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer con Propiedad Intelectual -->
+    <footer class="bg-white border-t border-zinc-200 mt-12 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-xs text-zinc-400">
+            <div class="max-w-xl">
+                <p class="text-zinc-500 text-[10px] leading-relaxed text-justify">
+                    <strong>Nota sobre la producción intelectual:</strong> Este recurso ha sido creado mediante un flujo de trabajo de Vibe Coding, utilizando IA como herramienta de asistencia técnica. La autoría intelectual de la metodología, la selección de contenidos, la estructura pedagógica y la supervisión técnica pertenecen a Sergio Gutiérrez Rodríguez. Se ha utilizado IA para optimizar la traducción de estas intenciones a código ejecutable, garantizando la eficiencia y la accesibilidad del recurso.
+                </p>
+            </div>
+
+            <!-- Licencia CC BY-NC-ND 4.0 -->
+            <div class="flex items-center space-x-3 bg-zinc-50 border border-zinc-150 p-3 rounded-lg max-w-sm">
+                <div class="flex items-center space-x-1 shrink-0 text-zinc-500">
+                    <i class="fa-brands fa-creative-commons text-2xl"></i>
+                    <i class="fa-brands fa-creative-commons-by text-xl"></i>
+                    <i class="fa-brands fa-creative-commons-nc text-xl"></i>
+                    <i class="fa-brands fa-creative-commons-nd text-xl"></i>
+                </div>
+                <div>
+                    <span class="text-[10px] font-extrabold text-zinc-600 block">Propiedad Intelectual y Licencia</span>
+                    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es" target="_blank" class="text-[10px] text-sky-900 font-bold hover:underline block">
+                        CC BY-NC-ND 4.0 Internacional
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts Interactivos -->
+    <script>
+        // Sincronización de pestañas generales
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+                content.classList.remove('block');
+            });
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-white', 'text-sky-950', 'shadow-xs');
+                btn.classList.add('text-zinc-650', 'hover:text-sky-950');
+            });
+
+            const activeContent = document.getElementById('content-' + tabId);
+            activeContent.classList.remove('hidden');
+            activeContent.classList.add('block');
+
+            const activeBtn = document.getElementById('tab-' + tabId);
+            activeBtn.classList.add('bg-white', 'text-sky-950', 'shadow-xs');
+            activeBtn.classList.remove('text-zinc-650', 'hover:text-sky-950');
+            
+            // Forzar actualización del cronograma si se accede a esa pestaña
+            if (tabId === 'cronograma') {
+                updateTimelineProgress(currentSelectedWeek);
+            }
+            
+            // Si salimos de evaluación, resetear la vista de evaluación para mostrar la rúbrica primero
+            if (tabId !== 'evaluacion') {
+                toggleSimulator(false);
+            }
+            
+            // Desplazamiento cómodo al inicio
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Alternar visualización del simulador de éxito dentro de la pestaña de evaluación
+        function toggleSimulator(showSimulator) {
+            const mainView = document.getElementById('eval-main-view');
+            const simView = document.getElementById('eval-simulator-view');
+            
+            if (showSimulator) {
+                mainView.classList.add('hidden');
+                mainView.classList.remove('block');
+                simView.classList.remove('hidden');
+                simView.classList.add('block');
+                updateCalculator();
+            } else {
+                simView.classList.add('hidden');
+                simView.classList.remove('block');
+                mainView.classList.remove('hidden');
+                mainView.classList.add('block');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Datos del cronograma (10 semanas completamente individuales sin agrupar)
+        const weeksData = {
+            1: {
+                badge: "Semana 1",
+                sessions: "4 Sesiones",
+                title: "Fase 0 y 1: Activar el Equipo e Identificación",
+                desc: "Primer acercamiento a la siniestralidad laboral mediante análisis grupal. Formamos equipos de aprendizaje de 4 personas con la dinámica de colores de personalidad y firmamos el contrato de equipo para regular compromisos y normas del equipo.",
+                activities: [
+                    "Presentación de la infografía interactiva y la guía del reto.",
+                    "Dinámica cooperativa de selección de colores de personalidad.",
+                    "Firma del contrato social básico y acuerdos de convivencia del grupo.",
+                    "Análisis de situaciones de riesgo elementales."
+                ],
+                resources: "Fichas de adjetivos, Contrato de equipo.",
+                evidences: "Contrato de Equipo formalizado (Moodle)."
+            },
+            2: {
+                badge: "Semana 2",
+                sessions: "4 Sesiones",
+                title: "Fase 2: Parámetros de Medición y Normativa",
+                desc: "Establecer qué se necesita saber y medir para resolver el reto. Buscamos y ordenamos el marco de referencia en materia preventiva general y específico de oficinas con apoyo del asistente de IA.",
+                activities: [
+                    "Búsqueda guiada mediante IA del marco legal aplicable.",
+                    "Identificación preliminar de los organismos de PRL.",
+                    "Clasificación inicial del mapa de conocimientos previos de prevención."
+                ],
+                resources: "Asistente de IA, Buscador de legislación, Guías del INSST.",
+                evidences: "Mapa mental del reto e informe de saberes mínimos."
+            },
+            3: {
+                badge: "Semana 3",
+                sessions: "4 Sesiones",
+                title: "Fase 3: Obtener y Organizar la Información",
+                desc: "Estudiamos la clasificación de las condiciones de trabajo y los riesgos de oficinas, con especial atención a los factores de carga física, ergonómicos y psicosociales (ansiedad).",
+                activities: [
+                    "Debate técnico sobre riesgos ergonómicos de las pantallas de datos.",
+                    "Estudio de condiciones de confort físico en oficinas.",
+                    "Construcción grupal de la hoja de checklist para la inspección."
+                ],
+                resources: "Herramientas colaborativas, Guías de oficina y despachos.",
+                evidences: "Lista de comprobación (checklist) de auditoría validada."
+            },
+            4: {
+                badge: "Semana 4",
+                sessions: "4 Sesiones",
+                title: "Fase 3 (Continuación): Gravedad, Daño y Ponderaciones",
+                desc: "Analizamos el método simplificado de evaluación del INSST (NTP-330). Ponderamos la gravedad de cada riesgo (Ligeramente Dañino, Dañino, Extremadamente Dañino) y su probabilidad de ocurrencia.",
+                activities: [
+                    "Simulación de clasificación de gravedad de accidentes laborales.",
+                    "Construcción de la matriz Excel para automatizar los cálculos de riesgos.",
+                    "Consensuar el índice de impacto de cada peligro en oficinas."
+                ],
+                resources: "Documentación NTP-330, Plantilla Excel/Sheets.",
+                evidences: "Hoja de cálculo de la matriz automatizada por grupo."
+            },
+            5: {
+                badge: "Semana 5",
+                sessions: "4 Sesiones",
+                title: "Fase 4: Alternativas de Formato y Medidas Preventivas",
+                desc: "Puesta en marcha del proceso creativo (brainstorming) sobre las propuestas de prevención de riesgos laborales y definición del formato final que adoptará la auditoría técnica.",
+                activities: [
+                    "Dinámica de lluvia de ideas (Brainstorming) de soluciones viables.",
+                    "Selección de alternativas mediante matriz de ponderación grupal.",
+                    "Estudio de las limitaciones de la normativa y viabilidad."
+                ],
+                resources: "Ideando el formato, almacén de ideas cooperativo.",
+                evidences: "Matriz de ponderación de medidas y formato consensuado."
+            },
+            6: {
+                badge: "Semana 6",
+                sessions: "4 Sesiones",
+                title: "Fase 4 (Ejecución): Trabajo de Campo y Mediciones (I)",
+                desc: "Realización de la primera parte de la auditoría en las instalaciones. El alumnado inspecciona la seguridad estructural de los espacios de oficina asignados utilizando el checklist grupal estructurado.",
+                activities: [
+                    "Trabajo de campo: inspección visual de las instalaciones de oficinas.",
+                    "Cumplimentación de la primera sección de checklist estructurado.",
+                    "Registro fotográfico y recolección preliminar de evidencias de riesgos físicos."
+                ],
+                resources: "Checklist de campo, cámaras o dispositivos móviles.",
+                evidences: "Borrador de checklist y registro fotográfico inicial."
+            },
+            7: {
+                badge: "Semana 7",
+                sessions: "4 Sesiones",
+                title: "Fase 4 (Ejecución): Trabajo de Campo y Mediciones (II)",
+                desc: "Finalización de la auditoría física del centro de trabajo. Toma de mediciones instrumentales detalladas de condiciones ambientales: iluminación, ruidos y confort termo-higrométrico.",
+                activities: [
+                    "Toma de mediciones físicas: luxes de iluminación, ruido ambiental e higrometría.",
+                    "Conclusión del registro fotográfico y catalogación de riesgos.",
+                    "Cumplimentación total de la lista de comprobación de la auditoría."
+                ],
+                resources: "Luxómetros, sonómetros o aplicaciones móviles de medición certificadas.",
+                evidences: "Lista de comprobación (checklist) de auditoría final validada."
+            },
+            8: {
+                badge: "Semana 8",
+                sessions: "4 Sesiones",
+                title: "Fase 4 (Redacción): Desarrollo del Plan de Prevención (I)",
+                desc: "Procesamiento de los datos de campo para elaborar el informe técnico formal. El equipo vuelca los datos en la matriz de probabilidad y gravedad (NTP-330).",
+                activities: [
+                    "Volcado de datos reales recopilados a la matriz de gravedad.",
+                    "Cálculo automatizado del nivel de riesgo para cada factor detectado.",
+                    "Estructuración de los primeros epígrafes del Informe de Auditoría."
+                ],
+                resources: "Computadora, plantilla de cálculo NTP-330.",
+                evidences: "Hoja de cálculo de la matriz de riesgos del grupo."
+            },
+            9: {
+                badge: "Semana 9",
+                sessions: "4 Sesiones",
+                title: "Fase 4 (Redacción): Desarrollo del Plan de Prevención (II)",
+                desc: "Redacción final del plan preventivo. El equipo asocia a cada riesgo detectado una medida correctora viable, redacta las conclusiones generales y el plan de emergencia y evacuación.",
+                activities: [
+                    "Redacción de las medidas preventivas, correctivas y plazos de ejecución.",
+                    "Elaboración del plan de emergencia, señalización y evacuación de la oficina.",
+                    "Consolidación del documento definitivo para su entrega en Moodle."
+                ],
+                resources: "Plantillas de planes de PRL, Guías Técnicas del INSST.",
+                evidences: "Entregable Final: Documento 'Informe de Auditoría y Plan de Prevención'."
+            },
+            10: {
+                badge: "Semana 10",
+                sessions: "4 Sesiones",
+                title: "Fase 5: Presentación de Resultados y Calificación",
+                desc: "Exponemos y defendemos las soluciones planteadas ante el comité evaluador en formato Elevator Pitch de 10 minutos por grupo. Completamos el proceso de autoevaluación y coevaluación del equipo.",
+                activities: [
+                    "Defensa del proyecto y Elevator Pitch del equipo.",
+                    "Ronda de preguntas del jurado y recogida de sugerencias.",
+                    "Rellenar rúbricas de coevaluación grupal e individual."
+                ],
+                resources: "Proyector, rúbricas de defensa en público.",
+                evidences: "Evaluación grupal, autoevaluación e coevaluación en Moodle."
+            }
+        };
+
+        let currentSelectedWeek = 1;
+
+        function selectWeek(weekNum) {
+            currentSelectedWeek = weekNum;
+
+            // Desmarcar botones laterales
+            document.querySelectorAll('.week-btn').forEach(btn => {
+                btn.classList.remove('border-sky-300', 'bg-sky-50/70');
+                btn.classList.add('border-zinc-200', 'bg-white');
+                const badge = btn.querySelector('.rounded-full');
+                if (badge) {
+                    badge.classList.remove('bg-sky-950', 'text-white');
+                    badge.classList.add('bg-zinc-200', 'text-zinc-700');
+                }
+            });
+
+            // Desmarcar todos los 10 nodos circulares individuales
+            const nodes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+            nodes.forEach(n => {
+                const nodeEl = document.getElementById('node-wk-' + n);
+                const txtEl = document.getElementById('node-txt-' + n);
+                if (nodeEl) {
+                    nodeEl.className = "w-10 h-10 rounded-full bg-white text-zinc-500 font-extrabold text-xs flex items-center justify-center border-4 border-zinc-200 shadow-sm transition-all duration-350 transform hover:scale-110 focus:outline-none";
+                }
+                if (txtEl) {
+                    txtEl.className = "w-12 text-center text-zinc-400 font-bold";
+                }
+            });
+
+            // Activar botón lateral seleccionado
+            const activeBtn = document.getElementById('btn-wk-' + weekNum);
+            activeBtn.classList.add('border-sky-300', 'bg-sky-50/70');
+            activeBtn.classList.remove('border-zinc-200', 'bg-white');
+            const activeBadge = activeBtn.querySelector('.rounded-full');
+            if (activeBadge) {
+                activeBadge.classList.add('bg-sky-950', 'text-white');
+                activeBadge.classList.remove('bg-zinc-200', 'text-zinc-700');
+            }
+
+            // Activar nodo superior seleccionado
+            const activeNode = document.getElementById('node-wk-' + weekNum);
+            const activeTxt = document.getElementById('node-txt-' + weekNum);
+            if (activeNode) {
+                activeNode.className = "w-10 h-10 rounded-full bg-sky-950 text-white font-extrabold text-xs flex items-center justify-center border-4 border-white shadow-md transition-all duration-350 transform hover:scale-110 focus:outline-none";
+            }
+            if (activeTxt) {
+                activeTxt.className = "w-12 text-center text-sky-950 font-extrabold";
+            }
+
+            // Actualizar la barra de progreso
+            updateTimelineProgress(weekNum);
+
+            // Cargar datos del panel de detalles
+            const data = weeksData[weekNum];
+            document.getElementById('wk-badge').textContent = data.badge;
+            document.getElementById('wk-sessions').textContent = data.sessions;
+            document.getElementById('wk-title').textContent = data.title;
+            document.getElementById('wk-desc').textContent = data.desc;
+            document.getElementById('wk-resources').textContent = data.resources;
+            document.getElementById('wk-evidences').textContent = data.evidences;
+
+            // Listado de actividades
+            const ul = document.getElementById('wk-activities');
+            ul.innerHTML = '';
+            data.activities.forEach(act => {
+                const li = document.createElement('li');
+                li.className = 'flex items-start gap-2';
+                li.innerHTML = `<i class="fa-solid fa-circle-check text-sky-900 mt-0.5 shrink-0"></i><span>${act}</span>`;
+                ul.appendChild(li);
+            });
+        }
+
+        // Ajustar el conector dinámico horizontal de la línea de tiempo (centrado perfecto de 10 hitos)
+        function updateTimelineProgress(weekNum) {
+            const progBar = document.getElementById('timeline-prog-bar');
+            let percentage = 0;
+            // Se calcula de forma proporcional para 10 nodos (distancia uniforme de 11.11% entre cada paso)
+            percentage = ((weekNum - 1) / 9) * 100;
+            if (progBar) {
+                progBar.style.width = percentage + '%';
+            }
+        }
+
+        // Lógica matemática del Simulador de Nota final (Promedios aritméticos por nivel y posterior ponderación de 0 a 10)
+        function updateCalculator() {
+            // Obtenemos los valores de las 8 evidencias (rango de 0 a 10)
+            const g1 = parseFloat(document.getElementById('range-g1').value);
+            const g2 = parseFloat(document.getElementById('range-g2').value);
+            const g3 = parseFloat(document.getElementById('range-g3').value);
+            const g4 = parseFloat(document.getElementById('range-g4').value);
+
+            const h1 = parseFloat(document.getElementById('range-h1').value);
+            const h2 = parseFloat(document.getElementById('range-h2').value);
+            const h3 = parseFloat(document.getElementById('range-h3').value);
+            const h4 = parseFloat(document.getElementById('range-h4').value);
+
+            const attendance = parseFloat(document.getElementById('range-attendance').value);
+
+            // Actualizamos etiquetas de los sliders
+            document.getElementById('lbl-val-g1').textContent = g1.toFixed(1) + ' / 10';
+            document.getElementById('lbl-val-g2').textContent = g2.toFixed(1) + ' / 10';
+            document.getElementById('lbl-val-g3').textContent = g3.toFixed(1) + ' / 10';
+            document.getElementById('lbl-val-g4').textContent = g4.toFixed(1) + ' / 10';
+
+            document.getElementById('lbl-val-h1').textContent = h1.toFixed(1) + ' / 10';
+            document.getElementById('lbl-val-h2').textContent = h2.toFixed(1) + ' / 10';
+            document.getElementById('lbl-val-h3').textContent = h3.toFixed(1) + ' / 10';
+            document.getElementById('lbl-val-h4').textContent = h4.toFixed(1) + ' / 10';
+
+            document.getElementById('lbl-val-attendance').textContent = attendance + '%';
+
+            // ALGORITMO DE CÁLCULO REQUERIDO:
+            // Las evidencias de cada nivel hacen media aritmética entre ellas:
+            // Nota Nivel 1 = (Ev. G.4 + Ev. H.1) / 2
+            // Nota Nivel 2 = (Ev. G.3 + Ev. H.2) / 2
+            // Nota Nivel 3 = (Ev. G.1 + Ev. H.3) / 2
+            // Nota Nivel 4 = (Ev. G.2 + Ev. H.4) / 2
+            const avgNivel1 = (g4 + h1) / 2;
+            const avgNivel2 = (g3 + h2) / 2;
+            const avgNivel3 = (g1 + h3) / 2;
+            const avgNivel4 = (g2 + h4) / 2;
+
+            // Mostramos los promedios de los niveles en el panel lateral
+            document.getElementById('lbl-avg-n1').textContent = avgNivel1.toFixed(2);
+            document.getElementById('lbl-avg-n2').textContent = avgNivel2.toFixed(2);
+            document.getElementById('lbl-avg-n3').textContent = avgNivel3.toFixed(2);
+            document.getElementById('lbl-avg-n4').textContent = avgNivel4.toFixed(2);
+
+            // Se calcula la del RA ponderando conforme al 20% N1, 20% N2, 30% N3, 30% N4:
+            const groupGrade = (avgNivel1 * 0.20) + (avgNivel2 * 0.20) + (avgNivel3 * 0.30) + (avgNivel4 * 0.30);
+            document.getElementById('lbl-group-grade').textContent = groupGrade.toFixed(2);
+
+            // Factor de asistencia
+            const factor = attendance / 100;
+            document.getElementById('lbl-multiplier-factor').textContent = 'x ' + factor.toFixed(2);
+
+            // Nota final individual
+            const finalGrade = groupGrade * factor;
+            document.getElementById('lbl-final-grade').textContent = finalGrade.toFixed(2);
+
+            // Actualización de estado
+            const msgEl = document.getElementById('lbl-status-message');
+            if (finalGrade >= 5) {
+                msgEl.textContent = "Superado con éxito";
+                msgEl.className = "text-[10px] text-sky-900 block mt-1 font-bold";
+            } else {
+                msgEl.textContent = "Bajo el mínimo de aprobación (5.0)";
+                msgEl.className = "text-[10px] text-red-600 block mt-1 font-bold";
+            }
+        }
+
+        // Inicialización tras cargar el DOM
+        window.onload = function() {
+            selectWeek(1);
+            updateCalculator();
+        }
+    </script>
+</body>
+</html>
