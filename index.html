@@ -705,8 +705,52 @@
     </div>
 </section>
 
+<!-- COOKIE BANNER -->
+<div id="cookie-banner" style="
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 999;
+    background: #1a2635;
+    border-top: 1px solid #1e3a52;
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+    box-shadow: 0 -8px 32px rgba(0,0,0,0.4);
+">
+    <p style="font-size: 0.82rem; color: #94a3b8; margin: 0; max-width: 680px; line-height: 1.6;">
+        Este sitio utiliza recursos de terceros (Google Fonts, Font Awesome, GitHub Pages) que pueden generar cookies técnicas. No utilizamos cookies propias de analítica ni publicidad.
+        <a href="cookies.html" style="color: #38bdf8; text-decoration: none;">Más información</a>
+    </p>
+    <div style="display: flex; gap: 0.75rem; flex-shrink: 0;">
+        <button onclick="acceptCookies()" style="
+            background: #38bdf8; color: #0f1923;
+            border: none; border-radius: 8px;
+            padding: 0.6rem 1.25rem;
+            font-size: 0.82rem; font-weight: 700;
+            cursor: pointer; transition: background 0.2s;
+        ">Aceptar</button>
+        <button onclick="rejectCookies()" style="
+            background: transparent; color: #94a3b8;
+            border: 1px solid #1e3a52; border-radius: 8px;
+            padding: 0.6rem 1.25rem;
+            font-size: 0.82rem; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
+        ">Solo necesarias</button>
+    </div>
+</div>
+
 <footer>
     profesorwho.com &nbsp;·&nbsp; Sergio Gutiérrez &nbsp;·&nbsp; Bilbao, Bizkaia
+    &nbsp;·&nbsp;
+    <a href="aviso-legal.html" style="color: #94a3b8; text-decoration: none; font-size: 0.78rem;">Aviso Legal</a>
+    &nbsp;·&nbsp;
+    <a href="privacidad.html" style="color: #94a3b8; text-decoration: none; font-size: 0.78rem;">Privacidad</a>
+    &nbsp;·&nbsp;
+    <a href="cookies.html" style="color: #94a3b8; text-decoration: none; font-size: 0.78rem;">Cookies</a>
 </footer>
 
 <script>
@@ -721,6 +765,21 @@
         });
     }, { threshold: 0.1 });
     reveals.forEach(el => observer.observe(el));
+
+    // Cookie banner
+    function acceptCookies() {
+        localStorage.setItem('cookieConsent', 'accepted');
+        document.getElementById('cookie-banner').style.display = 'none';
+    }
+    function rejectCookies() {
+        localStorage.setItem('cookieConsent', 'rejected');
+        document.getElementById('cookie-banner').style.display = 'none';
+    }
+    window.addEventListener('load', () => {
+        if (!localStorage.getItem('cookieConsent')) {
+            document.getElementById('cookie-banner').style.display = 'flex';
+        }
+    });
 </script>
 
 </body>
