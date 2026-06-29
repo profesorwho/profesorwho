@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Profesor Who — Portfolio Docente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:        #0f1923;
+            --surface:   #1a2635;
+            --surface2:  #1f2f42;
+            --accent:    #38bdf8;
+            --accent-dim:#075985;
+            --text:      #e2e8f0;
+            --text-muted:#94a3b8;
+            --border:    #1e3a52;
+            --white:     #f0f9ff;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            background: rgba(15,25,35,0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--white);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+        .nav-logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--accent); }
+
+        /* ── HERO ── */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(56,189,248,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(56,189,248,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+        }
+        .hero-glow {
+            position: absolute;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(56,189,248,0.08) 0%, transparent 70%);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+        .hero-content {
+            position: relative;
+            max-width: 800px;
+            text-align: center;
+        }
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(56,189,248,0.1);
+            border: 1px solid rgba(56,189,248,0.2);
+            border-radius: 100px;
+            padding: 0.35rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--accent);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.8rem, 8vw, 5.5rem);
+            font-weight: 700;
+            line-height: 1.0;
+            letter-spacing: -0.03em;
+            color: var(--white);
+            margin-bottom: 0.2rem;
+        }
+        .hero-title .who {
+            color: var(--accent);
+            position: relative;
+            display: inline-block;
+        }
+        .hero-title .who::after {
+            content: '?';
+            position: absolute;
+            top: -0.15em;
+            right: -0.45em;
+            font-size: 0.45em;
+            color: var(--accent);
+            opacity: 0.5;
+            font-weight: 300;
+        }
+        .hero-subtitle {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            font-weight: 400;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.5;
+        }
+        .hero-subtitle strong { color: var(--text); font-weight: 600; }
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            margin-right: 1rem;
+        }
+        .hero-cta:hover { background: var(--white); transform: translateY(-1px); }
+        .hero-cta-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .hero-cta-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* ── SECTIONS ── */
+        section { padding: 5rem 2rem; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .section-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.6rem, 4vw, 2.2rem);
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        .section-divider {
+            width: 40px; height: 3px;
+            background: var(--accent);
+            border-radius: 2px;
+            margin-bottom: 3rem;
+        }
+
+        /* ── SOBRE MÍ ── */
+        #sobre-mi { background: var(--surface); }
+        .sobre-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+        .sobre-text p {
+            color: var(--text-muted);
+            margin-bottom: 1.2rem;
+            font-size: 0.95rem;
+            line-height: 1.75;
+        }
+        .sobre-text p strong { color: var(--text); }
+        .sobre-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .stat-card {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .stat-icon {
+            width: 40px; height: 40px;
+            background: rgba(56,189,248,0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        .stat-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 500; }
+        .stat-value { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; color: var(--white); font-weight: 600; margin-top: 0.1rem; }
+
+        /* ── MATERIALES ── */
+        #materiales { background: var(--bg); }
+        .materiales-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+        .material-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.75rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.25s;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .material-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s;
+        }
+        .material-card:hover { border-color: var(--accent-dim); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+        .material-card:hover::before { transform: scaleX(1); }
+        .material-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(56,189,248,0.08);
+            border: 1px solid rgba(56,189,248,0.15);
+            border-radius: 100px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--accent);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            width: fit-content;
+        }
+        .material-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--white);
+            line-height: 1.3;
+        }
+        .material-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.65;
+            flex: 1;
+        }
+        .material-note {
+            font-size: 0.75rem;
+            color: var(--accent);
+            background: rgba(56,189,248,0.06);
+            border: 1px solid rgba(56,189,248,0.12);
+            border-radius: 8px;
+            padding: 0.6rem 0.75rem;
+            line-height: 1.5;
+        }
+        .material-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border);
+        }
+        .material-module { font-size: 0.75rem; color: var(--text-muted); }
+        .material-arrow { color: var(--accent); font-size: 0.85rem; transition: transform 0.2s; }
+        .material-card:hover .material-arrow { transform: translateX(4px); }
+
+        /* ── EXPERIENCIA ── */
+        #experiencia { background: var(--surface); }
+        .exp-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+        .exp-col-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .timeline { display: flex; flex-direction: column; gap: 1.25rem; }
+        .timeline-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        .timeline-dot {
+            width: 8px; height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            margin-top: 0.45rem;
+            flex-shrink: 0;
+        }
+        .timeline-content { flex: 1; }
+        .timeline-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 0.15rem;
+            line-height: 1.3;
+        }
+        .timeline-org {
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 0.15rem;
+        }
+        .timeline-period {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.4rem;
+        }
+        .timeline-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .badge {
+            display: inline-block;
+            background: rgba(56,189,248,0.08);
+            border: 1px solid rgba(56,189,248,0.15);
+            border-radius: 4px;
+            padding: 0.1rem 0.5rem;
+            font-size: 0.68rem;
+            color: var(--accent);
+            font-weight: 600;
+            margin-left: 0.4rem;
+            vertical-align: middle;
+        }
+
+        /* ── CONTACTO ── */
+        #contacto { background: var(--bg); text-align: center; }
+        .contacto-inner { max-width: 560px; margin: 0 auto; }
+        .contacto-inner p { color: var(--text-muted); margin-bottom: 2.5rem; font-size: 0.95rem; }
+        .contacto-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+        .contacto-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .contacto-btn.primary { background: var(--accent); color: var(--bg); }
+        .contacto-btn.primary:hover { background: var(--white); }
+        .contacto-btn.secondary { border: 1px solid var(--border); color: var(--text-muted); }
+        .contacto-btn.secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 1.5rem 2rem;
+            text-align: center;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 768px) {
+            .sobre-grid, .materiales-grid, .exp-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .nav-links { display: none; }
+            .hero-cta-secondary { display: none; }
+        }
+
+        /* ── SCROLL REVEAL ── */
+        .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .reveal.visible { opacity: 1; transform: none; }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+    <a href="#hero" class="nav-logo">El Profesor <span>Who</span></a>
+    <ul class="nav-links">
+        <li><a href="#sobre-mi">Sobre mí</a></li>
+        <li><a href="#materiales">Materiales</a></li>
+        <li><a href="#experiencia">Experiencia</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+    </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+        <div class="hero-eyebrow">
+            <i class="fa-solid fa-chalkboard-user"></i>
+            Portfolio Docente · FP Vasca
+        </div>
+        <h1 class="hero-title">El Profesor <span class="who">Who</span></h1>
+        <p class="hero-subtitle">
+            Diseño <strong>experiencias de aprendizaje</strong> ancladas en problemas reales.<br>
+            Porque en FP, la competencia se desarrolla <strong>haciendo</strong>, no memorizando.
+        </p>
+        <a href="#materiales" class="hero-cta">
+            <i class="fa-solid fa-rocket"></i> Ver materiales
+        </a>
+        <a href="#contacto" class="hero-cta-secondary">
+            <i class="fa-solid fa-envelope"></i> Contactar
+        </a>
+    </div>
+</section>
+
+<!-- SOBRE MÍ -->
+<section id="sobre-mi">
+    <div class="container">
+        <div class="reveal">
+            <p class="section-label">Quién soy</p>
+            <h2 class="section-title">Docente. Jurista. Formador.</h2>
+            <div class="section-divider"></div>
+        </div>
+        <div class="sobre-grid">
+            <div class="sobre-text reveal">
+                <p>Llevo <strong>más de 20 años</strong> enseñando en Ciclos Formativos de Grado Superior del área de Administración y Gestión, y en programas de formación para el empleo de Lanbide.</p>
+                <p>Por eso diseño mis clases alrededor de <strong>problemas reales</strong>. Mis alumnos no estudian prevención de riesgos laborales en abstracto: auditan un espacio de trabajo real, construyen su propio asistente de IA con la normativa aplicable y elaboran un plan de prevención viable.</p>
+                <p>Trabajo con la metodología <strong>ETHAZI</strong> e integro herramientas de IA generativa como parte del proceso de aprendizaje. He diseñado materiales propios —planificadores de proyectos, dinámicas gamificadas, aplicaciones de evaluación formativa— porque los materiales genéricos no siempre se ajustan a lo que cada grupo necesita.</p>
+                <p>Mi formación combina <strong>ADE, Derecho y ejercicio profesional</strong> como abogado laboralista, lo que me permite aportar contexto jurídico y empresarial real a cada módulo que imparto.</p>
+            </div>
+            <div class="sobre-stats reveal">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <div>
+                        <div class="stat-label">Experiencia docente</div>
+                        <div class="stat-value">+20 años en FP y Lanbide</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                    <div>
+                        <div class="stat-label">Perfil técnico-jurídico</div>
+                        <div class="stat-value">ADE · Derecho · Abogado laboralista</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-brain"></i></div>
+                    <div>
+                        <div class="stat-label">Metodología</div>
+                        <div class="stat-value">ETHAZI · ABR · IA en el aula</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-map-marker-alt"></i></div>
+                    <div>
+                        <div class="stat-label">Ubicación</div>
+                        <div class="stat-value">Bilbao, Bizkaia</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-language"></i></div>
+                    <div>
+                        <div class="stat-label">Idiomas</div>
+                        <div class="stat-value">Castellano · Inglés C1 · Euskera B1</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MATERIALES -->
+<section id="materiales">
+    <div class="container">
+        <div class="reveal">
+            <p class="section-label">Lo que creo</p>
+            <h2 class="section-title">Materiales didácticos propios</h2>
+            <div class="section-divider"></div>
+        </div>
+        <div class="materiales-grid">
+
+            <a href="2027_AFI_1_IPE1_RETO1_Infografia-presentaci%C3%B3n.html" target="_blank" class="material-card reveal">
+                <div class="material-tag"><i class="fa-solid fa-shield-halved"></i> Reto ETHAZI</div>
+                <div class="material-title">¿Es nuestra oficina un lugar seguro?</div>
+                <div class="material-desc">Infografía interactiva de presentación del reto de Prevención de Riesgos Laborales para 1º de AFI. El alumnado audita un espacio real, construye su asistente de IA con normativa aplicable y elabora un Plan de Prevención viable.</div>
+                <div class="material-footer">
+                    <span class="material-module">IPE I · 1º Administración y Finanzas</span>
+                    <i class="fa-solid fa-arrow-right material-arrow"></i>
+                </div>
+            </a>
+
+            <a href="2027_AFI_IPE1_DINAMICA1_CAZADORES.html" target="_blank" class="material-card reveal">
+                <div class="material-tag"><i class="fa-solid fa-gamepad"></i> Dinámica gamificada</div>
+                <div class="material-title">Cazadores de Riesgos</div>
+                <div class="material-desc">Actividad gamificada de identificación de riesgos laborales en oficina. El alumnado analiza una imagen con hotspots interactivos, categoriza riesgos y obtiene una puntuación con rango. Sistema de control docente integrado.</div>
+                <div class="material-note">
+                    <i class="fa-solid fa-circle-info"></i> <strong>Nota:</strong> Esta dinámica tiene dos fases. La segunda se activa con Ctrl+J, atajo reservado al docente para controlar el momento en que el alumnado accede a las soluciones.
+                </div>
+                <div class="material-footer">
+                    <span class="material-module">IPE I · 1º Administración y Finanzas</span>
+                    <i class="fa-solid fa-arrow-right material-arrow"></i>
+                </div>
+            </a>
+
+            <a href="2027_ETHAZI_Planificador.html" target="_blank" class="material-card reveal">
+                <div class="material-tag"><i class="fa-solid fa-diagram-project"></i> Herramienta de gestión</div>
+                <div class="material-title">Planificador ETHAZI con CPM</div>
+                <div class="material-desc">Aplicación de gestión de proyectos diseñada específicamente para equipos de alumnado en metodología ETHAZI. Incluye WBS, diagrama de Gantt, grafo PERT, análisis CPM, asignación por miembro y registro de auditoría de cambios.</div>
+                <div class="material-footer">
+                    <span class="material-module">Transversal · Todos los retos</span>
+                    <i class="fa-solid fa-arrow-right material-arrow"></i>
+                </div>
+            </a>
+
+            <a href="2027_NI_T0_infografia_presentacion.html" target="_blank" class="material-card reveal">
+                <div class="material-tag"><i class="fa-solid fa-globe"></i> Presentación de módulo</div>
+                <div class="material-title">Negociación Internacional</div>
+                <div class="material-desc">Infografía interactiva de presentación del módulo de Negociación Internacional para Ciclos Formativos de Grado Superior. Contextualiza el módulo, sus competencias y su relevancia profesional antes de comenzar el primer reto.</div>
+                <div class="material-footer">
+                    <span class="material-module">Negociación Internacional · CFGS</span>
+                    <i class="fa-solid fa-arrow-right material-arrow"></i>
+                </div>
+            </a>
+
+        </div>
+    </div>
+</section>
+
+<!-- EXPERIENCIA Y FORMACIÓN -->
+<section id="experiencia">
+    <div class="container">
+        <div class="reveal">
+            <p class="section-label">Trayectoria</p>
+            <h2 class="section-title">Experiencia y formación</h2>
+            <div class="section-divider"></div>
+        </div>
+        <div class="exp-grid">
+            <div class="reveal">
+                <div class="exp-col-title"><i class="fa-solid fa-briefcase"></i> &nbsp;Experiencia profesional</div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Profesor CFGS — Administración y Gestión</div>
+                            <div class="timeline-org">Centro de Estudios Mikeldi · Bilbao</div>
+                            <div class="timeline-period">2006 – actualidad</div>
+                            <div class="timeline-desc">AFI, Asistencia a la Dirección, Comercio Internacional y Gestión Comercial. Diseño de programaciones didácticas y materiales propios bajo metodología ETHAZI.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Formador — Formación para el Empleo</div>
+                            <div class="timeline-org">Lanbide – Servicio Vasco de Empleo</div>
+                            <div class="timeline-period">2003 – actualidad</div>
+                            <div class="timeline-desc">RRHH, Nóminas y Seguros Sociales, Contabilidad y Finanzas para PYMEs.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Abogado Laboralista <span class="badge">Ejercicio libre</span></div>
+                            <div class="timeline-org">Bilbao</div>
+                            <div class="timeline-period">2021 – 2024 · Compatible con docencia</div>
+                            <div class="timeline-desc">Asesoramiento laboral, despidos, incapacidades, SMAC y Jurisdicción Social.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Profesor CFGS</div>
+                            <div class="timeline-org">Centro Martínez Aznar · Bilbao</div>
+                            <div class="timeline-period">2005 – 2006</div>
+                            <div class="timeline-desc">Ofimática, Logística y Auditoría.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="reveal">
+                <div class="exp-col-title"><i class="fa-solid fa-graduation-cap"></i> &nbsp;Formación académica</div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Grado en Derecho <span class="badge">2º promoción nacional</span></div>
+                            <div class="timeline-org">UNED · 2019</div>
+                            <div class="timeline-desc">Nota media 8,7. Premio Extraordinario a la Excelencia Académica (media 9,9 en su convocatoria).</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Máster de Acceso a la Abogacía</div>
+                            <div class="timeline-org">UNIR · 2019</div>
+                            <div class="timeline-desc">Nota media 9,1.</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Licenciatura en ADE</div>
+                            <div class="timeline-org">Universidad del País Vasco / EHU · 2003</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Especialista en Gestión Financiera Integral de PYMEs</div>
+                            <div class="timeline-org">Colegio de Economistas Vascos · 2008</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Competencia Digital Docente</div>
+                            <div class="timeline-org">Nivel A2 acreditado · DigCompEdu</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+    <div class="container">
+        <div class="contacto-inner reveal">
+            <p class="section-label">Hablemos</p>
+            <h2 class="section-title">¿Buscas un formador?</h2>
+            <div class="section-divider" style="margin: 1rem auto 2rem;"></div>
+            <p>Si buscas un docente para FP o para programas de formación para el empleo en el área de Administración y Gestión en Bizkaia, estaré encantado de hablar.</p>
+            <div class="contacto-links">
+                <a href="mailto:sgutierrezr@gmail.com" class="contacto-btn primary">
+                    <i class="fa-solid fa-envelope"></i> Enviar email
+                </a>
+                <a href="https://www.linkedin.com/in/sergio-guti%C3%A9rrez-rodr%C3%ADguez-b7118a175/" target="_blank" class="contacto-btn secondary">
+                    <i class="fa-brands fa-linkedin"></i> LinkedIn
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    profesorwho.com &nbsp;·&nbsp; Sergio Gutiérrez &nbsp;·&nbsp; Bilbao, Bizkaia
+</footer>
+
+<script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => entry.target.classList.add('visible'), i * 80);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
