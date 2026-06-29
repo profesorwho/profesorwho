@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planificación Curricular y Alineación del Reto - Negociación Internacional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f7fc; /* Soft slate/blue wash */
+        }
+        .theme-circle {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            outline: none !important;
+            box-shadow: none !important;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .theme-circle:focus, .theme-circle *:focus, .theme-circle:active, .theme-circle *:active {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        .theme-circle.active {
+            transform: scale(1.1);
+        }
+        /* Custom scrollbar matching the pale blue aesthetics */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e0f2fe; /* Light sky blue */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #bae6fd;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #38bdf8;
+        }
+    </style>
+</head>
+<body class="text-slate-800 bg-[#f1f7fc] min-h-screen">
+
+    <header class="bg-[#e0f2fe] text-slate-900 py-6 px-4 md:px-8 border-b border-[#bae6fd]">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="bg-[#eff6ff] text-blue-900 text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border border-[#bfdbfe]">METODOLOGÍA ETHAZI</span>
+                    <span class="text-blue-800 text-sm font-medium">60 Horas | 20 Semanas | FP Grado Superior (Grado D)</span>
+                </div>
+                <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">Planificación Curricular y Alineación del Reto</h1>
+                <p class="text-blue-950 text-sm mt-1 font-medium">Negociación Internacional — Módulo Profesional Clave en Comercio Internacional</p>
+            </div>
+            
+            <!-- View Mode Switcher -->
+            <div class="flex bg-white/60 p-1 rounded-lg border border-[#bae6fd] w-full md:w-auto shadow-sm">
+                <button id="btn-timeline" onclick="switchView('timeline')" class="flex-1 md:flex-none text-xs font-bold px-4 py-2.5 rounded-md transition duration-150 flex items-center justify-center gap-2 text-white bg-blue-700 shadow-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Vista de Línea de Tiempo
+                </button>
+                <button id="btn-macro" onclick="switchView('macro')" class="flex-1 md:flex-none text-xs font-bold px-4 py-2.5 rounded-md transition duration-150 flex items-center justify-center gap-2 text-blue-900 hover:bg-[#eff6ff]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                    </svg>
+                    Mapa Completo (Macro)
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="max-w-7xl mx-auto px-4 md:px-8 mt-6">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-white p-4 rounded-xl shadow-xs border border-[#bae6fd] flex items-center gap-3">
+                <div class="p-3 bg-[#eff6ff] text-blue-800 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400">DURACIÓN TOTAL</span>
+                    <p class="text-sm md:text-base font-bold text-slate-800">60 Horas Lectivas</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-xl shadow-xs border border-[#bae6fd] flex items-center gap-3">
+                <div class="p-3 bg-[#e0f2fe] text-blue-800 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                </div>
+                <div>
+                    <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400">HITOS DE PROYECTO</span>
+                    <p class="text-sm md:text-base font-bold text-slate-800">2 Retos Integrados</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-xl shadow-xs border border-[#bae6fd] flex items-center gap-3">
+                <div class="p-3 bg-[#f0f7ff] text-blue-800 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 2h4M12 2v5M5.07 19H18.9a1 1 0 00.86-1.5l-5.74-9.61V5H10v2.89L4.21 17.5A1 1 0 005.07 19z" />
+                    </svg>
+                </div>
+                <div>
+                    <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400">PLANIFICACIÓN</span>
+                    <p class="text-sm md:text-base font-bold text-slate-800">20 Semanas de Curso</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-xl shadow-xs border border-[#bae6fd] flex items-center gap-3">
+                <div class="p-3 bg-[#e0f2fe] text-blue-800 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                </div>
+                <div>
+                    <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400">ACREDITACIÓN</span>
+                    <p class="text-sm md:text-base font-bold text-slate-800">6 RA / 24 Niveles IL</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 md:px-8 mt-6">
+        <div class="bg-white p-4 rounded-xl shadow-xs border border-[#bae6fd] flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="relative w-full md:max-w-md">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </span>
+                <input id="search-input" oninput="handleSearch()" type="text" placeholder="Buscar por código (ej. C4N1A), tema o concepto..." class="w-full pl-10 pr-4 py-2 border border-[#bae6fd] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition bg-[#f1f7fc]/40">
+            </div>
+            <div class="text-xs font-semibold text-blue-900 bg-[#eff6ff] px-3 py-1.5 rounded-md border border-[#bae6fd]">
+                RESULTADOS ENCONTRADOS: <span id="search-count" class="text-blue-800 font-bold">7 TEMAS</span>
+            </div>
+        </div>
+    </section>
+
+    <main id="view-timeline" class="max-w-7xl mx-auto px-4 md:px-8 py-6 space-y-6">
+        
+        <!-- LINE TIMELINE NAVIGATOR -->
+        <div class="bg-white p-6 rounded-xl shadow-xs border border-[#bae6fd] relative overflow-hidden">
+            <div class="relative w-full pt-4 pb-4">
+                <!-- Connective Timeline Line aligned vertically in the perfect center (48px) -->
+                <div class="absolute top-[48px] left-10 right-10 h-[2px] bg-blue-100 z-0">
+                    <div id="timeline-progress" class="h-full bg-blue-600 transition-all duration-300" style="width: 0%;"></div>
+                </div>
+                
+                <!-- Timeline Navigation Buttons inside a responsive flex layout with padding to avoid scale cuts -->
+                <div class="relative z-10 flex justify-between items-center overflow-x-auto lg:overflow-x-visible gap-2 sm:gap-4 md:gap-6 scrollbar-none pt-3 pb-3 px-2">
+                    <!-- Tema 1 -->
+                    <button onclick="selectTheme(1)" id="theme-btn-1" class="theme-circle active flex flex-col items-center text-center min-w-[70px] sm:min-w-[90px] md:min-w-[100px] focus:outline-none focus-visible:outline-none outline-none select-none group">
+                        <div id="circle-1" class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm bg-blue-600 text-white shadow-md border-2 border-blue-600 transition-all">1</div>
+                        <span class="text-xs font-bold text-slate-800 mt-2">Tema 1</span>
+                        <span class="text-[10px] text-blue-600 font-medium">Semanas 1-2</span>
+                    </button>
+                    <!-- Tema 2 -->
+                    <button onclick="selectTheme(2)" id="theme-btn-2" class="theme-circle flex flex-col items-center text-center min-w-[70px] sm:min-w-[90px] md:min-w-[100px] focus:outline-none focus-visible:outline-none outline-none select-none group">
+                        <div id="circle-2" class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm bg-white text-slate-400 hover:bg-blue-50 border-2 border-blue-100 transition-all">2</div>
+                        <span class="text-xs font-semibold text-slate-500 mt-2">Tema 2</span>
+                        <span class="text-[10px] text-slate-400">Semanas 3-4</span>
+                    </button>
+                    <!-- Tema 3 -->
+                    <button onclick="selectTheme(3)" id="theme-btn-3" class="theme-circle flex flex-col items-center text-center min-w-[70px] sm:min-w-[90px] md:min-w-[100px] focus:outline-none focus-visible:outline-none outline-none select-none group">
+                        <div id="circle-3" class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm bg-white text-slate-400 hover:bg-blue-50 border-2 border-blue-100 transition-all">3</div>
+                        <span class="text-xs font-semibold text-slate-500 mt-2">Tema 3</span>
+                        <span class="text-[10px] text-slate-400">Semanas 5-10</span>
+                    </button>
+                    <!-- Tema 4 -->
+                    <button onclick="selectTheme(4)" id="theme-btn-4" class="theme-circle flex flex-col items-center text-center min-w-[70px] sm:min-w-[90px] md:min-w-[100px] focus:outline-none focus-visible:outline-none outline-none select-none group">
+                        <div id="circle-4" class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm bg-white text-slate-400 hover:bg-blue-50 border-2 border-blue-100 transition-all">4</div>
+                        <span class="text-xs font-semibold text-slate-500 mt-2">Tema 4</span>
+                        <span class="text-[10px] text-slate-400">Semana 11</span>
+                    </button>
+                    <!-- Tema 5 -->
+                    <button onclick="selectTheme(5)" id="theme-btn-5" class="theme-circle flex flex-col items-center text-center min-w-[70px] sm:min-w-[90px] md:min-w-[100px] focus:outline-none focus-visible:outline-none outline-none select-none group">
+                        <div id="circle-5" class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm bg-white text-slate-400 hover:bg-blue-50 border-2 border-blue-100 transition-all">5</div>
+                        <span class="text-xs font-semibold text-slate-500 mt-2">Tema 5</span>
+                        <span class="text-[10px] text-slate-400">Semanas 12-13</span>
+                    </button>
+                    <!-- Tema 6 -->
+                    <button onclick="selectTheme(6)" id="theme-btn-6" class="theme-circle flex flex-col items-center text-center min-w-[70px] sm:min-w-[90px] md:min-w-[100px] focus:outline-none focus-visible:outline-none outline-none select-none group">
+                        <div id="circle-6" class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm bg-white text-slate-400 hover:bg-blue-50 border-2 border-blue-100 transition-all">6</div>
+                        <span class="text-xs font-semibold text-slate-500 mt-2">Tema 6</span>
+                        <span class="text-[10px] text-slate-400">Semanas 14-16</span>
+                    </button>
+                    <!-- Tema 7 -->
+                    <button onclick="selectTheme(7)" id="theme-btn-7" class="theme-circle flex flex-col items-center text-center min-w-[70px] sm:min-w-[90px] md:min-w-[100px] focus:outline-none focus-visible:outline-none outline-none select-none group">
+                        <div id="circle-7" class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm bg-white text-slate-400 hover:bg-blue-50 border-2 border-blue-100 transition-all">7</div>
+                        <span class="text-xs font-semibold text-slate-500 mt-2">Tema 7</span>
+                        <span class="text-[10px] text-slate-400">Semanas 17-20</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SPLIT PANEL FOR DETAILED THEMATIC AND COMPETENCE LAYOUTS -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <div class="lg:col-span-5 space-y-6">
+                
+                <!-- CARD TEMA DETALLE -->
+                <div class="bg-white p-6 rounded-xl shadow-xs border border-[#bae6fd] relative overflow-hidden">
+                    <div class="flex justify-between items-start mb-4">
+                        <span id="dt-semanas" class="bg-[#eff6ff] text-blue-950 text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-[#bfdbfe]">Semanas 1 a 2</span>
+                        <span id="dt-horas" class="text-xs font-bold text-blue-800">6 Horas Lectivas</span>
+                    </div>
+                    <h2 id="dt-titulo" class="text-xl font-bold text-slate-800 mb-4">Tema 1: Introducción al Marketing Internacional y selección de mercados</h2>
+                    
+                    <!-- Accordion container for official syllabus contents -->
+                    <div class="border-t border-blue-100/60 pt-4">
+                        <button onclick="toggleContenidos()" class="flex items-center justify-between w-full text-left text-slate-600 hover:text-slate-800 focus:outline-none">
+                            <span class="text-xs font-bold uppercase tracking-wider text-blue-800">Contenidos del Temario Oficial</span>
+                            <svg id="arrow-contenidos" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div id="contenidos-list" class="mt-3 space-y-2 text-xs text-slate-600 hidden transition-all">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD RETO ETHAZI (Fully pastel-tinted card using #f0f7ff to prevent heavy contrasts) -->
+                <div class="bg-white text-slate-800 p-6 rounded-xl border border-[#bae6fd] relative overflow-hidden shadow-xs">
+                    <span class="text-[10px] font-extrabold uppercase tracking-widest text-blue-800">PROYECTO COLABORATIVO ETHAZI</span>
+                    <h3 id="reto-fase" class="text-base font-extrabold text-blue-950 mt-1 uppercase tracking-wide">FASE 1: Selección de mercado al que internacionalizar</h3>
+                    
+                    <div class="mt-4 border-t border-blue-200/40 pt-4">
+                        <span class="text-[10px] uppercase font-bold text-blue-950 block tracking-wider mb-1">Justificación Técnica y Pedagógica</span>
+                        <p id="reto-justificacion" class="text-xs text-slate-700 leading-relaxed font-normal">
+                            Base del proyecto: Una elección incorrecta del mercado objetivo arruina cualquier estrategia posterior...
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT SECTION: DYNAMIC RESULTS OF LEARNING & THE EXACT "RAMPA DE LOGRO" SELECTORS -->
+            <div class="lg:col-span-7">
+                <div class="bg-white p-6 rounded-xl shadow-xs border border-[#bae6fd] h-full">
+                    <div class="border-b border-[#e0f2fe] pb-4 mb-6">
+                        <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 bg-blue-700 rounded-full animate-pulse"></span>
+                            Resultados de Aprendizaje y Niveles de Logro Intervinientes
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">
+                            Haz clic en los botones de rampa de logro correspondientes para explorar sus niveles específicos. Solo se muestran los niveles que intervienen activamente en este tema.
+                        </p>
+                    </div>
+
+                    <!-- Dynamic container with custom interactive rampa de logro indicators -->
+                    <div id="ra-container" class="space-y-6">
+                        <!-- Injected Dynamically by Javascript -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+
+    <!-- VISTA 2: MAPA COMPLETO (MACRO) -->
+    <main id="view-macro" class="max-w-7xl mx-auto px-4 md:px-8 py-6 hidden">
+        <div class="bg-white rounded-xl shadow-xs border border-[#bae6fd] overflow-hidden">
+            <div class="p-6 border-b border-[#e0f2fe]">
+                <h2 class="text-lg font-bold text-slate-800">Mapa Curricular Integrado</h2>
+                <p class="text-xs text-slate-500 mt-1">Visualiza de manera global la interconexión entre la temporalidad, el reto práctico y los indicadores de logro requeridos en el aula.</p>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="bg-[#e0f2fe]/60 border-b border-[#bae6fd]">
+                            <th class="p-4 font-bold text-slate-900 uppercase tracking-wider w-[18%]">Tema y Cronograma</th>
+                            <th class="p-4 font-bold text-slate-900 uppercase tracking-wider w-[22%]">Fase del Reto (ETHAZI)</th>
+                            <th class="p-4 font-bold text-slate-900 uppercase tracking-wider w-[42%]">Resultados de Aprendizaje e Indicadores de Logro</th>
+                            <th class="p-4 font-bold text-slate-900 uppercase tracking-wider w-[18%]">Justificación Técnica</th>
+                        </tr>
+                    </thead>
+                    <tbody id="macro-table-body" class="divide-y divide-slate-100">
+                        <!-- Injected Dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="max-w-7xl mx-auto py-10 px-4 border-t border-[#bae6fd]/60 mt-12 text-slate-500">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="text-left max-w-3xl space-y-2">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700">Reconocimiento de Autoría Intelectual</h4>
+                <p class="text-[11px] leading-relaxed">
+                    <strong>Nota sobre la producción intelectual:</strong> Este recurso ha sido creado mediante un flujo de trabajo de <em>Vibe Coding</em>, utilizando IA como herramienta de asistencia técnica. La autoría intelectual de la metodología, la selección de contenidos, la estructura pedagógica y la supervisión técnica pertenecen de forma exclusiva a <strong class="text-blue-950 font-extrabold">Sergio Gutiérrez Rodríguez</strong>. Se ha utilizado IA para optimizar la traducción de estas intenciones a código ejecutable, garantizando la eficiencia y la accesibilidad del recurso.
+                </p>
+                <div class="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-wider">
+                    MÓDULO DE NEGOCIACIÓN INTERNACIONAL — FP GRADO SUPERIOR BAJO MODELO DE ALTO RENDIMIENTO ETHAZI
+                </div>
+            </div>
+            
+            <div class="flex flex-col items-center md:items-end gap-2 shrink-0">
+                <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es" target="_blank" rel="noopener noreferrer" class="hover:opacity-85 transition-opacity">
+                    <img src="https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by-nc-nd.svg" alt="Licencia Creative Commons BY-NC-ND 4.0" class="h-9 w-auto">
+                </a>
+                <span class="text-[10px] font-semibold text-slate-400">CC BY-NC-ND 4.0 Internacional</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const TEMAS_DB = {
+            1: {
+                id: 1,
+                semanas: "Semanas 1 y 2",
+                horas: "6 Horas Lectivas",
+                titulo: "Tema 1: Nociones introductorias de Negociación Internacional",
+                retoFase: "RETO 1 - FASE 1: Lanzamiento y Análisis del Entorno",
+                justificacion: "Durante el lanzamiento del Reto 1, los alumnos se organizan en equipos y asumen roles estratégicos de matriz vasca o socio local. Para fundamentar el proyecto, deben investigar barreras comerciales, físicas y legales del país de destino utilizando bases de datos oficiales (ICEX, etc.), consolidando de forma práctica la preparación analítica previa a cualquier mesa de negociación.",
+                contenidos: [
+                    "<strong>1.a. La negociación internacional como comunicación global:</strong>",
+                    "• i. Análisis de los efectos de la globalización en el ámbito empresarial.",
+                    "• ii. Implicaciones de la globalización en el comportamiento organizativo.",
+                    "• iii. Concepto y características esenciales de la negociación internacional.",
+                    "• iv. Diferencias básicas entre negociación de origen y exterior.",
+                    "<strong>1.b. Análisis del entorno:</strong>",
+                    "• i. Motivaciones y obstáculos para la expansión hacia otros mercados.",
+                    "• ii. Factores condicionantes del desarrollo a nivel externo.",
+                    "• iii. Factores condicionantes a nivel interno y poder negociador.",
+                    "<strong>1.c. Organismos especializados de apoyo a la exportación:</strong>",
+                    "• i. Instituciones supranacionales promotoras del comercio.",
+                    "• ii. Instituciones nacionales dedicadas al comercio (ICEX, etc.)."
+                ],
+                // Organized specifically to allow custom select indicators active in each theme
+                activeIndicators: {
+                    "RA 1": {
+                        titulo: "Selecciona clientes y/o proveedores potenciales de las fuentes de información, analizando sus condiciones comerciales",
+                        levels: {
+                            "N1": {
+                                code: "C4N1A",
+                                label: "Nivel N1 - Básico",
+                                text: "Identifica los principales elementos, etapas y variables de un proceso de negociación internacional mediante la lectura de manuales técnicos para comprender el marco general de los intercambios comerciales exteriores."
+                            }
+                        }
+                    },
+                    "RA 4": {
+                        titulo: "Interpreta la normativa y usos habituales que regulan la contratación internacional, analizando su repercusión en las operaciones",
+                        levels: {
+                            "N2": {
+                                code: "C4N2D",
+                                label: "Nivel N2 - Intermedio",
+                                text: "Diferencia las implicaciones jurídicas de las distintas figuras de colaboración internacional (tales como contratos de agencia, distribución o alianzas de empresas compartidas) comparando las obligaciones, las responsabilidades y los niveles de riesgo de cada modalidad."
+                            }
+                        }
+                    }
+                }
+            },
+            2: {
+                id: 2,
+                semanas: "Semanas 3 y 4",
+                horas: "6 Horas Lectivas",
+                titulo: "Tema 2: El proceso de comunicación en las relaciones internacionales",
+                retoFase: "RETO 1 - FASE 2: Toma de Contacto y Planificación de Agenda",
+                justificacion: "Fase de comunicación escrita e interactiva en el Reto 1. Los equipos redactan cartas de intenciones y correos de presentación formal respetando el canal elegido. Diseñan la agenda del viaje de negocios, estiman presupuestos operativos y adaptan el protocolo a la cultura de destino (saludos, tiempos, uso de TICs).",
+                contenidos: [
+                    "<strong>2.1. La comunicación como instrumento de relación y consolidación:</strong>",
+                    "• 2.1.1. Elementos básicos del proceso de comunicación comercial.",
+                    "• 2.1.2. El proceso en el ámbito de la negociación internacional.",
+                    "• 2.1.3. Tipologías o alternativas de comunicación (verbal, no verbal, etc.).",
+                    "<strong>2.2. Medios y sistemas de comunicación aplicables:</strong>",
+                    "• 2.2.1. El correo convencional y la carta comercial formal.",
+                    "• 2.2.2. La comunicación telefónica eficaz en exportación.",
+                    "• 2.2.3. La comunicación online: el correo electrónico corporativo.",
+                    "<strong>2.3. Instrumentos esenciales para las relaciones:</strong>",
+                    "• 2.3.1. Elaboración del presupuesto comercial operativo.",
+                    "• 2.3.2. Protocolo internacional y etiqueta en los negocios.",
+                    "<strong>2.4. TICs y soportes informáticos:</strong>",
+                    "• Sistemas de software para la confección y envío formal de documentos comerciales."
+                ],
+                activeIndicators: {
+                    "RA 3": {
+                        titulo: "Diseña el proceso de negociación proponiendo los términos más ventajosos para la organización",
+                        levels: {
+                            "N1": {
+                                code: "C4N1C",
+                                label: "Nivel N1 - Básico",
+                                text: "Reconoce las principales técnicas de comunicación, argumentación y objeción comercial utilizando recursos formativos para asimilar los fundamentos de la persuasión en el ámbito de las ventas exteriores."
+                            }
+                        }
+                    },
+                    "RA 1": {
+                        titulo: "Selecciona clientes y/o proveedores potenciales de las fuentes de información, analizando sus condiciones comerciales",
+                        levels: {
+                            "N3": {
+                                code: "C4N3A",
+                                label: "Nivel N3 - Avanzado",
+                                text: "Planifica la estrategia de acercamiento y comunicación con un operador global adaptando el protocolo de negociación al contexto cultural específico del país de destino durante la resolución de un reto simulado."
+                            }
+                        }
+                    }
+                }
+            },
+            3: {
+                id: 3,
+                semanas: "Semanas 5 a 10",
+                horas: "18 Horas Lectivas",
+                titulo: "Tema 3: La negociación internacional como proceso de comunicación",
+                retoFase: "RETO 1 - FASE 3: Negociación, Conflicto de Intereses y Consenso",
+                justificacion: "El núcleo práctico del Reto 1. Tras preparar la estrategia comercial (G-I-P, MAAN) en la W5, se abren las mesas de negociación en la W6. En la W7, el profesorado introduce de forma simulada un conflicto de intereses ético o cultural (ej. prácticas laborales o medioambiente). Los alumnos deben aplicar asertividad para desbloquear las posturas y formalizar el acuerdo final en la W9.",
+                contenidos: [
+                    "<strong>3.1. Margen de negociación:</strong> Concepto esencial de éxito en el desarrollo del comercio exterior.",
+                    "<strong>3.2. El proceso de negociación internacional paso a paso:</strong>",
+                    "• 3.2.1. Toma de contacto inicial.",
+                    "• 3.2.2. Preparación técnica y establecimiento de objetivos estratégicos.",
+                    "• 3.2.3. Desarrollo operativo de las reuniones de negocios.",
+                    "• 3.2.4. Consolidación, cierre y establecimiento formal de acuerdos.",
+                    "<strong>3.3. Técnicas y tácticas de negociación internacional:</strong>",
+                    "• 3.3.1. Negociación por confrontation | 3.3.2. Negociación subordinada.",
+                    "• 3.3.3. Negociación por inacción | 3.3.4. Negociación razonada.",
+                    "• 3.3.5. Negociación colaborativa (Enfoque Win-Win).",
+                    "<strong>3.4. La importancia de la cultura y estilos nacionales:</strong>",
+                    "• 3.4.1. Estilo anglosajón | 3.4.2. Estilo francés | 3.4.3. Estilo alemán.",
+                    "• 3.4.4. Estilo asiático (Japón, Corea del Sur y China).",
+                    "• 3.4.5. Estilo norteamericano | 3.4.6. Estilo latinoamericano.",
+                    "• 3.4.7. Elementos clave para la adaptación del negociador al contexto local."
+                ],
+                activeIndicators: {
+                    "RA 1": {
+                        titulo: "Selecciona clientes y/o proveedores potenciales de las fuentes de información, analizando sus condiciones comerciales",
+                        levels: {
+                            "N2": {
+                                code: "C4N2A",
+                                label: "Nivel N2 - Intermedio",
+                                text: "Distingue los diferentes estilos y protocolos de negociación comparando las características culturales, los valores sociales y las costumbres comerciales de los países de los operadores económicos implicados."
+                            },
+                            "N4": {
+                                code: "C4N4A",
+                                label: "Nivel N4 - Excelente",
+                                text: "Evalúa de forma crítica la influencia del factor cultural en situaciones complejas de negociación proponiendo soluciones y alternativas de comunicación asertiva para reconducir posibles bloqueos o malentendidos entre las partes."
+                            }
+                        }
+                    },
+                    "RA 3": {
+                        titulo: "Diseña el proceso de negociación proponiendo los términos más ventajosos para la organización",
+                        levels: {
+                            "N2": {
+                                code: "C4N2C",
+                                label: "Nivel N2 - Intermedio",
+                                text: "Asocia el uso de diferentes tácticas de negociación (tales como las de carácter competitivo o las colaborativas) analizando las posiciones de poder, las necesidades del interlocutor y los objetivos comerciales de la propia empresa."
+                            },
+                            "N3": {
+                                code: "C4N3C",
+                                label: "Nivel N3 - Avanzado",
+                                text: "Gestiona y ejecuta los procesos de negociación con el operador global aplicando de forma activa técnicas de persuasión, resolución de conflictos y concesiones mutuas mediante una simulación de roles o defensa de propuestas en el aula."
+                            },
+                            "N4": {
+                                code: "C4N4C",
+                                label: "Nivel N4 - Excelente",
+                                text: "Aporta e innova soluciones creativas de mutuo beneficio durante el proceso de concertación defendiendo argumentaciones sólidas que logren desbloquear posturas encontradas y maximicen el valor de la alianza estratégica para ambas organizaciones."
+                            }
+                        }
+                    },
+                    "RA 4": {
+                        titulo: "Interpreta la normativa y usos habituales que regulan la contratación internacional, analizando su repercusión en las operaciones",
+                        levels: {
+                            "N3": {
+                                code: "C4N3D",
+                                label: "Nivel N3 - Avanzado",
+                                text: "Redacta y formaliza el clausulado del documento contractual o del acuerdo de alianza estratégica con el operador global ajustando los términos jurídicos y los mecanismos de resolución de disputas a lo pactado previamente en la fase de negociación comercial."
+                            }
+                        }
+                    }
+                }
+            },
+            4: {
+                id: 4,
+                semanas: "Semana 11",
+                horas: "3 Horas Lectivas",
+                titulo: "Tema 4: Técnicas de búsqueda y selección de clientes y proveedores",
+                retoFase: "RETO 2 - FASE 1: Prospección de Socios mediante CRM y Data Mining",
+                justificacion: "Lanzamiento del Reto 2 (Cooperativa vasca vs. Distribuidora en EE.UU. o Japón). El alumnado realiza búsquedas y filtrados de clientes y proveedores utilizando sistemas de bases de datos avanzadas (Data Warehouse, Data Mining), aplicando herramientas comerciales digitales para estructurar la prospección técnica antes del diseño de la oferta.",
+                contenidos: [
+                    "<strong>4.1. El proceso de internacionalización de una empresa:</strong> Vías y canales de entrada.",
+                    "<strong>4.2. Selección de los agentes de expansión comercial:</strong>",
+                    "• 4.2.1. Selección cualificada de proveedores.",
+                    "• 4.2.2. Selección cualificada de clientes finales e intermediarios.",
+                    "<strong>4.3. Condiciones comerciales en la negociación:</strong> Proveedores, intermediarios y clientes.",
+                    "<strong>4.5. Instrumentos promocionales oficiales de apoyo a la exportación.</strong>",
+                    "<strong>4.6. Licitaciones y concursos internacionales como instrumento de expansión.</strong>"
+                ],
+                activeIndicators: {
+                    "RA 1": {
+                        titulo: "Selecciona clientes y/o proveedores potenciales de las fuentes de información, analizando sus condiciones comerciales",
+                        levels: {
+                            "N3": {
+                                code: "C4N3A",
+                                label: "Nivel N3 - Avanzado",
+                                text: "Planifica la estrategia de acercamiento y comunicación con un operador global adaptando el protocolo de negociación al contexto cultural específico del país de destino durante la resolución de un reto simulado."
+                            }
+                        }
+                    }
+                }
+            },
+            5: {
+                id: 5,
+                semanas: "Semanas 12 y 13",
+                horas: "6 Horas Lectivas",
+                titulo: "Tema 5: Contratos en el ámbito de la negociación internacional",
+                retoFase: "RETO 2 - FASE 2: Borrador Contractual y Diseño del Canal de Venta",
+                justificacion: "Estructuración del armazón jurídico del acuerdo a largo plazo. Los equipos redactan el borrador inicial de la compraventa. Evalúan y deciden de forma colaborativa la mejor figura legal (contrato de distribución o suministro regular) analizando las obligaciones y responsabilidades de las partes implicadas.",
+                contenidos: [
+                    "<strong>5.1. Importancia de los contratos en la negociación internacional:</strong>",
+                    "• 5.1.1. Elementos esenciales de validez de un contrato internacional.",
+                    "• 5.1.2. Supuestos de nulidad, anulabilidad o rescisión del acuerdo.",
+                    "<strong>5.2. Contrato de compraventa internacional de mercancías:</strong>",
+                    "• 5.2.1. Reglas y delimitación del concepto.",
+                    "• 5.2.2. Estructura tipo y clausulado estándar del contrato.",
+                    "<strong>5.3. Contrato de agencia o intermediación comercial:</strong>",
+                    "• 5.3.1. Estructura del canal mediante agentes en el exterior.",
+                    "• 5.3.2. Características esenciales y cláusulas críticas del contrato de agencia.",
+                    "<strong>5.4. Contrato de suministro o distribución internacional:</strong>",
+                    "• 5.4.1. Papel de los distribuidores en el desarrollo del comercio exterior.",
+                    "• 5.4.2. Cláusulas y características del contrato de distribución."
+                ],
+                activeIndicators: {
+                    "RA 4": {
+                        titulo: "Interpreta la normativa y usos habituales que regulan la contratación internacional, analizando su repercusión en las operaciones",
+                        levels: {
+                            "N1": {
+                                code: "C4N1D",
+                                label: "Nivel N1 - Básico",
+                                text: "Enumera las cláusulas esenciales y los requisitos legales que debe contener un contrato de compraventa internacional a partir del análisis de modelos normalizados por los organismos multilaterales de comercio."
+                            },
+                            "N2": {
+                                code: "C4N2D",
+                                label: "Nivel N2 - Intermedio",
+                                text: "Diferencia las implicaciones jurídicas de las distintas figuras de colaboración internacional (tales como contratos de agencia, distribución o alianzas de empresas compartidas) comparando las obligaciones, las responsabilidades y los niveles de riesgo de cada modalidad."
+                            }
+                        }
+                    }
+                }
+            },
+            6: {
+                id: 6,
+                semanas: "Semanas 14, 15 y 16",
+                horas: "9 Horas Lectivas",
+                titulo: "Tema 6: Normativa y usos en Negociación y Contratación Internacional",
+                retoFase: "RETO 2 - FASE 3: Cotización Base y Blindaje Contractual ante Disrupciones",
+                justificacion: "Fase crítica del Reto 2. Tras fijar la oferta de salida aplicando Incoterms (W14), el profesorado introduce en la W15 una contingencia repentina (alza masiva de fletes o nuevo arancel). El alumnado debe recalcular costes para medir el impacto financiero real. En la W16 estructuran cláusulas preventivas de fuerza mayor, hardship y designan arbitraje internacional.",
+                contenidos: [
+                    "<strong>6.1. Instrumentos de armonización en la contratación comercial:</strong>",
+                    "• 6.1.1. Origen y aplicación de la Lex Mercatoria internacional.",
+                    "• 6.1.2. Convenio de Viena sobre compraventa internacional de mercancías.",
+                    "• 6.1.3. Principios UNIDROIT sobre contratos comerciales internacionales.",
+                    "<strong>6.2. Los términos de comercio internacional (Incoterms vigentes):</strong> Obligaciones de entrega de mercancías, costes de transporte, seguros, aranceles y manipulación según la regla pactada.",
+                    "<strong>6.3. El arbitraje comercial internacional:</strong>",
+                    "• 6.3.1. El procedimiento arbitral paso a paso.",
+                    "• 6.3.2. Tipologías aplicables a nivel nacional y exterior. Cláusulas de sumisión."
+                ],
+                activeIndicators: {
+                    "RA 2": {
+                        titulo: "Establece procesos de comunicación según los protocolos empresariales y costumbres del país utilizando los medios y sistemas adecuados",
+                        levels: {
+                            "N1": {
+                                code: "C4N1B",
+                                label: "Nivel N1 - Básico",
+                                text: "Describe los componentes de coste que integran el precio de una operación de comercio exterior a través del estudio de las reglas internacionales para la interpretación de los términos comerciales en su versión vigente."
+                            },
+                            "N2": {
+                                code: "C4N2B",
+                                label: "Nivel N2 - Intermedio",
+                                text: "Contrasta el impacto económico de las diferentes condiciones de entrega en la oferta comercial calculando y comparando los costes de transporte, seguros, aranceles y manipulación según el término comercial seleccionado."
+                            }
+                        }
+                    },
+                    "RA 5": {
+                        titulo: "Elabora los contratos asociados a los procesos de negociación, aplicando la normativa, usos y costumbres internacionales",
+                        levels: {
+                            "N1": {
+                                code: "C4N1E",
+                                label: "Nivel N1 - Básico",
+                                text: "Identifica las causas más comunes de conflicto comercial y los principales métodos de resolución de disputas (como el arbitraje, la mediación o el procedimiento judicial) mediante el análisis de guías jurídicas internacionales."
+                            },
+                            "N2": {
+                                code: "C4N2E",
+                                label: "Nivel N2 - Intermedio",
+                                text: "Clasifica los diferentes tipos de reclamaciones comerciales y los costes asociados relacionando la naturaleza del incumplimiento contractual con los mecanismos de resarcimiento o penalización aplicables de forma ordinaria."
+                            }
+                        }
+                    }
+                }
+            },
+            7: {
+                id: 7,
+                semanas: "Semanas 17 a 20",
+                horas: "12 Horas Lectivas",
+                titulo: "Tema 7: Implementación y seguimiento de acuerdos Internacionales",
+                retoFase: "RETO 2 - FASE 4: Renegociación, Cuadro de Mando y Auditoría de Operación",
+                justificacion: "Cierre estratégico del curso. Las mesas de renegociación bilateral salvan los márgenes financieros tras el impacto de la crisis logística mediante análisis de sensibilidad (W17). Se diseñan KPIs operativos (tiempos, mermas, desvíos) en la W18. En la W19 se firma el contrato final y en la W20 se defiende la resiliencia de la operación ante un tribunal.",
+                contenidos: [
+                    "<strong>7.1. Análisis situacional de los mercados internacionales.</strong>",
+                    "<strong>7.2. Organización de operaciones de compraventa exterior:</strong>",
+                    "• 7.2.1. Estrategias de relación del fabricante con su red de venta externa.",
+                    "• 7.2.2. Estrategias de cobertura óptima de mercados.",
+                    "• 7.2.3. Estructura y relación de canal con intermediarios.",
+                    "• 7.2.4. Estrategia comunicativa con intermediarios y cliente final.",
+                    "<strong>7.3. Alternativas para operar en mercados exteriores:</strong>",
+                    "• 7.3.1. Métodos indirectos | 7.3.2. Métodos directos | 7.3.3. Métodos mixtos.",
+                    "<strong>7.4. Seguimiento y control de operaciones internacionales:</strong>",
+                    "• 7.4.1. Definición del proceso de control operativo internacional.",
+                    "• 7.4.2. Sistemas de información aplicados al seguimiento comercial.",
+                    "• 7.4.3. Ratios de control financiero, documental y logístico."
+                ],
+                activeIndicators: {
+                    "RA 2": {
+                        titulo: "Establece procesos de comunicación según los protocolos empresariales y costumbres del país utilizando los medios y sistemas adecuados",
+                        levels: {
+                            "N3": {
+                                code: "C4N3B",
+                                label: "Nivel N3 - Avanzado",
+                                text: "Elabora la oferta comercial internacional definitiva para el cliente o proveedor extranjero calculando con precisión el precio de exportación o importación y detallando las condiciones de entrega y pago en el marco de una operación real de comercio."
+                            },
+                            "N4": {
+                                code: "C4N4B",
+                                label: "Nivel N4 - Excelente",
+                                text: "Audita la rentabilidad financiera de la oferta comercial presentada realizando análisis de sensibilidad ante variaciones en los costes logísticos, imprevistos arancelarios o fluctuaciones en las divisas para asegurar el margen de beneficio de la empresa."
+                            }
+                        }
+                    },
+                    "RA 6": {
+                        titulo: "Planifica el desarrollo y proceso de control de los acuerdos contractuales internacionales, obteniendo información de los agentes intervinientes",
+                        levels: {
+                            "N1": {
+                                code: "C4N1F",
+                                label: "Nivel N1 - Básico",
+                                text: "Reconoce los principales documentos de control y los hitos clave en la ejecución de un contrato internacional (tales como plazos de entrega, embarques o transferencias de fondos) a través de la revisión de cronogramas operativos patrón."
+                            },
+                            "N2": {
+                                code: "C4N2F",
+                                label: "Nivel N2 - Intermedio",
+                                text: "Compara el desarrollo real de la operación de comercio exterior con los términos inicialmente pactados en el contrato detectando desviaciones técnicas, demoras temporales o incidencias en las especificaciones de las mercancías entregadas."
+                            },
+                            "N3": {
+                                code: "C4N3F",
+                                label: "Nivel N3 - Avanzado",
+                                text: "Monitorea y controla la ejecución del acuerdo comercial con el operador global utilizando cuadros de mando de seguimiento logístico, financiero y documental para asegurar el cumplimiento exacto de todas las obligaciones contraídas."
+                            },
+                            "N4": {
+                                code: "C4N4F",
+                                label: "Nivel N4 - Excelente",
+                                text: "Audita y evalúa el rendimiento global del proceso de ejecución contractual desarrollando propuestas de mejora continua y recomendaciones estratégicas que incrementen la eficiencia de los futuros procesos de negociación y contratación internacional de la organización."
+                            }
+                        }
+                    },
+                    "RA 4": {
+                        titulo: "Interpreta la normativa y usos habituales que regulan la contratación internacional, analizando su repercusión en las operaciones",
+                        levels: {
+                            "N3": {
+                                code: "C4N3D",
+                                label: "Nivel N3 - Avanzado",
+                                text: "Redacta y formaliza el clausulado del documento contractual o del acuerdo de alianza estratégica con el operador global ajustando los términos jurídicos y los mecanismos de resolución de disputas a lo pactado previamente en la fase de negociación comercial."
+                            },
+                            "N4": {
+                                code: "C4N4D",
+                                label: "Nivel N4 - Excelente",
+                                text: "Valora la seguridad jurídica global del acuerdo contractual diseñado identificando posibles vacíos legales o contingencias normativas con el fin de proponer cláusulas de salvaguarda eficaces que garanticen una operación exterior plenamente eficiente y blindada."
+                            }
+                        }
+                    },
+                    "RA 5": {
+                        titulo: "Elabora los contratos asociados a los procesos de negociación, aplicando la normativa, usos y costumbres internacionales",
+                        levels: {
+                            "N3": {
+                                code: "C4N3E",
+                                label: "Nivel N3 - Avanzado",
+                                text: "Gestiona la resolución de una incidence o reclamación con el operador internacional redactando propuestas de acuerdo, activando las cláusulas de sumisión expresa o tramitando el expediente de arbitraje comercial correspondiente ante la entidad competente."
+                            },
+                            "N4": {
+                                code: "C4N4E",
+                                label: "Nivel N4 - Excelente",
+                                text: "Optimiza la gestión preventiva del riesgo de litigio en la empresa diseñando un protocolo integrado de actuación y control de reclamaciones que minimice el impacto económico y preserve la relación comercial a largo plazo con el socio exterior."
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        // State variables
+        let currentThemeId = 1;
+        let activeView = 'timeline';
+        // Map to keep track of selected levels for each active RA in the current theme
+        let selectedLevels = {};
+
+        // Window startup triggers
+        window.onload = function() {
+            selectTheme(1);
+            renderMacroTable();
+        }
+
+        // Switch view controller between Timeline and Macro Table Views
+        function switchView(view) {
+            activeView = view;
+            const btnTimeline = document.getElementById('btn-timeline');
+            const btnMacro = document.getElementById('btn-macro');
+            const viewTimeline = document.getElementById('view-timeline');
+            const viewMacro = document.getElementById('view-macro');
+
+            if (view === 'timeline') {
+                btnTimeline.className = "flex-1 md:flex-none text-xs font-bold px-4 py-2.5 rounded-md transition duration-150 flex items-center justify-center gap-2 text-white bg-blue-700 shadow-md";
+                btnMacro.className = "flex-1 md:flex-none text-xs font-bold px-4 py-2.5 rounded-md transition duration-150 flex items-center justify-center gap-2 text-blue-900 hover:bg-[#eff6ff]";
+                viewTimeline.classList.remove('hidden');
+                viewMacro.classList.add('hidden');
+            } else {
+                btnTimeline.className = "flex-1 md:flex-none text-xs font-bold px-4 py-2.5 rounded-md transition duration-150 flex items-center justify-center gap-2 text-blue-900 hover:bg-[#eff6ff]";
+                btnMacro.className = "flex-1 md:flex-none text-xs font-bold px-4 py-2.5 rounded-md transition duration-150 flex items-center justify-center gap-2 text-white bg-blue-700 shadow-md";
+                viewTimeline.classList.add('hidden');
+                viewMacro.classList.remove('hidden');
+            }
+        }
+
+        function selectTheme(themeId) {
+            currentThemeId = themeId;
+            const tema = TEMAS_DB[themeId];
+
+            // Update theme navigation timeline active state styles
+            for (let i = 1; i <= 7; i++) {
+                const btn = document.getElementById(`theme-btn-${i}`);
+                const circle = document.getElementById(`circle-${i}`);
+                if (i === themeId) {
+                    btn.classList.add('active');
+                    circle.className = "w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm bg-blue-600 text-white shadow-md border-2 border-blue-600 transition-all";
+                } else {
+                    btn.classList.remove('active');
+                    circle.className = "w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm bg-white text-slate-400 hover:bg-blue-50 border-2 border-blue-100 transition-all";
+                }
+            }
+
+            // Update dynamic progress bar width matching current selected theme node
+            const progressPercent = ((themeId - 1) / 6) * 100;
+            document.getElementById('timeline-progress').style.width = `${progressPercent}%`;
+
+            // Update Left Column elements
+            document.getElementById('dt-semanas').innerText = tema.semanas;
+            document.getElementById('dt-horas').innerText = tema.horas;
+            document.getElementById('dt-titulo').innerText = tema.titulo;
+            
+            // Inject official subcontents
+            const contList = document.getElementById('contenidos-list');
+            contList.innerHTML = tema.contenidos.map(item => `<div class="py-1 border-b border-blue-50 last:border-0">${item}</div>`).join('');
+
+            // Update Ethazi Challenge elements
+            document.getElementById('reto-fase').innerText = tema.retoFase;
+            document.getElementById('reto-justificacion').innerText = tema.justificacion;
+
+            // Reset selected levels for the new theme to their default values (first available level of each RA)
+            selectedLevels = {};
+            Object.keys(tema.activeIndicators).forEach(raCode => {
+                const availableLevels = Object.keys(tema.activeIndicators[raCode].levels);
+                selectedLevels[raCode] = availableLevels[0]; // pick first key (e.g. "N1" or "N3")
+            });
+
+            // Render custom selectors based exactly on image_24890b.png
+            renderRampaLogro();
+        }
+
+        function selectRaLevel(raCode, level) {
+            selectedLevels[raCode] = level;
+            renderRampaLogro();
+        }
+
+        function renderRampaLogro() {
+            const tema = TEMAS_DB[currentThemeId];
+            const raContainer = document.getElementById('ra-container');
+            raContainer.innerHTML = '';
+
+            // Loop through each active RA assigned to this theme and draw elements
+            Object.keys(tema.activeIndicators).forEach(raCode => {
+                const raData = tema.activeIndicators[raCode];
+                const activeLevel = selectedLevels[raCode];
+                const activeIndicatorDetails = raData.levels[activeLevel];
+
+                const raCard = document.createElement('div');
+                raCard.className = "bg-white p-5 rounded-xl border border-[#e0f2fe] space-y-4 shadow-xs";
+
+                // Generate Rampa de Logro Selector row dynamically
+                let selectorButtonsHtml = '';
+                const levelsList = ["N1", "N2", "N3", "N4"];
+                
+                levelsList.forEach(lvl => {
+                    const isAvailable = raData.levels[lvl] !== undefined;
+                    if (isAvailable) {
+                        const isActive = activeLevel === lvl;
+                        const btnClass = isActive 
+                            ? "flex-1 py-2 text-xs font-bold text-center text-white bg-blue-800 rounded-md border border-blue-800 transition duration-150 shadow-sm"
+                            : "flex-1 py-2 text-xs font-medium text-center text-blue-800 bg-white hover:bg-[#eff6ff] rounded-md border border-[#bae6fd] transition duration-150";
+                        
+                        selectorButtonsHtml += `
+                            <button onclick="selectRaLevel('${raCode}', '${lvl}')" class="${btnClass}">
+                                ${lvl}
+                            </button>
+                        `;
+                    }
+                });
+
+                // Set Dot & Badge Colors based on level type for premium look
+                let dotColorClass = "bg-blue-500";
+                let badgeBgClass = "bg-blue-50 text-blue-900 border-blue-200";
+                
+                if (activeLevel === "N2") {
+                    dotColorClass = "bg-sky-500";
+                    badgeBgClass = "bg-sky-50 text-sky-900 border-sky-200";
+                } else if (activeLevel === "N3") {
+                    dotColorClass = "bg-indigo-600";
+                    badgeBgClass = "bg-indigo-50 text-indigo-900 border-indigo-200";
+                } else if (activeLevel === "N4") {
+                    dotColorClass = "bg-slate-700";
+                    badgeBgClass = "bg-slate-100 text-slate-900 border-slate-200";
+                }
+
+                raCard.innerHTML = `
+                    <div class="space-y-2">
+                        <!-- RA Pill Header -->
+                        <span class="inline-block bg-[#eff6ff] text-blue-900 text-[10.5px] font-extrabold px-3 py-1 rounded-md border border-[#bfdbfe] uppercase tracking-wider">${raCode}</span>
+                        <p class="text-sm font-semibold text-slate-800 leading-relaxed">${raData.titulo}</p>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <span class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 block">SELECCIONAR RAMPA DE LOGRO:</span>
+                        <div class="flex gap-2 w-full">
+                            ${selectorButtonsHtml}
+                        </div>
+                    </div>
+
+                    <!-- Inner Card Details matching image_24890b.png structure but in light blues -->
+                    <div class="bg-[#f1f7fc]/60 p-4 rounded-lg border border-[#e0f2fe] space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="flex items-center gap-2 text-xs font-bold text-slate-700">
+                                <span class="w-2 h-2 rounded-full ${dotColorClass}"></span>
+                                ${activeIndicatorDetails.label}
+                            </span>
+                            <span class="bg-white text-slate-700 text-[10px] font-mono border border-slate-200 font-bold px-2 py-0.5 rounded-md shadow-2xs">${activeIndicatorDetails.code}</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed font-normal">${activeIndicatorDetails.text}</p>
+                    </div>
+                `;
+
+                raContainer.appendChild(raCard);
+            });
+        }
+
+        // Toggle state of content accordion list
+        let contenidosOpen = false;
+        function toggleContenidos() {
+            contenidosOpen = !contenidosOpen;
+            const list = document.getElementById('contenidos-list');
+            const arrow = document.getElementById('arrow-contenidos');
+            if (contenidosOpen) {
+                list.classList.remove('hidden');
+                arrow.classList.add('rotate-180');
+            } else {
+                list.classList.add('hidden');
+                arrow.classList.remove('rotate-180');
+            }
+        }
+
+        function renderMacroTable() {
+            const tbody = document.getElementById('macro-table-body');
+            tbody.innerHTML = '';
+
+            Object.values(TEMAS_DB).forEach(tema => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-[#e0f2fe]/10 transition duration-150 align-top border-b border-slate-100";
+
+                let rasHtml = '';
+                
+                Object.keys(tema.activeIndicators).forEach(raCode => {
+                    const raData = tema.activeIndicators[raCode];
+                    let levelsHtml = '';
+                    
+                    Object.keys(raData.levels).forEach(lvl => {
+                        const ind = raData.levels[lvl];
+                        levelsHtml += `
+                            <div class="text-[11px] leading-relaxed mt-2 pl-3 border-l border-blue-100">
+                                <strong class="text-blue-900">${ind.label}:</strong> ${ind.text} 
+                                <span class="bg-white border border-slate-200 text-slate-700 text-[9px] font-bold px-1.5 py-0.5 rounded ml-1">${ind.code}</span>
+                            </div>
+                        `;
+                    });
+
+                    rasHtml += `
+                        <div class="mb-4 pb-4 border-b border-slate-100 last:border-0 last:pb-0">
+                            <div class="flex items-center gap-1.5 mb-1.5">
+                                <span class="bg-[#eff6ff] text-blue-950 text-[10px] font-extrabold px-2 py-0.5 rounded uppercase tracking-wider border border-[#bfdbfe]">${raCode}</span>
+                                <span class="text-[10.5px] font-bold text-slate-700 line-clamp-1">${raData.titulo}</span>
+                            </div>
+                            <div class="space-y-1">
+                                ${levelsHtml}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                tr.innerHTML = `
+                    <td class="p-4">
+                        <div class="font-bold text-slate-800 text-sm mb-1">${tema.titulo}</div>
+                        <span class="bg-[#eff6ff] text-blue-950 text-[9.5px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider border border-[#bfdbfe]">${tema.semanas}</span>
+                        <div class="text-[10px] text-slate-400 font-bold mt-1.5">${tema.horas}</div>
+                    </td>
+                    <td class="p-4">
+                        <div class="text-xs font-bold text-blue-900 uppercase tracking-wide mb-1">${tema.retoFase.split(':')[0]}</div>
+                        <div class="text-[10.5px] text-slate-500 font-medium">${tema.retoFase.split(':')[1] || ''}</div>
+                    </td>
+                    <td class="p-4 border-l border-r border-slate-100">
+                        ${rasHtml}
+                    </td>
+                    <td class="p-4 text-slate-500 leading-relaxed text-[11px]">
+                        ${tema.justificacion}
+                    </td>
+                `;
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Search engine logic filtering temas, indicators and codes in real-time
+        function handleSearch() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            const countSpan = document.getElementById('search-count');
+
+            if (!query) {
+                for (let i = 1; i <= 7; i++) {
+                    document.getElementById(`theme-btn-${i}`).classList.remove('hidden');
+                }
+                countSpan.innerText = "7 TEMAS";
+                return;
+            }
+
+            let foundThemes = [];
+
+            Object.entries(TEMAS_DB).forEach(([id, tema]) => {
+                let matches = false;
+
+                if (tema.titulo.toLowerCase().includes(query) || tema.semanas.toLowerCase().includes(query)) {
+                    matches = true;
+                }
+
+                if (tema.justificacion.toLowerCase().includes(query)) {
+                    matches = true;
+                }
+
+                Object.keys(tema.activeIndicators).forEach(raCode => {
+                    const raData = tema.activeIndicators[raCode];
+                    if (raData.titulo.toLowerCase().includes(query) || raCode.toLowerCase().includes(query)) {
+                        matches = true;
+                    }
+                    Object.values(raData.levels).forEach(ind => {
+                        if (ind.code.toLowerCase().includes(query) || ind.text.toLowerCase().includes(query)) {
+                            matches = true;
+                        }
+                    });
+                });
+
+                const btn = document.getElementById(`theme-btn-${id}`);
+                if (matches) {
+                    btn.classList.remove('hidden');
+                    foundThemes.push(id);
+                } else {
+                    btn.classList.add('hidden');
+                }
+            });
+
+            countSpan.innerText = `${foundThemes.length} TEMA${foundThemes.length !== 1 ? 'S' : ''}`;
+
+            if (foundThemes.length > 0 && !foundThemes.includes(currentThemeId.toString())) {
+                selectTheme(parseInt(foundThemes[0]));
+            }
+        }
+    </script>
+</body>
+</html>
