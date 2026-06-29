@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-zinc-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cazadores de Riesgos - Formación Preventiva Profesional</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome para Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        @keyframes custom-pulse {
+            0%, 100% {
+                transform: scale(1) translate(-50%, -50%);
+                box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.6);
+            }
+            50% {
+                transform: scale(1.3) translate(-38%, -38%);
+                box-shadow: 0 0 0 6px rgba(14, 165, 233, 0);
+            }
+        }
+        .hotspot-pulse {
+            animation: custom-pulse 2s infinite;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f4f4f5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="h-full text-zinc-800 flex flex-col overflow-hidden bg-zinc-100">
+
+    <header class="bg-white border-b-2 border-zinc-300 px-6 py-3.5 flex flex-col md:flex-row items-center justify-between gap-4 z-10 shrink-0 shadow-sm">
+        <div class="flex items-center gap-3">
+            <div class="bg-sky-600 p-2.5 rounded-xl text-white shadow-md shadow-sky-500/20">
+                <i class="fa-solid fa-shield-halved text-xl"></i>
+            </div>
+            <div>
+                <h1 class="font-extrabold text-lg md:text-xl tracking-tight text-zinc-900 flex items-center gap-2">
+                    Cazadores de Riesgos <span class="text-xs bg-sky-100 text-sky-700 px-2.5 py-1 rounded-full font-bold border border-sky-200">Formación PRL</span>
+                </h1>
+                <p class="text-xs text-zinc-500 font-semibold">Evaluador y Gestor de Auditorías de Seguridad en la Oficina</p>
+            </div>
+        </div>
+        
+        <div class="flex bg-zinc-200 p-1 rounded-xl border border-zinc-300">
+            <button onclick="switchTab('fase1')" id="btn-fase1" class="tab-btn px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition-all duration-200 bg-white text-sky-600 shadow-sm border border-zinc-300">
+                <i class="fa-solid fa-search mr-1.5"></i> 1. Esta oficina...
+            </button>
+            <button onclick="switchTab('fase2')" id="btn-fase2" class="tab-btn px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition-all duration-200 text-zinc-600 hover:text-zinc-950">
+                <i class="fa-solid fa-circle-dot mr-1.5"></i> 2. ...es una ruina
+            </button>
+        </div>
+    </header>
+
+    <section class="bg-white border-b border-zinc-200 px-6 py-2.5 flex flex-wrap items-center justify-between gap-4 shrink-0 z-10">
+        <div class="flex items-center gap-6 flex-wrap">
+            <div class="flex items-center gap-3 bg-zinc-50 border-2 border-zinc-300 rounded-xl px-4 py-1.5">
+                <span class="text-xs font-bold uppercase tracking-wider text-zinc-600">Cronómetro Dinámica:</span>
+                <div id="timer-display" class="text-xl font-mono font-bold text-zinc-900">10:00</div>
+                <div class="flex gap-1.5 ml-2">
+                    <button id="btn-start" onclick="toggleTimer()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] px-2.5 py-1 rounded-lg transition font-bold flex items-center gap-1 shadow-sm">
+                        <i class="fa-solid fa-play"></i> Iniciar
+                    </button>
+                    <button onclick="resetTimer()" class="bg-zinc-200 hover:bg-zinc-300 text-zinc-700 text-[11px] px-2 py-1 rounded-lg transition font-bold border border-zinc-300">
+                        <i class="fa-solid fa-rotate-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="hidden lg:flex items-center gap-3 text-[11px] font-bold text-zinc-700 bg-zinc-50 px-3 py-1.5 rounded-xl border border-zinc-300">
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle text-amber-500 text-[8px]"></i> Eléctrico</span>
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle text-rose-500 text-[8px]"></i> Golpes</span>
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle text-purple-500 text-[8px]"></i> Ergonomía</span>
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle text-sky-500 text-[8px]"></i> Tránsito</span>
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle text-orange-500 text-[8px]"></i> Luz/Fatiga</span>
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle text-emerald-500 text-[8px]"></i> Clima/Ruido</span>
+        </div>
+    </section>
+
+    <main class="flex-1 flex flex-col overflow-hidden bg-zinc-50 relative">
+
+        <section class="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0">
+            
+            <div id="image-viewport" class="flex-1 overflow-auto flex items-center justify-center p-4 relative min-w-0 bg-zinc-100 border-r border-zinc-200">
+                
+                <div id="fase1-container" class="relative max-w-full max-h-full flex items-center justify-center">
+                    <div class="relative inline-block mx-auto max-w-full">
+                        <img src="https://i.postimg.cc/9QfkhdKZ/PRl-Limpia.png" alt="Oficina limpia de riesgos" class="block max-w-full max-h-[58vh] h-auto w-auto rounded-2xl border-2 border-zinc-300 shadow-xl bg-white select-none">
+                        <div class="absolute inset-0 bg-transparent flex items-center justify-center pointer-events-none">
+                            <span class="text-zinc-400/20 text-4xl md:text-5xl font-black uppercase tracking-widest rotate-12 select-none">Caza de Riesgos</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="fase2-container" class="relative max-w-full max-h-full hidden flex items-center justify-center">
+                    <div class="relative inline-block mx-auto max-w-full">
+                        <img src="https://i.postimg.cc/9QfkhdKZ/PRl-Limpia.png" alt="Oficina limpia soluciones" class="block max-w-full max-h-[58vh] h-auto w-auto rounded-2xl border-2 border-zinc-300 shadow-xl bg-white relative">
+                        <div id="hotspots-overlay" class="absolute inset-0 pointer-events-auto">
+                            <!-- Injected by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="side-collab-panel" class="w-full lg:w-96 bg-white flex flex-col shrink-0 z-10 shadow-lg border-l border-zinc-300">
+                
+                <div id="notes-panel-container" class="flex flex-col flex-1 overflow-hidden">
+                    <div class="p-4 border-b border-zinc-200 bg-zinc-50/50">
+                        <h3 class="font-bold text-sm text-zinc-900 flex items-center gap-2">
+                            <i class="fa-solid fa-file-signature text-sky-600"></i> Pizarra de Hallazgos en Vivo
+                        </h3>
+                        <p class="text-xs text-zinc-500 mt-0.5 leading-normal">Registra las aportaciones e ideas de tus alumnos durante el proceso de caza.</p>
+                    </div>
+
+                    <div class="flex-1 overflow-y-auto p-4 space-y-3" id="custom-notes-list">
+                        <div id="custom-notes-empty" class="h-full flex flex-col items-center justify-center text-center text-zinc-400 p-4">
+                            <i class="fa-solid fa-clipboard-question text-3xl mb-2 text-zinc-300"></i>
+                            <p class="text-xs font-semibold">Sin anotaciones de alumnos</p>
+                            <p class="text-[10px] text-zinc-500 mt-0.5">Usa el formulario de abajo para documentar los riesgos sugeridos por los estudiantes.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-zinc-50 border-t border-zinc-200 space-y-2">
+                        <div>
+                            <label class="block text-[10px] font-bold text-zinc-600 uppercase">Riesgo detectado por el grupo:</label>
+                            <input type="text" id="input-note-risk" placeholder="Ej. Cable suelto en el pasillo central" class="w-full text-xs px-2.5 py-1.5 bg-white border border-zinc-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 text-zinc-900 font-medium">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-zinc-600 uppercase">Daño potencial planteado:</label>
+                            <input type="text" id="input-note-damage" placeholder="Ej. Caída de bruces y esguince" class="w-full text-xs px-2.5 py-1.5 bg-white border border-zinc-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 text-zinc-900 font-medium">
+                        </div>
+                        <button onclick="addCustomNote()" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs py-2 rounded-lg shadow transition flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-plus text-[10px]"></i> Registrar en Pizarra
+                        </button>
+                    </div>
+                </div>
+
+                <div id="evaluation-panel-container" class="flex flex-col flex-1 overflow-hidden hidden">
+                    <div class="p-4 border-b border-zinc-200 bg-zinc-50/50 flex flex-col gap-2">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-sm text-zinc-900 flex items-center gap-2">
+                                <i class="fa-solid fa-clipboard-check text-sky-600"></i> Registro de Auditoría Manual
+                            </h3>
+                            <!-- New UI Button Placement for Evaluation -->
+                            <button id="btn-evaluation-trigger" disabled onclick="triggerEvaluation()" class="bg-zinc-200 text-zinc-400 font-bold text-xs px-3 py-1.5 rounded-lg border border-zinc-300 cursor-not-allowed flex items-center gap-1.5 transition-all">
+                                <i class="fa-solid fa-calculator text-[10px]"></i> Evaluación
+                            </button>
+                        </div>
+                        <p class="text-xs text-zinc-500 mt-0.5 leading-normal">Aquí quedan calificados los riesgos evaluados interactivamente en la oficina.</p>
+                    </div>
+
+                    <div class="flex-1 flex flex-col overflow-hidden">
+                        <div class="px-4 py-2 border-b border-zinc-200 bg-zinc-100 flex justify-between items-center shrink-0">
+                            <span class="text-[10px] font-bold text-zinc-600 uppercase tracking-wider">Historial de Auditoría</span>
+                            <span id="student-list-count" class="text-[10px] font-bold bg-zinc-300 text-zinc-800 px-2 py-0.5 rounded-full">0 de 24 Evaluados</span>
+                        </div>
+                        
+                        <div id="student-observations-list" class="flex-1 overflow-y-auto p-4 space-y-2.5">
+                            <div id="observations-empty" class="h-full flex flex-col items-center justify-center text-center text-zinc-400 p-4">
+                                <i class="fa-solid fa-circle-info text-3xl mb-2 text-zinc-300"></i>
+                                <p class="text-xs font-semibold">Sin riesgos evaluados todavía</p>
+                                <p class="text-[10px] text-zinc-500 mt-0.5 max-w-[200px]">Haz clic en cualquier punto del mapa para auditar y registrar la puntuación de tu grupo.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section id="banner-inferior" class="bg-white border-t-2 border-zinc-300 p-5 h-48 shrink-0 z-10 shadow-lg flex items-center justify-center overflow-y-auto">
+            <div id="risk-detail-box" class="w-full max-w-5xl">
+                <!-- Injected by JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-sky-50 text-sky-900 text-[11px] px-6 py-4 shrink-0 border-t border-sky-200 shadow-inner">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="space-y-1 text-center md:text-left max-w-4xl">
+                <h4 class="font-extrabold text-sky-950 text-xs">Metodología y Supervisión Docente</h4>
+                <p class="leading-relaxed text-sky-800">
+                    <span class="font-semibold text-sky-900">Nota sobre la producción intelectual:</span> Este recurso ha sido creado mediante un flujo de trabajo de Vibe Coding, utilizando IA como herramienta de asistencia técnica. La autoría intelectual de la metodología, la selección de contenidos, la estructura pedagógica y la supervisión técnica pertenecen a <span class="font-bold text-sky-950">Sergio Gutiérrez Rodríguez</span>. Se ha utilizado IA para optimizar la traducción de estas intenciones a código ejecutable, garantizando la eficiencia y la accesibilidad del recurso.
+                </p>
+            </div>
+            <div class="flex flex-col items-center shrink-0 bg-white/80 p-2.5 rounded-lg border border-sky-200 text-center shadow-sm">
+                <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es" target="_blank" rel="noopener noreferrer">
+                    <img src="https://licensebuttons.net/l/by-nc-nd/4.0/88x31.png" alt="Licencia Creative Commons BY-NC-ND 4.0" class="w-20 h-auto rounded hover:opacity-90 transition duration-150 mb-1" onerror="this.src='https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by-nc-nd.svg';">
+                </a>
+                <span class="text-[9px] text-sky-800 font-bold">CC BY-NC-ND 4.0</span>
+            </div>
+        </div>
+    </footer>
+
+    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-white border-2 border-zinc-300 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2.5 text-xs text-zinc-900 transform translate-y-20 opacity-0 transition-all duration-300">
+        <i id="toast-icon" class="fa-solid fa-circle-info text-sky-600"></i>
+        <span id="toast-message">Notificación</span>
+    </div>
+
+    <script>
+        const baseDeDatosRiesgos = [
+            // Eléctricos (Yellow)
+            { 
+                id: 1, color: 'yellow', cat: 'Riesgo Eléctrico / Incendio', title: 'Regleta sobrecargada', 
+                damage: 'Cortocircuito, sobrecalentamiento e inicio de incendio estructural en la oficina.', x: 26.5, y: 21,
+                oneSentence: 'El uso excesivo de ladrones y regletas en cascada genera un peligro grave de incendio por calentamiento eléctrico.',
+                legislationName: 'RD 614/2001 (Riesgo Eléctrico)',
+                legislationLink: 'https://www.boe.es/buscar/doc.php?id=BOE-A-2001-11812'
+            },
+            { 
+                id: 2, color: 'yellow', cat: 'Riesgo Eléctrico / Incendio', title: 'Cables expuestos (Servidores)', 
+                damage: 'Electrocución por contacto directo, quemaduras severas o parada cardiorrespiratoria.', x: 31.5, y: 28.5,
+                oneSentence: 'Las conexiones sin canalizar o con cables pelados dejan conductores activos al alcance directo de los trabajadores.',
+                legislationName: 'RD 614/2001 (Riesgo Eléctrico)',
+                legislationLink: 'https://www.boe.es/buscar/doc.php?id=BOE-A-2001-11812'
+            },
+            { 
+                id: 3, color: 'yellow', cat: 'Riesgo Eléctrico / Incendio', title: 'Enchufe defectuoso (Tras armario)', 
+                damage: 'Arco eléctrico, quemaduras por contacto y riesgo de ignición de materiales cercanos (madera/papel).', x: 49.5, y: 17,
+                oneSentence: 'Las tomas de corriente rotas o forzadas por mobiliario pueden originar arcos eléctricos inflamando materiales cercanos.',
+                legislationName: 'RD 486/1997 (Lugares de Trabajo - Instalaciones)',
+                legislationLink: 'https://www.boe.es/buscar/doc.php?id=BOE-A-1997-8669'
+            },
+            { 
+                id: 4, color: 'yellow', cat: 'Riesgo Eléctrico / Incendio', title: 'Hervidor junto a agua/charco', 
+                damage: 'Electrocución por conductividad del agua y cortocircuito generalizado.', x: 65.5, y: 26,
+                oneSentence: 'El agua es un excelente conductor eléctrico; posicionar electrodomésticos cerca de charcos expone a descargas fatales.',
+                legislationName: 'RD 614/2001 (Riesgo Eléctrico)',
+                legislationLink: 'https://www.boe.es/buscar/doc.php?id=BOE-A-2001-11812'
+            },
+
+            // Caídas/Golpes (Red)
+            { 
+                id: 5, color: 'red', cat: 'Caídas, Golpes y Obstrucciones', title: 'Salida de emergencia bloqueada', 
+                damage: 'Atrapamiento, asfixia o aplastamiento en caso de evacuación de emergencia por pánico.', x: 20, y: 20,
+                oneSentence: 'La obstrucción de las puertas de evacuación impide un escape rápido y seguro en situaciones de riesgo inminente.',
+                legislationName: 'RD 486/1997 (Vías y Salidas de Evacuación)',
+                legislationLink: 'https://www.boe.es/buscar/doc.php?id=BOE-A-1997-8669'
+            },
+            { 
+                id: 6, color: 'red', cat: 'Caídas, Golpes y Obstrucciones', title: 'Cajón de archivador abierto', 
+                damage: 'Contusiones, heridas, golpes en espinillas o tropiezos con caída al mismo nivel.', x: 47, y: 36.5,
+                oneSentence: 'Los cajones abiertos en pasillos estrechos representan obstáculos ciegos que causan tropiezos y golpes severos.',
+                legislationName: 'RD 486/1997 (Condiciones de Seguridad y Orden)',
+                legislationLink: 'https://www.boe.es/buscar/doc.php?id=BOE-A-1997-8669'
+            },
+            { 
+                id: 7, color: 'red', cat: 'Caídas, Golpes y Obstrucciones', title: 'Cajas inestables en altura', 
+                damage: 'Traumatismos craneoencefálicos o golpes en hombros/espalda por caída de objetos.', x: 61.5, y: 15.5,
+                oneSentence: 'Apilar material de embalaje por encima de las estanterías sin anclajes expone a la caída fortuita de carga.',
+                legislationName: 'RD 486/1997 (Anexo I - Almacenamiento Seguro)',
+                legislationLink: 'https://www.boe.es/buscar/doc.php?id=BOE-A-1997-8669'
+            },
+            { 
+                id: 8, color: 'red', cat: 'Caídas, Golpes y Obstrucciones', title: 'Cable rojo cruzando el pasillo', 
+                damage: 'Caídas severas por tropiezo, esguinces, fracturas de muñeca o traumatismos al golpear el suelo.', x: 49, y: 47,
+                oneSentence: 'Los conductores eléctricos extendidos por el suelo sin pasacables de protección causan la mayoría de accidentes por tropiezo.',
+                legislationName: 'RD 486/1997 (Zonas de Paso y Tránsito)',
+                legislationLink: 'https://www.boe.es/buscar/doc.php?id=BOE-A-1997-8669'
+            },
+
+            // Ergonomía (Purple)
+            { 
+                id: 9, color: 'purple', cat: 'Ergonomía y Factores Psicosociales', title: 'Acumulación de tareas (Papeleo)', 
+                damage: 'Ansiedad, fatiga mental, bloqueo cognitivo y síndrome de burnout.', x: 11, y: 59,
+                oneSentence: 'La acumulación desmedida de documentos físicos sin archivar es indicio de una sobrecarga de tareas perjudicial.',
+                legislationName: 'Ley 31/1995 (Art. 15 - Evaluación Psicosocial)',
+                legislationLink: 'https://www.boe.es/buscar/doc.php?id=BOE-A-1995-24272'
+            },
+            { 
+                id: 10, color: 'purple', cat: 'Ergonomía y Factores Psicosociales', title: 'Mal posicionamiento de pantalla/torres', 
+                damage: 'Sobreesfuerzo visual, dolores de cabeza (migrañas) y sobrecarga muscular en la zona dorsal.', x: 23, y: 51.5,
+                oneSentence: 'Usar pilas de papel o soportes inestables para elevar pantallas altera el ángulo de visión natural de los ojos.',
+                legislationName: 'RD 488/1997 (Pantallas de Visualización de Datos)',
+                legislationLink: 'https://www.boe.es/buscar/doc.php?id=BOE-A-1997-8671'
+            },
+            { 
+                id: 11, color: 'purple', cat: 'Ergonomía y Factores Psicosociales', title: 'Estrés/Cefalea (Manos a la cabeza)', 
+                damage: 'Crisis de ansiedad, aumento de la presión arterial y absentismo laboral por estrés crónico.', x: 57.5, y: 59,
+                oneSentence: 'La gesticulación de agobio denota fallos de organización laboral con riesgos psicosociales asociados.',
+                legislationName: 'Ley 31/1995 (Protección frente a Riesgos Psicosociales)',
+                legislationLink: 'https://www.boe.es/buscar/doc.php?id=BOE-A-1995-24272'
+            },
+            { 
+                id: 12, color: 'purple', cat: 'Ergonomía y Factores Psicosociales', title: 'Postura de cuello torcido al teléfono', 
+                damage: 'Contracturas cervicales severas, tortícolis y compresión nerviosa.', x: 48.5, y: 73,
+                oneSentence: 'Sujetar el auricular telefónico presionándolo con el hombro fuerza las vértebras e inflama la musculatura.',
+                legislationName: 'RD 488/1997 (Ergonomía en el Puesto de Trabajo)',
+                legislationLink: 'https://www.boe.es/buscar/doc.php?id=BOE-A-1997-8671'
+            },
+            { 
+                id: 13, color: 'purple', cat: 'Ergonomía y Factores Psicosociales', title: 'Espalda arqueada frente a monitor', 
+                damage: 'Hiperxifosis, lumbalgia crónica y fatiga muscular postural.', x: 67, y: 61.5,
+                oneSentence: 'Sentarse sin mantener la espalda apoyada firmemente en el respaldo desgasta crónicamente la zona lumbar.',
+                legislationName: 'RD 488/1997 (Mobiliario Regulable Obligatorio)',
+                legislationLink: 'https://www.boe.es/buscar/doc.php?id=BOE-A-1997-8671'
+            },
+
+            // Caídas/Distracciones (Blue)
+            { 
+                id: 14, color: 'blue', cat: 'Caídas al mismo nivel y Distracciones', title: 'Charco de agua en la cocina', 
+                damage: 'Lesiones osteoarticulares, resbalones con consecuencias de esguinces o fracturas.', x: 76.5, y: 34.5,
+                oneSentence: 'Cualquier derrame o fuga de agua en zonas de descanso crea una pista de deslizamiento altamente peligrosa.',
+                legislationName: 'RD 486/1997 (Suelos Antideslizantes y Limpieza)',
+                legislationLink: 'https://www.boe.es/buscar/doc.php?id=BOE-A-1997-8669'
+            },
+            { 
+                id: 15, color: 'blue', cat: 'Caídas al mismo nivel y Distracciones', title: 'Esquina de alfombra levantada', 
+                damage: 'Tropiezos imprevistos, caídas de bruces, esguinces de tobillo.', x: 65, y: 44,
+                oneSentence: 'El desgaste o levantamiento de las esquinas en alfombras atrapa la puntera del calzado, provocando caídas de bruces.',
+                legislationName: 'RD 486/1997 (Pavimentos Estables y Regulares)',
+                legislationLink: 'https://www.boe.es/buscar/doc.php?id=BOE-A-1997-8669'
+            },
+            { 
+                id: 16, color: 'blue', cat: 'Caídas al mismo nivel y Distracciones', title: 'Trabajador distraído con el móvil', 
+                damage: 'Colisión con otros compañeros, caídas al no advertir los obstáculos del suelo (cable/alfombra).', x: 66, y: 49,
+                oneSentence: 'La falta de atención espacial por consultar dispositivos móviles mientras se camina multiplica el riesgo de colisión.',
+                legislationName: 'Ley 31/1995 (Art. 29 - Obligaciones de Autocuidado del Trabajador)',
+                legislationLink: 'https://www.boe.es/buscar/doc.php?id=BOE-A-1995-24272'
+            },
+
+            // Iluminación/Fatiga (Orange)
+            { 
+                id: 17, color: 'orange', cat: 'Iluminación, Fatiga y Microtraumatismos', title: 'Reflejos solares en pantalla', 
+                damage: 'Fatiga visual, sequedad ocular, picor de ojos y errores de ejecución por falta de visibilidad.', x: 8.5, y: 40,
+                oneSentence: 'La radiación solar directa que incide en las pantallas crea reflejos molestos que obligan a forzar la vista.',
+                legislationName: 'RD 488/1997 (Evitar Deslumbramientos en PVD)',
+                legislationLink: 'https://www.boe.es/buscar/doc.php?id=BOE-A-1997-8671'
+            },
+            { 
+                id: 18, color: 'orange', cat: 'Iluminación, Fatiga y Microtraumatismos', title: 'Puesto en zona de penumbra (Ventana derecha)', 
+                damage: 'Pérdida progresiva de agudeza visual, posturas forzadas para enfocar la vista y cefaleas.', x: 94.5, y: 27.5,
+                oneSentence: 'Trabajar en rincones oscuros sin la iluminación adecuada fatiga los ojos y propicia posturas forzadas de aproximación.',
+                legislationName: 'RD 486/1997 (Anexo IV - Iluminación de Puestos)',
+                legislationLink: 'https://www.boe.es/buscar/doc.php?id=BOE-A-1997-8669'
+            },
+            { 
+                id: 19, color: 'orange', cat: 'Iluminación, Fatiga y Microtraumatismos', title: 'Somnolencia extrema en teclado', 
+                damage: 'Pérdida de reflejos, propensión a sufrir microaccidentes o errores críticos de seguridad.', x: 36.5, y: 69.5,
+                oneSentence: 'Quedarse dormido en el puesto alerta de un agotamiento agudo o desajustes graves en los turnos laborales.',
+                legislationName: 'Ley 31/1995 (Vigilancia de la Salud Laboral)',
+                legislationLink: 'https://www.boe.es/buscar/doc.php?id=BOE-A-1995-24272'
+            },
+            { 
+                id: 20, color: 'orange', cat: 'Iluminación, Fatiga y Microtraumatismos', title: 'Postura encorvada crítica (Mesa izquierda)', 
+                damage: 'Deformidades de la columna, dolor lumbar severo y fatiga física prematura.', x: 25.5, y: 40,
+                oneSentence: 'Arquearse sobre la mesa sin aprovechar los mecanismos ergonómicos daña gravemente el eje vertebral.',
+                legislationName: 'RD 488/1997 (Disposiciones Ergonómicas)',
+                legislationLink: 'https://www.boe.es/buscar/doc.php?id=BOE-A-1997-8671'
+            },
+            { 
+                id: 21, color: 'orange', cat: 'Iluminación, Fatiga y Microtraumatismos', title: 'Dolor de muñeca (Mala ergonomía de ratón/teclado)', 
+                damage: 'Síndrome del túnel carpiano, tendinitis de la muñeca y baja médica por movimientos repetitivos.', x: 18.5, y: 69.5,
+                oneSentence: 'Apoyar de manera incorrecta la muñeca al manejar periféricos presiona crónicamente el canal carpiano.',
+                legislationName: 'RD 488/1997 (Disposición Ergonómica del Teclado)',
+                legislationLink: 'https://www.boe.es/buscar/doc.php?id=BOE-A-1997-8671'
+            },
+
+            // Clima/Ruido (Green)
+            { 
+                id: 22, color: 'green', cat: 'Confort Ambiental y Ruido', title: 'Estrés térmico (Calor/Abanicos)', 
+                damage: 'Deshidratación, lipotimias, bajadas de tensión y falta de concentración general.', x: 79.5, y: 44.5,
+                oneSentence: 'La falta de climatización eleva la temperatura ambiente mermando drásticamente el rendimiento.',
+                legislationName: 'RD 486/1997 (Anexo III - Límites de Temperatura)',
+                legislationLink: 'https://www.boe.es/buscar/doc.php?id=BOE-A-1997-8669'
+            },
+            { 
+                id: 23, color: 'green', cat: 'Confort Ambiental y Ruido', title: 'Falta de ventilación (Ventana bloqueada)', 
+                damage: 'Contusiones o cortes por rotura de cristal, agobio por ambiente viciado.', x: 88, y: 56.5,
+                oneSentence: 'El forcejeo con ventanas bloqueadas por mal mantenimiento expone a lesiones físicas directas y cortes.',
+                legislationName: 'RD 486/1997 (Mantenimiento de Instalaciones y Ventilación)',
+                legislationLink: 'https://www.boe.es/buscar/doc.php?id=BOE-A-1997-8669'
+            },
+            { 
+                id: 24, color: 'green', cat: 'Confort Ambiental y Ruido', title: 'Ruido e interferencia de la fotocopiadora', 
+                damage: 'Pérdida de concentración, necesidad de elevar el nivel de la voz (fatiga vocal), interferencias de comunicación y estrés agudo.', x: 84.5, y: 81.5,
+                oneSentence: 'La instalación de impresoras de alto volumen de ruido junto a salas de reunión perturba los diálogos e incrementa el estrés.',
+                legislationName: 'RD 286/2006 (Protección frente al Ruido Laboral)',
+                legislationLink: 'https://www.boe.es/buscar/doc.php?id=BOE-A-2006-4354'
+            }
+        ];
+
+        let timer = 600; 
+        let timerInterval = null;
+        let activeTab = 'fase1';
+        let currentSelectedRiskId = null;
+        let bypassUnlock = false; // flag to bypass solution lock manually
+        
+        let evaluationStates = {};
+        baseDeDatosRiesgos.forEach(r => {
+            evaluationStates[r.id] = 'pending';
+        });
+
+        let customStudentNotes = [];
+
+        function isSolutionUnlocked() {
+            if (bypassUnlock) return true;
+            if (timer <= 0) return true;
+            // Check if at least one risk has been evaluated
+            const hasEvaluated = Object.values(evaluationStates).some(state => state !== 'pending');
+            if (hasEvaluated) return true;
+            return false;
+        }
+
+        function switchTab(tabId) {
+            if (tabId === 'fase2' && !isSolutionUnlocked()) {
+                showToast('Acceso restringido: La fase de soluciones se desbloqueará al finalizar el tiempo de la dinámica.', 'warning');
+                return;
+            }
+            activeTab = tabId;
+            
+            document.getElementById('fase1-container').classList.add('hidden');
+            document.getElementById('fase2-container').classList.add('hidden');
+            
+            document.getElementById('notes-panel-container').classList.add('hidden');
+            document.getElementById('evaluation-panel-container').classList.add('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition-all duration-200 text-zinc-600 hover:text-zinc-950";
+            });
+
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            activeBtn.className = "tab-btn px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition-all duration-200 bg-white text-sky-600 shadow-sm border border-zinc-300";
+
+            if (tabId === 'fase1') {
+                document.getElementById('fase1-container').classList.remove('hidden');
+                document.getElementById('notes-panel-container').classList.remove('hidden');
+                resetBannerDefault();
+            } else if (tabId === 'fase2') {
+                document.getElementById('fase2-container').classList.remove('hidden');
+                document.getElementById('evaluation-panel-container').classList.remove('hidden');
+                resetBannerDefault();
+                renderHotspots();
+            }
+            renderSidebar();
+        }
+
+        function resetBannerDefault() {
+            const detailBox = document.getElementById('risk-detail-box');
+            if (activeTab === 'fase1') {
+                detailBox.className = "w-full max-w-5xl flex items-center gap-5 text-left bg-zinc-50 border-2 border-zinc-200 rounded-2xl p-4 shadow-sm";
+                detailBox.innerHTML = `
+                    <div class="p-3.5 bg-sky-100 text-sky-700 rounded-2xl border-2 border-sky-200 shadow-sm">
+                        <i class="fa-solid fa-graduation-cap text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-sm text-zinc-900 uppercase tracking-wide">Propósito y Funcionamiento Pedagógico de la Dinámica</h3>
+                        <p class="text-xs text-zinc-700 mt-1 leading-relaxed font-medium">
+                            <strong class="text-sky-700">Objetivo:</strong> Descubrir de manera colaborativa los peligros ocultos en una oficina estándar antes de que causen accidentes.
+                        </p>
+                        <p class="text-xs text-zinc-600 mt-0.5 leading-relaxed">
+                            <strong class="text-zinc-800">Cómo jugar:</strong> Proyecta esta pantalla limpia ante tu alumnado. Pon en marcha el cronómetro de 10 minutos. Pide a los alumnos que analicen la escena y describan qué ven y qué daño podría originar. El formador puede anotar cada hallazgo en vivo en la <span class="font-bold text-zinc-800">Pizarra de Hallazgos</span> de la derecha para mantener al grupo motivado.
+                        </p>
+                    </div>
+                `;
+            } else {
+                const auditedCount = baseDeDatosRiesgos.filter(r => evaluationStates[r.id] !== 'pending').length;
+                if (auditedCount === 24) {
+                    detailBox.className = "w-full max-w-5xl flex items-center gap-5 text-left bg-zinc-50 border-2 border-zinc-200 rounded-2xl p-5 shadow-sm";
+                    detailBox.innerHTML = `
+                        <div class="p-3.5 bg-sky-100 text-sky-700 rounded-2xl border-2 border-sky-200 shadow-sm">
+                            <i class="fa-solid fa-clipboard-check text-2xl animate-bounce"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-sm text-zinc-900 uppercase tracking-wide">¡Auditoría Completa Registrada!</h3>
+                            <p class="text-xs text-zinc-700 mt-1 leading-relaxed font-medium">
+                                Los 24 puntos críticos de la oficina han sido completamente evaluados. ¡Presiona el botón de <strong class="text-sky-700">Evaluación</strong> en el panel de la derecha para calcular el veredicto final!
+                            </p>
+                        </div>
+                    `;
+                } else {
+                    detailBox.className = "w-full max-w-5xl flex items-center gap-5 text-left bg-zinc-50 border-2 border-zinc-200 rounded-2xl p-4 shadow-sm";
+                    detailBox.innerHTML = `
+                        <div class="p-3.5 bg-sky-100 text-sky-700 rounded-2xl border-2 border-sky-200 shadow-sm">
+                            <i class="fa-solid fa-circle-nodes text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-sm text-zinc-900 uppercase tracking-wide">Fase de Solución, Revelación y Auditoría</h3>
+                            <p class="text-xs text-zinc-700 mt-1 leading-relaxed font-medium">
+                                Los hotspots de la oficina se muestran ahora con sus <strong class="text-sky-700">colores de categoría reglamentarios de PRL</strong> para estructurar el aprendizaje.
+                            </p>
+                            <p class="text-xs text-zinc-600 mt-0.5 leading-relaxed">
+                                Haz clic en cualquiera de los puntos activos de la imagen para analizar las consecuencias de cada riesgo y calificar las respuestas dadas por tu grupo. (Pendientes: ${24 - auditedCount}/24)
+                            </p>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function toggleTimer() {
+            const startBtn = document.getElementById('btn-start');
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                startBtn.innerHTML = `<i class="fa-solid fa-play"></i> Continuar`;
+                startBtn.classList.replace('bg-amber-600', 'bg-emerald-600');
+            } else {
+                timerInterval = setInterval(() => {
+                    if (timer > 0) {
+                        timer--;
+                        updateTimerDisplay();
+                        if (timer === 60) {
+                            showToast('¡Último minuto de la dinámica de búsqueda!', 'warning');
+                        }
+                    } else {
+                        clearInterval(timerInterval);
+                        timerInterval = null;
+                        showToast('¡Tiempo finalizado! Procede con la fase de evaluación interactiva.', 'info');
+                    }
+                }, 1000);
+                startBtn.innerHTML = `<i class="fa-solid fa-pause"></i> Pausar`;
+                startBtn.className = "bg-amber-600 hover:bg-amber-500 text-white text-[11px] px-2.5 py-1 rounded-lg transition font-bold flex items-center gap-1 shadow-sm";
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            timer = 600;
+            updateTimerDisplay();
+            const startBtn = document.getElementById('btn-start');
+            startBtn.innerHTML = `<i class="fa-solid fa-play"></i> Iniciar`;
+            startBtn.className = "bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] px-2.5 py-1 rounded-lg transition font-bold flex items-center gap-1 shadow-sm";
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timer / 60);
+            const secs = timer % 60;
+            document.getElementById('timer-display').textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function renderHotspots() {
+            const container = document.getElementById('hotspots-overlay');
+            container.innerHTML = ''; 
+
+            baseDeDatosRiesgos.forEach(risk => {
+                const dot = document.createElement('button');
+                dot.style.position = 'absolute';
+                dot.style.width = '20px';
+                dot.style.height = '20px';
+                dot.style.left = `${risk.x}%`;
+                dot.style.top = `${risk.y}%`;
+                
+                let colorClass = 'bg-sky-500 shadow-sky-500/50';
+                if (risk.color === 'yellow') colorClass = 'bg-amber-500 shadow-amber-500/50';
+                if (risk.color === 'red') colorClass = 'bg-rose-600 shadow-rose-600/50';
+                if (risk.color === 'purple') colorClass = 'bg-purple-600 shadow-purple-600/50';
+                if (risk.color === 'blue') colorClass = 'bg-sky-500 shadow-sky-500/50';
+                if (risk.color === 'orange') colorClass = 'bg-orange-500 shadow-orange-500/50';
+                if (risk.color === 'green') colorClass = 'bg-emerald-600 shadow-emerald-600/50';
+
+                const borderHighlight = (risk.id === currentSelectedRiskId) ? 'ring-4 ring-offset-2 ring-zinc-950 scale-125 z-30' : 'border border-white/90';
+                
+                const isPending = evaluationStates[risk.id] === 'pending';
+                // Highlight with pulse animation only if pending
+                const pulseClass = isPending ? 'hotspot-pulse' : '';
+
+                dot.className = `${colorClass} ${borderHighlight} ${pulseClass} rounded-full hover:scale-125 shadow-md cursor-pointer transform -translate-x-1/2 -translate-y-1/2 transition duration-200 z-20`;
+                dot.onclick = () => selectRisk(risk);
+                container.appendChild(dot);
+            });
+        }
+
+        function selectRisk(risk) {
+            currentSelectedRiskId = risk.id;
+            renderHotspots(); 
+            
+            const detailBox = document.getElementById('risk-detail-box');
+            const state = evaluationStates[risk.id];
+
+            const colorMap = {
+                yellow: 'bg-amber-50 text-amber-800 border border-amber-300',
+                red: 'bg-rose-50 text-rose-800 border border-rose-300',
+                purple: 'bg-purple-50 text-purple-800 border border-purple-300',
+                blue: 'bg-sky-50 text-sky-800 border border-sky-300',
+                orange: 'bg-orange-50 text-orange-800 border border-orange-300',
+                green: 'bg-emerald-50 text-emerald-800 border border-emerald-300'
+            };
+
+            const headerIcon = {
+                yellow: 'fa-bolt',
+                red: 'fa-triangle-exclamation',
+                purple: 'fa-chair',
+                blue: 'fa-person-falling-burst',
+                orange: 'fa-eye-slash',
+                green: 'fa-volume-high'
+            };
+
+            detailBox.className = "w-full max-w-5xl grid grid-cols-1 md:grid-cols-12 gap-5 text-left bg-zinc-50 border-2 border-zinc-200 rounded-2xl p-4 shadow-sm";
+            detailBox.innerHTML = `
+                <div class="md:col-span-4 flex flex-col justify-center space-y-1.5 border-r border-zinc-200 pr-2">
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${colorMap[risk.color]}">
+                            <i class="fa-solid ${headerIcon[risk.color]}"></i> ${risk.cat}
+                        </span>
+                        <span class="text-[10px] font-bold text-zinc-500">Riesgo #${risk.id}</span>
+                    </div>
+                    <h3 class="text-sm font-extrabold text-zinc-900 leading-tight">${risk.title}</h3>
+                    <p class="text-[11px] text-zinc-700 leading-snug"><strong>Daño esperado:</strong> ${risk.damage}</p>
+                </div>
+
+                <div class="md:col-span-4 bg-white border border-zinc-300 rounded-xl p-3 flex flex-col justify-center space-y-1.5 shadow-sm">
+                    <span class="text-[9px] font-bold text-zinc-600 uppercase tracking-widest block mb-0.5"><i class="fa-solid fa-graduation-cap"></i> Calificar respuesta del grupo</span>
+                    <div class="grid grid-cols-3 gap-1">
+                        <button onclick="setEvaluationState(${risk.id}, 'none')" class="px-1.5 py-1.5 rounded-lg text-[9px] font-bold border transition text-center ${state === 'none' ? 'bg-rose-600 text-white border-rose-700' : 'bg-white text-rose-600 border-rose-300 hover:bg-rose-50'}">
+                            🔴 No Detectado
+                        </button>
+                        <button onclick="setEvaluationState(${risk.id}, 'risk')" class="px-1.5 py-1.5 rounded-lg text-[9px] font-bold border transition text-center ${state === 'risk' ? 'bg-amber-500 text-white border-amber-600' : 'bg-white text-amber-600 border-amber-300 hover:bg-amber-50'}">
+                            🟡 Solo Riesgo
+                        </button>
+                        <button onclick="setEvaluationState(${risk.id}, 'both')" class="px-1.5 py-1.5 rounded-lg text-[9px] font-bold border transition text-center ${state === 'both' ? 'bg-emerald-600 text-white border-emerald-700' : 'bg-white text-emerald-600 border-emerald-300 hover:bg-emerald-50'}">
+                            🟢 Riesgo y Daño
+                        </button>
+                    </div>
+                </div>
+
+                <div class="md:col-span-4 bg-sky-50 border border-sky-200 rounded-xl p-3 flex flex-col justify-center space-y-1 shadow-sm">
+                    <span class="text-[9px] font-bold text-sky-800 tracking-widest block"><i class="fa-solid fa-shield-halved text-[9px]"></i> Medida Correctiva</span>
+                    <p class="text-[11px] text-zinc-800 leading-tight font-semibold">
+                        ${getPreventiveAction(risk.id)}
+                    </p>
+                </div>
+            `;
+
+            const cardElement = document.getElementById(`side-card-${risk.id}`);
+            if (cardElement) {
+                cardElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        function setEvaluationState(riskId, state) {
+            evaluationStates[riskId] = state;
+            renderHotspots(); 
+            renderSidebar();  
+            
+            const risk = baseDeDatosRiesgos.find(r => r.id === riskId);
+            if (risk) selectRisk(risk);
+
+            showToast('Evaluación manual guardada y registrada.', 'success');
+        }
+
+        function getPreventiveAction(id) {
+            const acciones = {
+                1: 'Retirar regletas en cascada. Instalar guiado ordenado y verificar potencia máxima.',
+                2: 'Canalizar cables mediante pasacables ignífugos. Evitar empalmes artesanales.',
+                3: 'Sustituir el enchufe deteriorado de forma segura por personal cualificado.',
+                4: 'Reubicar el hervidor lejos de tomas de agua e instalar bases estancas.',
+                5: 'Mantener permanentemente despejadas las vías y salidas de evacuación.',
+                6: 'Cerrar cajones tras su uso para evitar golpes imprevistos de compañeros.',
+                7: 'Limitar la altura de apilado. Cajas pesadas deben guardarse abajo.',
+                8: 'Fijar cables al suelo mediante pasacables de goma de alta resistencia.',
+                9: 'Reorganizar el reparto de carga laboral y fomentar pausas activas.',
+                10: 'Configurar pantallas a 90° de luz y usar soportes regulables.',
+                11: 'Fomentar de forma periódica las dinámicas grupales de desconexión y pausas activas.',
+                12: 'Suministrar auricular manos libres a operadores con telefonía continua.',
+                13: 'Ajustar silla ergonómica regulable y mantener la espalda apoyada.',
+                14: 'Secar de inmediato y señalizar con cartel de suelo mojado.',
+                15: 'Fijar alfombras con cinta de doble cara o sustituir por liso.',
+                16: 'Prohibir uso de móvil al caminar por pasillos o escaleras.',
+                17: 'Colocar estores regulables de láminas opacas contra reflejos.',
+                18: 'Fomentar la luz ambiental difusa y evitar sombras de penumbra en puestos.',
+                19: 'Establecer turnos rotativos saludables y garantizar descansos reparadores.',
+                20: 'Realizar charlas periódicas de concienciación sobre higiene postural.',
+                21: 'Garantizar alfombrillas y ratones ergonómicos con reposamuñecas.',
+                22: 'Ajustar el sistema de climatización entre 20°C y 24°C por normativa.',
+                23: 'Someter la ventana a mantenimiento mecánico de apertura y cierre seguro.',
+                24: 'Aislar acústicamente la fotocopiadora o reubicarla fuera de áreas de reunión.'
+            };
+            return acciones[id] || 'Revisar protocolos de seguridad y ordenar el área de trabajo.';
+        }
+
+        function addCustomNote() {
+            const riskInput = document.getElementById('input-note-risk');
+            const damageInput = document.getElementById('input-note-damage');
+
+            const riskText = riskInput.value.trim();
+            const damageText = damageInput.value.trim();
+
+            if (!riskText) {
+                showToast('Debes indicar al menos el riesgo detectado.', 'warning');
+                return;
+            }
+
+            customStudentNotes.push({
+                risk: riskText,
+                damage: damageText || 'Sin daño especificado por el alumno.'
+            });
+
+            riskInput.value = '';
+            damageInput.value = '';
+
+            renderCustomNotesList();
+            showToast('Aportación registrada en la pizarra.', 'success');
+        }
+
+        function removeCustomNote(index) {
+            customStudentNotes.splice(index, 1);
+            renderCustomNotesList();
+            showToast('Aportación eliminada de la pizarra.', 'info');
+        }
+
+        function renderCustomNotesList() {
+            const list = document.getElementById('custom-notes-list');
+            const emptyState = document.getElementById('custom-notes-empty');
+
+            if (customStudentNotes.length === 0) {
+                emptyState.classList.remove('hidden');
+                Array.from(list.children).forEach(child => {
+                    if (child.id !== 'custom-notes-empty') child.remove();
+                });
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            list.innerHTML = '';
+            list.appendChild(emptyState);
+
+            customStudentNotes.forEach((note, index) => {
+                const item = document.createElement('div');
+                item.className = "bg-sky-50 border-2 border-sky-200 rounded-xl p-3 shadow-sm relative group";
+                item.innerHTML = `
+                    <button onclick="removeCustomNote(${index})" class="absolute top-2 right-2 text-zinc-400 hover:text-rose-600 opacity-0 group-hover:opacity-100 transition duration-150">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                    <div class="flex items-start gap-1.5 pr-5">
+                        <span class="bg-sky-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-md mt-0.5">${index + 1}</span>
+                        <div>
+                            <p class="text-xs font-bold text-zinc-900 leading-tight">Riesgo: ${note.risk}</p>
+                            <p class="text-[11px] text-zinc-600 mt-1 italic leading-snug">Daño: ${note.damage}</p>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function renderSidebar() {
+            const list = document.getElementById('student-observations-list');
+            const emptyState = document.getElementById('observations-empty');
+            const counter = document.getElementById('student-list-count');
+            const evalBtn = document.getElementById('btn-evaluation-trigger');
+
+            const auditedRisks = baseDeDatosRiesgos.filter(r => evaluationStates[r.id] !== 'pending');
+            counter.textContent = `${auditedRisks.length} de 24 Evaluados`;
+
+            // Control the button status dynamically
+            if (evalBtn) {
+                if (auditedRisks.length === 24) {
+                    evalBtn.disabled = false;
+                    evalBtn.className = "bg-sky-600 hover:bg-sky-700 text-white font-extrabold text-xs px-3 py-1.5 rounded-lg border border-sky-500 shadow transition-all flex items-center gap-1.5 cursor-pointer animate-pulse";
+                } else {
+                    evalBtn.disabled = true;
+                    evalBtn.className = "bg-zinc-200 text-zinc-400 font-bold text-xs px-3 py-1.5 rounded-lg border border-zinc-300 cursor-not-allowed flex items-center gap-1.5 transition-all";
+                }
+            }
+
+            if (currentSelectedRiskId === null) {
+                resetBannerDefault();
+            }
+
+            if (auditedRisks.length === 0) {
+                emptyState.classList.remove('hidden');
+                Array.from(list.children).forEach(child => {
+                    if (child.id !== 'observations-empty') child.remove();
+                });
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            list.innerHTML = '';
+            list.appendChild(emptyState);
+
+            auditedRisks.forEach(risk => {
+                const state = evaluationStates[risk.id];
+                let badgeClass = '';
+                let bgClass = '';
+                let badgeText = '';
+
+                if (state === 'none') {
+                    badgeClass = 'bg-rose-100 text-rose-900 border-rose-300';
+                    bgClass = 'bg-rose-50 hover:bg-rose-100 border-rose-200';
+                    badgeText = '<i class="fa-solid fa-circle-xmark mr-1"></i> No Detectado';
+                } else if (state === 'risk') {
+                    badgeClass = 'bg-amber-100 text-amber-900 border-amber-300';
+                    bgClass = 'bg-amber-50 hover:bg-amber-100 border-amber-200';
+                    badgeText = '<i class="fa-solid fa-triangle-exclamation mr-1"></i> Detectado';
+                } else if (state === 'both') {
+                    badgeClass = 'bg-emerald-100 text-emerald-950 border-emerald-300';
+                    bgClass = 'bg-emerald-50 hover:bg-emerald-100 border-emerald-200';
+                    badgeText = '<i class="fa-solid fa-circle-check mr-1"></i> Detectado y Evaluado';
+                }
+
+                const card = document.createElement('div');
+                card.id = `side-card-${risk.id}`;
+                card.className = `${bgClass} border-2 rounded-xl p-3 flex flex-col gap-2 transition cursor-pointer relative shadow-sm`;
+                card.onclick = () => selectRisk(risk);
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-start gap-2">
+                        <span class="text-[9px] font-extrabold bg-zinc-200 text-zinc-900 px-1.5 py-0.5 rounded border border-zinc-300 uppercase">#${risk.id} ${risk.title}</span>
+                        <span class="inline-flex items-center text-[9px] font-extrabold px-2 py-0.5 rounded border ${badgeClass}">
+                            ${badgeText}
+                        </span>
+                    </div>
+
+                    <p class="text-[11px] font-bold text-zinc-900 leading-snug">
+                        "${risk.oneSentence}"
+                    </p>
+
+                    <div class="pt-1.5 border-t border-zinc-200/50 flex items-center justify-between text-[10px] text-sky-800 font-semibold">
+                        <span class="font-bold flex items-center gap-1">
+                            <i class="fa-solid fa-gavel"></i> ${risk.legislationName}
+                        </span>
+                        <a href="${risk.legislationLink}" target="_blank" class="hover:underline flex items-center gap-0.5 font-extrabold text-sky-900 bg-sky-100 px-2 py-0.5 rounded border border-sky-300 shadow-sm" onclick="event.stopPropagation();">
+                            Ver BOE <i class="fa-solid fa-arrow-up-right-from-square text-[8px]"></i>
+                        </a>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function triggerEvaluation() {
+            const auditedRisks = baseDeDatosRiesgos.filter(r => evaluationStates[r.id] !== 'pending');
+            let totalPoints = 0;
+            auditedRisks.forEach(r => {
+                const state = evaluationStates[r.id];
+                if (state === 'both') totalPoints += 2; 
+                else if (state === 'risk') totalPoints += 1; 
+            });
+            
+            const percentage = Math.round((totalPoints / 48) * 100);
+            
+            const detailBox = document.getElementById('risk-detail-box');
+            detailBox.className = "w-full max-w-5xl flex flex-col md:flex-row items-center justify-center gap-8 bg-zinc-50 border-2 border-zinc-200 rounded-2xl p-5 shadow-md transition-all duration-300";
+            
+            const r = 45;
+            const circumference = 2 * Math.PI * r;
+            
+            detailBox.innerHTML = `
+                <div class="flex flex-col md:flex-row items-center gap-8 justify-center w-full">
+                    <div class="relative flex items-center justify-center w-28 h-28 shrink-0">
+                        <svg class="w-28 h-28 transform -rotate-90">
+                            <circle cx="56" cy="56" r="${r}" class="stroke-zinc-200" stroke-width="7" fill="transparent"></circle>
+                            <circle id="animated-ring" cx="56" cy="56" r="${r}" class="stroke-sky-600 transition-all duration-75" stroke-width="7" stroke-linecap="round" fill="transparent"
+                                stroke-dasharray="${circumference}" stroke-dashoffset="${circumference}"></circle>
+                        </svg>
+                        <span id="animated-percent-text" class="absolute text-lg font-black text-sky-950">0%</span>
+                    </div>
+                    
+                    <div id="trophy-container" class="flex flex-col items-center justify-center shrink-0 min-w-[120px] opacity-0 scale-75 transition-all duration-500">
+                        <div id="trophy-icon-box" class="p-3 bg-white border-2 border-zinc-300 rounded-2xl shadow-md">
+                        </div>
+                        <span class="text-[10px] font-black text-sky-900 tracking-wider uppercase mt-1.5">Rango Obtenido</span>
+                    </div>
+
+                    <div id="feedback-text-container" class="flex-1 opacity-0 transition-all duration-500 text-center md:text-left">
+                        <h3 id="feedback-title" class="text-sm font-extrabold text-zinc-900 uppercase tracking-wide">Procesando auditoría...</h3>
+                        <p id="feedback-desc" class="text-xs text-zinc-600 mt-1 leading-relaxed font-semibold">Generando matriz de resultados en base a las correcciones del facilitador.</p>
+                    </div>
+                </div>
+            `;
+
+            let currentPercent = 0;
+            const totalDuration = 2000 * (percentage / 100 || 0.05); 
+            const startTime = performance.now();
+            const ringElement = document.getElementById('animated-ring');
+            const textElement = document.getElementById('animated-percent-text');
+
+            function animateRing(timestamp) {
+                const elapsed = timestamp - startTime;
+                const progress = Math.min(elapsed / totalDuration, 1);
+                currentPercent = Math.round(progress * percentage);
+
+                textElement.textContent = `${currentPercent}%`;
+                const currentOffset = circumference - (currentPercent / 100) * circumference;
+                ringElement.setAttribute('stroke-dashoffset', currentOffset);
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateRing);
+                } else {
+                    textElement.textContent = `${percentage}%`;
+                    ringElement.setAttribute('stroke-dashoffset', circumference - (percentage / 100) * circumference);
+                    revealTrophyAndFeedback(percentage);
+                }
+            }
+
+            requestAnimationFrame(animateRing);
+        }
+
+        function revealTrophyAndFeedback(percentage) {
+            const trophyContainer = document.getElementById('trophy-container');
+            const trophyIconBox = document.getElementById('trophy-icon-box');
+            const feedbackContainer = document.getElementById('feedback-text-container');
+            const feedbackTitle = document.getElementById('feedback-title');
+            const feedbackDesc = document.getElementById('feedback-desc');
+
+            let iconHtml = '';
+            let titleText = '';
+            let descText = '';
+
+            if (percentage === 100) {
+                iconHtml = `<i class="fa-solid fa-trophy text-sky-400 text-5xl animate-bounce drop-shadow-[0_4px_8px_rgba(56,189,248,0.5)]"></i>`;
+                titleText = '🏆 ¡COPA DE DIAMANTE PREVENTIVO! 💎';
+                descText = '<strong>¡Auditoría Perfecta!</strong> Nivel de Auditoría Senior Alcanzado. Habéis detectado todos los riesgos y sus consecuencias de forma milimétrica. Cumplimiento absoluto del protocolo de PRL.';
+            } else if (percentage >= 75) {
+                iconHtml = `<i class="fa-solid fa-trophy text-amber-400 text-5xl animate-pulse drop-shadow-[0_4px_8px_rgba(251,191,36,0.5)]"></i>`;
+                titleText = '🏆 ¡COPA DE ORO PREVENTIVO! 🥇';
+                descText = '<strong>¡Excelente Trabajo!</strong> Muy buena capacidad de análisis de campo de prevención. Gran ojo para el detalle estructural.';
+            } else if (percentage >= 50) {
+                iconHtml = `<i class="fa-solid fa-trophy text-zinc-400 text-5xl drop-shadow-[0_4px_8px_rgba(156,163,175,0.4)]"></i>`;
+                titleText = '🏆 ¡COPA DE PLATA PREVENTIVA! 🥈';
+                descText = '<strong>¡Buen Trabajo!</strong> Habéis identificado la mayoría de los riesgos, pero recordad profundizar en los daños potenciales asociados para evitar accidentes mayores.';
+            } else if (percentage >= 30) {
+                iconHtml = `<i class="fa-solid fa-trophy text-amber-700 text-5xl drop-shadow-[0_4px_8px_rgba(180,83,9,0.4)]"></i>`;
+                titleText = '⚠️ ¡COPA DE BRONCE PREVENTIVO! 🥉';
+                descText = '<strong>¡Aprobado Justo!</strong> Habéis localizado varios focos de peligro obvios, pero muchos daños clave pasaron desapercibidos en la auditoría.';
+            } else {
+                iconHtml = `<i class="fa-solid fa-dumpster-fire text-rose-500 text-5xl animate-pulse"></i>`;
+                titleText = '🚨 ¡ALERTA DE SEGURIDAD MÁXIMA! 💩';
+                descText = '<strong>¡Mucho Peligro!</strong> Tenéis que repasar los criterios fundamentales de PRL de forma urgente. ¡Esta oficina simulada es un peligro de alta prioridad!';
+            }
+
+            trophyIconBox.innerHTML = iconHtml;
+            feedbackTitle.innerHTML = titleText;
+            feedbackDesc.innerHTML = descText;
+
+            trophyContainer.classList.remove('opacity-0', 'scale-75');
+            trophyContainer.classList.add('opacity-100', 'scale-100');
+            feedbackContainer.classList.remove('opacity-0');
+            feedbackContainer.classList.add('opacity-100');
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            const toastIcon = document.getElementById('toast-icon');
+            const toastMessage = document.getElementById('toast-message');
+
+            toastMessage.textContent = message;
+
+            if (type === 'success') {
+                toastIcon.className = "fa-solid fa-circle-check text-emerald-600";
+                toast.className = "fixed bottom-6 right-6 z-50 bg-white border-2 border-emerald-300 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2.5 text-xs text-zinc-900 transform translate-y-20 opacity-0 transition-all duration-300";
+            } else if (type === 'warning') {
+                toastIcon.className = "fa-solid fa-circle-exclamation text-amber-500";
+                toast.className = "fixed bottom-6 right-6 z-50 bg-white border-2 border-amber-300 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2.5 text-xs text-zinc-900 transform translate-y-20 opacity-0 transition-all duration-300";
+            } else {
+                toastIcon.className = "fa-solid fa-circle-info text-sky-600";
+                toast.className = "fixed bottom-6 right-6 z-50 bg-white border-2 border-sky-300 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2.5 text-xs text-zinc-900 transform translate-y-20 opacity-0 transition-all duration-300";
+            }
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        window.onload = function() {
+            updateTimerDisplay();
+            resetBannerDefault();
+        };
+
+        window.addEventListener('keydown', function(e) {
+            // Check if CTRL + J is pressed
+            if (e.ctrlKey && e.key.toLowerCase() === 'j') {
+                e.preventDefault(); // Prevent browser default search/download history action
+                bypassUnlock = true;
+                showToast('¡Solución desbloqueada manualmente por el formador!', 'success');
+                switchTab('fase2');
+            }
+        });
+    </script>
+</body>
+</html>
