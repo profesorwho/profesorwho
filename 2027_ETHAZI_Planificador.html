@@ -1,0 +1,2234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETHAZI - Planificador & CPM</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        zinc: {
+                            50: '#fafafa',
+                            100: '#f4f4f5',
+                            200: '#e4e4e7',
+                            300: '#d4d4d8',
+                            400: '#a1a1aa',
+                            500: '#71717a',
+                            600: '#52525b',
+                            700: '#3f3f46',
+                            800: '#27272a',
+                            900: '#18181b',
+                        },
+                        ethazi: {
+                            light: '#e0f2fe',
+                            pastel: '#bae6fd',
+                            brand: '#38bdf8',
+                            dark: '#0284c7',
+                            navy: '#0369a1'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Ocultar barra de scroll en contenedores específicos */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-zinc-50 text-zinc-800 min-h-screen flex flex-col selection:bg-ethazi-light selection:text-ethazi-navy">
+
+<header class="bg-white border-b border-zinc-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+        <div class="flex items-center space-x-3 min-w-0">
+            <div class="bg-ethazi-light p-2 rounded-xl text-ethazi-dark shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
+                </svg>
+            </div>
+            <div class="truncate">
+                <h1 class="font-bold text-base sm:text-lg text-zinc-900 leading-tight truncate">Planificador & Gestor CPM</h1>
+                <p class="text-[10px] sm:text-xs text-zinc-500 truncate">FP Vasca / Modelo de Aprendizaje Colaborativo ETHAZI</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-2 shrink-0">
+            <button onclick="document.getElementById('importFile').click()" class="px-2.5 py-1.5 text-xs font-semibold bg-zinc-100 hover:bg-zinc-200 text-zinc-700 rounded-lg transition flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+                </svg>
+                <span class="hidden md:inline">Importar</span>
+            </button>
+            <input type="file" id="importFile" class="hidden" accept=".json" onchange="importProject(event)">
+            <button onclick="exportProject()" class="px-2.5 py-1.5 text-xs font-semibold bg-ethazi-light hover:bg-ethazi-pastel text-ethazi-navy rounded-lg transition flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+                <span class="hidden md:inline">Exportar</span>
+            </button>
+            <button onclick="loadDemoData()" class="px-2.5 py-1.5 text-xs font-medium border border-zinc-200 hover:border-zinc-300 rounded-lg text-zinc-600 transition">
+                Cargar Demo
+            </button>
+            <button onclick="openConfirmModal()" class="px-2.5 py-1.5 text-xs font-semibold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg transition flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                </svg>
+                <span class="hidden sm:inline">Limpiar</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<div id="toastContainer" class="fixed top-20 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+<main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col lg:flex-row gap-6">
+    <!-- Lateral izquierdo: Miembros del Grupo, Ejecución Real y Estadísticas de carga -->
+    <aside class="w-full lg:w-80 flex flex-col gap-6 shrink-0">
+        <!-- Tarjeta de Grupo -->
+        <div class="bg-white rounded-2xl border border-zinc-200 p-5 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="font-bold text-zinc-900 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-ethazi-dark">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                    </svg>
+                    Miembros del Equipo
+                </h2>
+                <span class="text-xs font-semibold bg-zinc-100 text-zinc-600 px-2 py-0.5 rounded-full transition-colors duration-200" id="memberCount">0/5</span>
+            </div>
+            
+            <div class="space-y-2 mb-4" id="memberList">
+                <!-- Se inyectarán dinámicamente -->
+            </div>
+
+            <!-- Formulario de añadir miembro -->
+            <div class="flex gap-2">
+                <input type="text" id="newMemberName" placeholder="Nombre del alumno..." class="flex-1 text-sm bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 focus:outline-none focus:border-ethazi-brand text-zinc-800 transition">
+                <button onclick="addMember()" class="bg-ethazi-brand hover:bg-ethazi-dark text-white p-2 rounded-xl transition shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Tarjeta de Ejecución Real del Proyecto -->
+        <div class="bg-white rounded-2xl border border-zinc-200 p-5 shadow-sm">
+            <h3 class="font-bold text-zinc-900 flex items-center gap-2 mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-emerald-600">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                </svg>
+                Ejecución Real del Reto
+            </h3>
+            <div class="space-y-4">
+                <!-- Progreso de Tareas -->
+                <div class="space-y-1">
+                    <div class="flex justify-between text-xs font-semibold">
+                        <span class="text-zinc-500">Avance de entregables</span>
+                        <span class="text-emerald-700 font-bold" id="realTaskProgress">0%</span>
+                    </div>
+                    <div class="w-full bg-zinc-100 rounded-full h-2.5">
+                        <div id="realTaskProgressBar" class="bg-emerald-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <p class="text-[10px] text-zinc-400 text-right" id="realTaskCounts">0 de 0 tareas completadas</p>
+                </div>
+
+                <!-- Comparativa Horas Invertidas -->
+                <div class="grid grid-cols-2 gap-2 pt-2 border-t border-zinc-100">
+                    <div class="bg-zinc-50 p-2.5 rounded-xl border border-zinc-100 text-center">
+                        <span class="block text-[9px] font-bold text-zinc-400 uppercase">Previsto</span>
+                        <span class="text-sm font-extrabold text-zinc-700" id="hoursPlannedMetric">0h</span>
+                    </div>
+                    <div class="bg-zinc-50 p-2.5 rounded-xl border border-zinc-100 text-center">
+                        <span class="block text-[9px] font-bold text-zinc-400 uppercase">Real Invertido</span>
+                        <span class="text-sm font-extrabold text-zinc-700" id="hoursRealMetric">0h</span>
+                    </div>
+                </div>
+
+                <!-- Desviación neta de tiempo -->
+                <div class="p-3 rounded-xl flex items-center justify-between text-xs font-semibold" id="historicalDeviationContainer">
+                    <span class="text-zinc-600">Desviación Histórica:</span>
+                    <span id="historicalDeviationValue" class="text-sm font-extrabold text-emerald-700">0 horas</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-zinc-200 p-5 shadow-sm">
+            <h3 class="font-bold text-zinc-900 flex items-center gap-2 mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-ethazi-dark">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z" />
+                </svg>
+                Distribución de Carga (Horas)
+            </h3>
+            <div class="space-y-3" id="workloadBars">
+                <!-- Horas estimadas por miembro calculadas en tiempo real -->
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-zinc-200 p-5 shadow-sm">
+            <h3 class="font-bold text-zinc-900 flex items-center gap-2 mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-amber-500">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                </svg>
+                Objetivo del Reto
+            </h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-zinc-500 mb-1">DURACIÓN OBJETIVO (HORAS)</label>
+                    <div class="flex items-center gap-2">
+                        <input type="number" id="targetDuration" value="40" onchange="recalculateCPM()" class="w-24 text-sm font-bold bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-1.5 focus:outline-none focus:border-ethazi-brand text-zinc-800 transition">
+                        <span class="text-xs text-zinc-500">horas de reto</span>
+                    </div>
+                </div>
+
+                <div id="optimizerAlerts" class="hidden p-3.5 rounded-xl border flex flex-col gap-1.5 text-xs">
+                    <!-- Avisos generados dinámicamente -->
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <section class="flex-1 flex flex-col gap-6" id="dropZone">
+        <!-- Barra de navegación por pestañas -->
+        <div class="bg-white border border-zinc-200 p-1.5 rounded-xl flex gap-1 shadow-sm overflow-x-auto no-scrollbar">
+            <button onclick="switchTab('wbs')" id="tab-wbs" class="flex-1 min-w-[100px] py-2 px-3 text-xs sm:text-sm font-semibold rounded-lg bg-ethazi-light text-ethazi-navy transition flex items-center justify-center gap-1.5">
+                📁 WBS / Tareas
+            </button>
+            <button onclick="switchTab('gantt')" id="tab-gantt" class="flex-1 min-w-[150px] py-2 px-3 text-xs sm:text-sm font-semibold rounded-lg hover:bg-zinc-100 text-zinc-600 transition flex items-center justify-center gap-1.5">
+                📅 Gantt de Desviaciones
+            </button>
+            <button onclick="switchTab('pert')" id="tab-pert" class="flex-1 min-w-[150px] py-2 px-3 text-xs sm:text-sm font-semibold rounded-lg hover:bg-zinc-100 text-zinc-600 transition flex items-center justify-center gap-1.5">
+                🕸️ Grafo PERT / CPM
+            </button>
+            <button onclick="switchTab('audit')" id="tab-audit" class="flex-1 min-w-[120px] py-2 px-3 text-xs sm:text-sm font-semibold rounded-lg hover:bg-zinc-100 text-zinc-600 transition flex items-center justify-center gap-1.5">
+                📜 Log de Evolución
+            </button>
+        </div>
+
+        <!-- Contenedor persistente de Advertencias por Conflictos de Dependencia en Tiempo Real -->
+        <div id="dependencyWarningsContainer" class="hidden p-4 rounded-xl border border-amber-200 bg-amber-50 text-amber-900 text-xs flex flex-col gap-2 shadow-sm transition-all duration-300">
+            <!-- Se inyectarán dinámicamente las inconsistencias de cronograma -->
+        </div>
+
+        <!-- Vista 1: WBS / Lista de Tareas -->
+        <div id="view-wbs" class="space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-extrabold text-zinc-950">Estructura de Desglose del Trabajo (WBS)</h2>
+                    <p class="text-sm text-zinc-500">Define tareas concretas y autoconclusivas para el equipo.</p>
+                </div>
+                <button onclick="openTaskModal()" class="px-4 py-2 bg-ethazi-dark hover:bg-ethazi-navy text-white text-sm font-bold rounded-xl transition shadow-sm flex items-center gap-2 self-start sm:self-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    Nueva Tarea / Hito
+                </button>
+            </div>
+
+            <!-- Grid de tareas -->
+            <div id="tasksGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Se inyectarán dinámicamente -->
+            </div>
+        </div>
+
+        <!-- Vista 2: Gantt Planificación vs Real -->
+        <div id="view-gantt" class="bg-white rounded-2xl border border-zinc-200 p-6 shadow-sm hidden space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-extrabold text-zinc-950">Diagrama de Gantt & Línea Base</h2>
+                    <p class="text-sm text-zinc-500">Compara de forma visual tu planificación original (línea base) con el progreso y desviaciones reales.</p>
+                </div>
+                <!-- Selector de Fecha de Control -->
+                <div class="bg-zinc-50 p-3 rounded-xl border border-zinc-200 flex items-center gap-3 self-start md:self-auto">
+                    <label for="simulationDate" class="text-xs font-bold text-zinc-500 whitespace-nowrap">FECHA DE SEGUIMIENTO:</label>
+                    <input type="date" id="simulationDate" onchange="renderGanttChart()" class="text-xs font-bold bg-white border border-zinc-300 rounded-lg px-2 py-1 focus:outline-none focus:border-ethazi-brand text-zinc-800 transition">
+                </div>
+            </div>
+
+            <!-- Panel de Alerta Inteligente en Gantt -->
+            <div id="ganttStatusAlert" class="p-4 rounded-xl border flex flex-col md:flex-row md:items-center justify-between gap-4 transition-colors">
+                <!-- Se inyectará dinámicamente -->
+            </div>
+
+            <div class="overflow-x-auto border border-zinc-200 rounded-xl no-scrollbar">
+                <div class="min-w-[800px] p-4 bg-zinc-50" id="ganttTimelineContainer">
+                    <!-- Se renderizará la línea de tiempo dinámica del Gantt -->
+                </div>
+            </div>
+            
+            <div class="flex flex-wrap items-center gap-4 sm:gap-6 justify-start sm:justify-end text-xs font-semibold text-zinc-500">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 bg-zinc-300 rounded-sm"></span> Línea Base Planificada
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 bg-ethazi-brand rounded-sm"></span> Ejecución Real / Progreso
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 bg-rose-500 rounded-sm"></span> Desviación / Retraso Real
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 border border-dashed border-amber-500 rounded-sm"></span> Hito (Milestone)
+                </div>
+            </div>
+        </div>
+
+        <!-- Vista 3: PERT -->
+        <div id="view-pert" class="bg-white rounded-2xl border border-zinc-200 p-6 shadow-sm hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-extrabold text-zinc-950">Diagrama de Grafo PERT & Camino Crítico</h2>
+                    <p class="text-sm text-zinc-500">Haz clic y arrastra libremente para mover los nodos y redistribuir tu planificación. Usa la rueda o botones para hacer zoom.</p>
+                </div>
+                <div class="bg-zinc-100 p-3 rounded-xl border border-zinc-200 flex items-center gap-4 text-xs shrink-0">
+                    <div>
+                        <p class="text-zinc-500 font-semibold">DURACIÓN ESTIMADA</p>
+                        <p class="text-lg font-extrabold text-zinc-900" id="pertProjDuration">0 horas</p>
+                    </div>
+                    <div class="border-l border-zinc-300 pl-4">
+                        <p class="text-zinc-500 font-semibold">HOLGURA DEL RETO</p>
+                        <p class="text-lg font-extrabold" id="pertSlack">0 horas</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contenedor del Grafo Interactivo con Zoom y Pan -->
+            <div class="relative w-full overflow-hidden bg-zinc-950 rounded-2xl border border-zinc-800 shadow-inner" style="height: 550px;">
+                <!-- Panel de controles de zoom y reseteo de distribución -->
+                <div class="absolute top-4 right-4 z-10 flex flex-col gap-1.5">
+                    <button onclick="zoomPert(1.15)" class="p-2.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-100 rounded-xl border border-zinc-800 shadow-md transition flex items-center justify-center font-bold" title="Acercar">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+                    </button>
+                    <button onclick="zoomPert(0.85)" class="p-2.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-100 rounded-xl border border-zinc-800 shadow-md transition flex items-center justify-center font-bold" title="Alejar">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M20 12H4"/></svg>
+                    </button>
+                    <button onclick="resetPertPan()" class="p-2.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-100 rounded-xl border border-zinc-800 shadow-md transition flex items-center justify-center text-xs font-semibold" title="Centrar">
+                        Centrar
+                    </button>
+                    <button onclick="resetLayout()" class="p-2.5 bg-rose-950/60 hover:bg-rose-900/80 text-rose-200 rounded-xl border border-rose-900 shadow-md transition flex items-center justify-center text-[10px] font-black tracking-wider uppercase" title="Restablecer posiciones originales">
+                        Reset Pos
+                    </button>
+                </div>
+
+                <div id="pertViewport" class="absolute inset-0 cursor-grab active:cursor-grabbing select-none">
+                    <div id="pertTransformContainer" class="absolute origin-top-left flex py-16 px-12 gap-16" style="width: 2500px; min-height: 480px;">
+                        <svg id="pertSvgCanvas" class="absolute inset-0 pointer-events-none w-full h-full"></svg>
+                        <div id="pertNodesContainer" class="absolute inset-0 flex py-16 px-12 gap-16 pointer-events-none">
+                            <!-- Nodos PERT generados dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vista 4: Histórico de Cambios (Log de Evolución de ETHAZI) -->
+        <div id="view-audit" class="bg-white rounded-2xl border border-zinc-200 p-6 shadow-sm hidden space-y-6">
+            <div>
+                <h2 class="text-xl font-extrabold text-zinc-950">Historial de Evolución y Log de Cambios</h2>
+                <p class="text-sm text-zinc-500">Indicio de la competencia transversal "Resolución de imprevistos" y "Toma de decisiones".</p>
+            </div>
+
+            <div class="border border-zinc-200 rounded-xl overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-zinc-200 text-sm">
+                        <thead class="bg-zinc-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left font-semibold text-zinc-500">Fecha/Hora</th>
+                                <th class="px-6 py-3 text-left font-semibold text-zinc-500">Evento / Acción</th>
+                                <th class="px-6 py-3 text-left font-semibold text-zinc-500">Detalles de la Gestión</th>
+                            </tr>
+                        </thead>
+                        <tbody id="auditLogsBody" class="divide-y divide-zinc-200 bg-white">
+                            <!-- Logs inyectados en tiempo real -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="bg-white border-t border-zinc-200 mt-auto py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-6">
+        <div class="w-full flex flex-col md:flex-row items-center gap-6">
+            <div class="flex items-center gap-2 shrink-0 bg-zinc-100 px-3 py-2 rounded-xl border border-zinc-200 text-zinc-600 font-bold text-xs select-none">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <circle cx="12" cy="12" r="10"/>
+                    <circle cx="12" cy="12" r="5"/>
+                    <path d="M12 2a10 10 0 0 1 10 10c0 1.5-.3 3-.9 4.3M12 22a10 10 0 0 1-10-10c0-1.5.3-3 .9-4.3"/>
+                </svg>
+                <span>CC BY-NC-ND 4.0</span>
+            </div>
+            <div class="text-justify text-[11px] sm:text-xs text-zinc-500 leading-relaxed font-normal">
+                <strong>Nota sobre la producción intelectual:</strong> Este recurso ha sido creado mediante un flujo de trabajo de <em>Vibe Coding</em>, utilizando IA como herramienta de asistencia técnica. La autoría intelectual de la metodología, la selección de contenidos, la estructura pedagógica y la supervisión técnica pertenecen a <strong>Sergio Gutiérrez Rodríguez</strong>. Se ha utilizado IA para optimizar la traducción de estas intenciones a código ejecutable, garantizando la eficiencia y la accesibilidad del recurso.
+            </div>
+        </div>
+    </div>
+</footer>
+
+<div id="taskModal" class="fixed inset-0 bg-zinc-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl border border-zinc-200 max-w-lg w-full shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+        <div class="p-5 border-b border-zinc-100 flex items-center justify-between">
+            <h3 class="font-bold text-lg text-zinc-950" id="modalTitle">Nueva Tarea</h3>
+            <button onclick="closeTaskModal()" class="text-zinc-400 hover:text-zinc-600 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="p-6 overflow-y-auto space-y-4 text-sm flex-1">
+            <input type="hidden" id="editTaskId">
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div class="col-span-2">
+                    <label class="block text-xs font-semibold text-zinc-500 mb-1">TÍTULO DE LA TAREA / ACCIÓN *</label>
+                    <input type="text" id="taskTitle" required class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 focus:outline-none focus:border-ethazi-brand text-zinc-800 transition">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-zinc-500 mb-1">RESPONSABLE *</label>
+                    <select id="taskResponsible" required class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 focus:outline-none focus:border-ethazi-brand text-zinc-800 transition">
+                        <option value="">Selecciona...</option>
+                    </select>
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="block text-xs font-semibold text-zinc-500">¿ES UN HITO CLAVE?</label>
+                    </div>
+                    <div class="flex items-center h-10">
+                        <input type="checkbox" id="taskIsMilestone" class="w-4 h-4 text-ethazi-dark border-zinc-300 rounded focus:ring-ethazi-brand">
+                        <label for="taskIsMilestone" class="ml-2 text-xs text-zinc-600">Marcar como Hito inamovible</label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-zinc-500 mb-1">DURACIÓN ESTIMADA (HORAS) *</label>
+                    <input type="number" id="taskDuration" required min="0.5" step="0.5" value="2" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 focus:outline-none focus:border-ethazi-brand text-zinc-800 transition">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-zinc-500 mb-1">DURACIÓN REAL (HORAS)</label>
+                    <input type="number" id="taskDurationReal" min="0" step="0.5" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 focus:outline-none focus:border-ethazi-brand text-zinc-800 transition" placeholder="Si ha diferido...">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-zinc-500 mb-1">FECHA PLANIFICADA *</label>
+                    <input type="date" id="taskStartDate" required class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 focus:outline-none focus:border-ethazi-brand text-zinc-800 transition">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-zinc-500 mb-1">HORA PLANIFICADA *</label>
+                    <input type="time" id="taskStartTime" required class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 focus:outline-none focus:border-ethazi-brand text-zinc-800 transition" value="08:00">
+                </div>
+
+                <div class="col-span-2">
+                    <label class="block text-xs font-semibold text-zinc-500 mb-1">INDICADOR DE LOGRO / CUMPLIMIENTO *</label>
+                    <input type="text" id="taskSuccessCriteria" required placeholder="Ej: Memoria en PDF colgada en Drive" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 focus:outline-none focus:border-ethazi-brand text-zinc-800 transition">
+                </div>
+
+                <div class="col-span-2">
+                    <label class="block text-xs font-semibold text-zinc-500 mb-1">DEPENDENCIAS (TAREAS PREDECESORAS)</label>
+                    <div id="taskDependenciesList" class="flex flex-wrap gap-2 max-h-24 overflow-y-auto p-2 bg-zinc-50 rounded-xl border border-zinc-200">
+                        <!-- Checkboxes inyectados dinámicamente -->
+                    </div>
+                </div>
+
+                <div class="col-span-2">
+                    <label class="block text-xs font-semibold text-zinc-500 mb-1">DESCRIPCIÓN DE LA TAREA</label>
+                    <textarea id="taskDescription" rows="2" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 focus:outline-none focus:border-ethazi-brand text-zinc-800 transition" placeholder="Qué se espera lograr..."></textarea>
+                </div>
+
+                <div class="col-span-2">
+                    <label class="block text-xs font-semibold text-zinc-500 mb-1">OBSERVACIONES / NOTAS DE EJECUCIÓN</label>
+                    <textarea id="taskNotes" rows="2" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 focus:outline-none focus:border-ethazi-brand text-zinc-800 transition" placeholder="Detalles o problemas encontrados durante su realización..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-5 border-t border-zinc-100 bg-zinc-50 flex items-center justify-between">
+            <button onclick="closeTaskModal()" class="px-4 py-2 text-xs font-semibold bg-white border border-zinc-200 hover:border-zinc-300 rounded-xl text-zinc-600 transition">
+                Cancelar
+            </button>
+            <button onclick="saveTask()" class="px-5 py-2 text-xs font-bold bg-ethazi-dark hover:bg-ethazi-navy text-white rounded-xl transition shadow-sm">
+                Guardar Cambios
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación de Limpieza -->
+<div id="confirmModal" class="fixed inset-0 bg-zinc-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl border border-zinc-200 max-w-sm w-full p-6 shadow-xl space-y-4">
+        <div class="flex items-center gap-3 text-rose-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+            <h3 class="font-bold text-lg text-zinc-900">¿Limpiar todo el proyecto?</h3>
+        </div>
+        <p class="text-sm text-zinc-500">Esta acción eliminará de forma irreversible todos los miembros del equipo, tareas, hitos y el historial del log actual de tu almacenamiento local.</p>
+        <div class="flex gap-3 justify-end pt-2">
+            <button onclick="closeConfirmModal()" class="px-4 py-2 text-xs font-semibold bg-zinc-100 hover:bg-zinc-200 rounded-xl text-zinc-600 transition">Cancelar</button>
+            <button onclick="executeClearProjectData()" class="px-4 py-2 text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white rounded-xl transition shadow-sm">Sí, borrar todo</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal secreto de Rúbrica de Evaluación mediante IA -->
+<div id="secretIAPanel" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl border border-zinc-200 max-w-4xl w-full shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+        <div class="p-6 border-b border-zinc-100 bg-gradient-to-r from-ethazi-dark to-ethazi-navy text-white flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-white/10 rounded-xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 21l8.982-11.795m-9 0L15 3l-.813 5.096m0 0L6 18.205m12 .11L18 21m0 0h-5" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg">Asistente de Evaluación de IA (Profesorado FP)</h3>
+                    <p class="text-xs text-sky-100">Copia el prompt optimizado y sube el archivo JSON del grupo en el chat de la IA para una corrección integral.</p>
+                </div>
+            </div>
+            <button onclick="toggleSecretPanel()" class="text-white/80 hover:text-white transition">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="p-6 overflow-y-auto space-y-6 text-sm flex-1">
+            <div class="bg-amber-50 border border-amber-200 text-amber-900 p-4 rounded-2xl flex gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-amber-700 shrink-0">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0-3a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm9.034-4.034a8.25 8.25 0 1 1-11.668 11.668 8.25 8.25 0 0 1 11.668-11.668Z" />
+                </svg>
+                <div>
+                    <h4 class="font-bold">Instrucciones para la Corrección Eficiente:</h4>
+                    <p class="text-xs mt-1">Exporta la planificación del grupo como un archivo `.json` usando el botón superior "Exportar". Después, copia el prompt optimizado de abajo y **adjunta/sube** el archivo JSON directamente en tu chat de IA preferido (ChatGPT, Claude, Gemini). La IA leerá el fichero automáticamente y generará el informe detallado.</p>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-zinc-500">PROMPT DE CORRECCIÓN (CÓPIALO Y SUBE EL ARCHIVO JSON)</span>
+                    <button onclick="copyGeneratedPrompt()" class="text-xs font-semibold text-ethazi-dark hover:text-ethazi-navy flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5-1.5H13.5a3 3 0 0 0-3-3H6.75a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 6.75 21h7.5a2.25 2.25 0 0 0 2.25-2.25V17.25m-3-12 3 3m0 0 3-3m-3 3v-6" />
+                        </svg>
+                        Copiar Prompt
+                    </button>
+                </div>
+                <textarea id="aiPromptArea" readonly rows="12" class="w-full bg-zinc-900 text-zinc-100 font-mono text-xs p-4 rounded-2xl border border-zinc-800 focus:outline-none"></textarea>
+            </div>
+        </div>
+
+        <div class="p-5 border-t border-zinc-100 bg-zinc-50 flex justify-end">
+            <button onclick="toggleSecretPanel()" class="px-5 py-2 text-xs font-bold bg-zinc-200 hover:bg-zinc-300 rounded-xl text-zinc-700 transition">
+                Entendido
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Estado de la Aplicación
+    let state = {
+        members: [],
+        tasks: [],
+        targetDuration: 40,
+        logs: [],
+        layout: {} // Layout Manager: { taskId: { x: OffsetX, y: OffsetY } }
+    };
+
+    // Parámetros de interacción con PERT
+    let pertPanX = 50;
+    let pertPanY = 40;
+    let pertZoom = 0.9;
+    let isPanning = false;
+    let startX, startY;
+
+    // Control de Arrastre de Nodos (Layout Manager state)
+    let activeDraggingNodeId = null;
+    let dragStartPointerX = 0;
+    let dragStartPointerY = 0;
+    let dragStartOffset = { x: 0, y: 0 };
+
+    // Al cargar la ventana, iniciar controladores
+    window.onload = function() {
+        initDragAndDrop();
+        initKeyListeners();
+        initPertInteractions();
+        loadFromLocalStorage();
+        
+        // Inicializar la fecha de control del Gantt con la fecha actual del sistema
+        const simInput = document.getElementById('simulationDate');
+        if (simInput && !simInput.value) {
+            simInput.value = new Date().toISOString().substring(0, 10);
+        }
+
+        if (state.tasks.length === 0 && state.members.length === 0) {
+            loadDemoData(true); // Carga inicial silenciosa
+        } else {
+            renderAll();
+        }
+    };
+
+    // Guardado y recuperación local
+    function saveToLocalStorage() {
+        localStorage.setItem('ethazi_project_state', JSON.stringify(state));
+    }
+
+    function loadFromLocalStorage() {
+        const stored = localStorage.getItem('ethazi_project_state');
+        if (stored) {
+            try {
+                state = JSON.parse(stored);
+                if (!state.layout) state.layout = {}; // Asegurar existencia de layout
+                document.getElementById('targetDuration').value = state.targetDuration || 40;
+            } catch (e) {
+                console.error("Error cargando de LocalStorage", e);
+            }
+        }
+    }
+
+    function initKeyListeners() {
+        window.addEventListener('keydown', function(event) {
+            // Activar pestaña secreta con Ctrl + J
+            if (event.ctrlKey && event.key.toLowerCase() === 'j') {
+                event.preventDefault();
+                toggleSecretPanel();
+            }
+        });
+    }
+
+    // Interacción Drag, Pan & Zoom sobre el lienzo PERT y Nodos (Event Delegation & Pointer Capture)
+    function initPertInteractions() {
+        const viewport = document.getElementById('pertViewport');
+        if (!viewport) return;
+
+        // Delegación de Eventos del puntero para Pan del lienzo y Drag de los nodos
+        viewport.addEventListener('pointerdown', (e) => {
+            if (e.target.closest('button')) return;
+
+            // Comprobar si se ha pulsado en un Nodo del Grafo PERT
+            const nodeEl = e.target.closest('[id^="pert-node-"]');
+            if (nodeEl) {
+                // Si hace click en inputs o elementos de control dentro del nodo
+                if (e.target.closest('button') || e.target.closest('input') || e.target.closest('select')) {
+                    return;
+                }
+                const nodeId = nodeEl.id.replace('pert-node-', '');
+                
+                // Inicializar arrastre de este nodo específico
+                activeDraggingNodeId = nodeId;
+                dragStartPointerX = e.clientX;
+                dragStartPointerY = e.clientY;
+                
+                if (!state.layout) state.layout = {};
+                dragStartOffset = state.layout[nodeId] ? { ...state.layout[nodeId] } : { x: 0, y: 0 };
+                
+                isPanning = false; // Desactivar panning del canvas de fondo
+                e.stopPropagation();
+                nodeEl.setPointerCapture(e.pointerId); // Captura del puntero
+                return;
+            }
+
+            // Si no es un nodo, inicializar Panning de todo el lienzo de trabajo
+            isPanning = true;
+            startX = e.clientX - pertPanX;
+            startY = e.clientY - pertPanY;
+            viewport.style.cursor = 'grabbing';
+            viewport.setPointerCapture(e.pointerId);
+        });
+
+        viewport.addEventListener('pointermove', (e) => {
+            // Caso A: Arrastre en curso de un nodo (Modifica su transformación CSS localmente)
+            if (activeDraggingNodeId) {
+                e.stopPropagation();
+                const dx = (e.clientX - dragStartPointerX) / pertZoom;
+                const dy = (e.clientY - dragStartPointerY) / pertZoom;
+                
+                if (!state.layout) state.layout = {};
+                state.layout[activeDraggingNodeId] = {
+                    x: dragStartOffset.x + dx,
+                    y: dragStartOffset.y + dy
+                };
+
+                const nodeEl = document.getElementById(`pert-node-${activeDraggingNodeId}`);
+                if (nodeEl) {
+                    nodeEl.style.transform = `translate(${state.layout[activeDraggingNodeId].x}px, ${state.layout[activeDraggingNodeId].y}px)`;
+                }
+                
+                // IMPORTANTE: Redibujado en caliente inmediato de líneas sin interferir en calculateCPM()
+                drawConnections();
+                return;
+            }
+
+            // Caso B: Arrastre libre del fondo del viewport
+            if (!isPanning) return;
+            pertPanX = e.clientX - startX;
+            pertPanY = e.clientY - startY;
+            applyPertTransform();
+        });
+
+        const handlePointerUp = (e) => {
+            if (activeDraggingNodeId) {
+                const nodeEl = document.getElementById(`pert-node-${activeDraggingNodeId}`);
+                if (nodeEl) {
+                    nodeEl.releasePointerCapture(e.pointerId);
+                }
+                activeDraggingNodeId = null;
+                saveToLocalStorage(); // Persistir coordenadas visuales locales
+            } else if (isPanning) {
+                isPanning = false;
+                viewport.style.cursor = 'grab';
+                viewport.releasePointerCapture(e.pointerId);
+            }
+        };
+
+        viewport.addEventListener('pointerup', handlePointerUp);
+        viewport.addEventListener('pointercancel', handlePointerUp);
+
+        // Zoom controlado con rueda de ratón
+        viewport.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const factor = e.deltaY < 0 ? 1.08 : 0.92;
+            zoomPert(factor);
+        }, { passive: false });
+    }
+
+    function zoomPert(factor) {
+        pertZoom = Math.min(2.0, Math.max(0.35, pertZoom * factor));
+        applyPertTransform();
+    }
+
+    function resetPertPan() {
+        pertPanX = 50;
+        pertPanY = 40;
+        pertZoom = 0.85;
+        applyPertTransform();
+    }
+
+    // Mecanismo "Layout Snapshot": limpia coordenadas manuales y restaura el árbol original
+    function resetLayout() {
+        state.layout = {};
+        saveToLocalStorage();
+        renderPERTGraph();
+        showToast("Se han restablecido los nodos a las columnas automáticas.", "info");
+    }
+
+    function applyPertTransform() {
+        const container = document.getElementById('pertTransformContainer');
+        if (container) {
+            container.style.transform = `translate(${pertPanX}px, ${pertPanY}px) scale(${pertZoom})`;
+        }
+    }
+
+    // Drag and Drop de archivos JSON
+    function initDragAndDrop() {
+        const dropZone = document.getElementById('dropZone');
+        
+        window.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+
+        window.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const file = e.dataTransfer.files[0];
+            if (file && file.name.endsWith('.json')) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    try {
+                        const parsed = JSON.parse(event.target.result);
+                        if (parsed.tasks && parsed.members) {
+                            state = parsed;
+                            if (!state.layout) state.layout = {};
+                            document.getElementById('targetDuration').value = state.targetDuration || 40;
+                            saveToLocalStorage();
+                            renderAll();
+                            showToast("¡Proyecto importado con éxito!", "success");
+                        } else {
+                            showToast("El archivo no tiene el formato del planificador ETHAZI.", "error");
+                        }
+                    } catch (err) {
+                        showToast("Error al parsear el archivo JSON.", "error");
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+    }
+
+    // Control de modales personalizados
+    function openConfirmModal() {
+        document.getElementById('confirmModal').classList.remove('hidden');
+    }
+
+    function closeConfirmModal() {
+        document.getElementById('confirmModal').classList.add('hidden');
+    }
+
+    function executeClearProjectData() {
+        state = {
+            members: [],
+            tasks: [],
+            targetDuration: 40,
+            logs: [],
+            layout: {}
+        };
+        addLog("SISTEMA", "Limpieza completa de los datos de planificación.");
+        saveToLocalStorage();
+        closeConfirmModal();
+        renderAll();
+        showToast("Datos borrados por completo.", "info");
+    }
+
+    function toggleSecretPanel() {
+        const panel = document.getElementById('secretIAPanel');
+        panel.classList.toggle('hidden');
+        if (!panel.classList.contains('hidden')) {
+            prepareAIPrompt();
+        }
+    }
+
+    function prepareAIPrompt() {
+        const promptTemplate = `Actúa como un Consultor Pedagógico de Alto Rendimiento y Profesor de Formación Profesional experto en el modelo vasco de Aprendizaje Basado en Retos (ETHAZI).
+
+Voy a adjuntarte un archivo JSON de planificación y seguimiento de un equipo de alumnos. Este archivo contiene la Estructura de Desglose del Trabajo (WBS), los miembros del grupo, la asignación de roles, las duraciones estimadas frente a las reales, las dependencias calculadas por camino crítico (CPM), los hitos clave y la auditoría histórica de toma de decisiones (log de evolución).
+
+Analiza rigurosamente este archivo JSON y genera un informe de evaluación estructurado de la siguiente forma:
+
+1. **Evaluación de la dinámica global del grupo:** ¿La planificación WBS ha sido realista y equilibrada? ¿Cómo han manejado las dependencias (CPM) y los hitos clave?
+2. **Auditoría de Desviaciones e Imprevistos (Resolución de problemas):** Con base en el log de auditoría (logs de cambios y desviaciones de Gantt), ¿cómo han gestionado la reorganización del trabajo ante desviaciones de tiempo? Evalúa esta competencia transversal según el marco ETHAZI.
+3. **Ficha de Desempeño Individual de Alumnos (Uno por uno):** Para cada integrante:
+   - Nombre
+   - Total de horas estimadas vs reales asignadas.
+   - Cantidad de tareas lideradas y porcentaje completado.
+   - Observaciones detalladas de su implicación técnica y aporte real detectado en la auditoría.
+4. **Calificación Final Recomendada (Rúbrica ETHAZI):** Aporta notas sugeridas de 1 a 10 para la dimensión técnica de planificación y la competencia de autogestión/trabajo en equipo.
+
+Por favor, lee el archivo JSON que adjunto a continuación para proceder con la auditoría.`;
+        document.getElementById('aiPromptArea').value = promptTemplate;
+    }
+
+    function copyGeneratedPrompt() {
+        const area = document.getElementById('aiPromptArea');
+        area.select();
+        document.execCommand('copy');
+        showToast("¡Prompt de corrección copiado! Pégalo en la IA y arrastra tu archivo JSON.", "success");
+    }
+
+    function renderMembers() {
+        const list = document.getElementById('memberList');
+        list.innerHTML = '';
+        state.members.forEach((member, idx) => {
+            const card = document.createElement('div');
+            card.className = "flex items-center justify-between p-2.5 rounded-xl bg-zinc-100/70 border border-zinc-200 text-sm";
+            card.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-ethazi-brand"></span>
+                    <span class="font-medium text-zinc-800">${member}</span>
+                </div>
+                <button onclick="removeMember('${member}')" class="text-zinc-400 hover:text-rose-500 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            `;
+            list.appendChild(card);
+        });
+
+        const counter = document.getElementById('memberCount');
+        counter.textContent = `${state.members.length}/5`;
+        if (state.members.length > 5) {
+            counter.className = "text-xs font-bold bg-rose-100 text-rose-700 px-2.5 py-0.5 rounded-full ring-1 ring-rose-300";
+        } else {
+            counter.className = "text-xs font-semibold bg-zinc-100 text-zinc-600 px-2 py-0.5 rounded-full";
+        }
+        
+        const select = document.getElementById('taskResponsible');
+        select.innerHTML = '<option value="">Selecciona...</option>';
+        state.members.forEach(member => {
+            const opt = document.createElement('option');
+            opt.value = member;
+            opt.textContent = member;
+            select.appendChild(opt);
+        });
+
+        updateWorkloadChart();
+    }
+
+    function addMember() {
+        const input = document.getElementById('newMemberName');
+        const name = input.value.trim();
+        if (!name) return;
+        if (state.members.includes(name)) {
+            showToast("Este miembro ya está registrado en el equipo.", "warning");
+            return;
+        }
+        if (state.members.length >= 5) {
+            showToast("Atención: El modelo ETHAZI recomienda equipos de hasta 5 miembros. Se ha superado el tamaño aconsejado.", "warning");
+        }
+        state.members.push(name);
+        addLog("EQUIPO", `Añadido nuevo miembro al grupo: ${name}`);
+        input.value = '';
+        saveToLocalStorage();
+        renderAll();
+        showToast(`${name} se ha unido al equipo.`, "success");
+    }
+
+    function removeMember(name) {
+        state.members = state.members.filter(m => m !== name);
+        addLog("EQUIPO", `Retirado del grupo al miembro: ${name}`);
+        saveToLocalStorage();
+        renderAll();
+    }
+
+    function updateWorkloadChart() {
+        const container = document.getElementById('workloadBars');
+        container.innerHTML = '';
+        
+        if (state.members.length === 0) {
+            container.innerHTML = `<p class="text-xs text-zinc-400 italic">No hay miembros registrados.</p>`;
+            return;
+        }
+
+        const hoursMap = {};
+        state.members.forEach(m => hoursMap[m] = 0);
+        
+        state.tasks.forEach(t => {
+            if (t.responsible && hoursMap[t.responsible] !== undefined) {
+                hoursMap[t.responsible] += parseFloat(t.duration || 0);
+            }
+        });
+
+        const totalHours = Object.values(hoursMap).reduce((a, b) => a + b, 0);
+
+        state.members.forEach(m => {
+            const hrs = hoursMap[m];
+            const pct = totalHours > 0 ? (hrs / totalHours) * 100 : 0;
+            const bar = document.createElement('div');
+            bar.className = "space-y-1";
+            bar.innerHTML = `
+                <div class="flex justify-between text-xs font-semibold">
+                    <span class="text-zinc-700">${m}</span>
+                    <span class="text-zinc-500">${hrs}h (${Math.round(pct)}%)</span>
+                </div>
+                <div class="w-full bg-zinc-100 rounded-full h-2">
+                    <div class="bg-ethazi-brand h-2 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+                </div>
+            `;
+            container.appendChild(bar);
+        });
+    }
+
+    function renderExecutionStatusCard() {
+        const realTaskProgress = document.getElementById('realTaskProgress');
+        const realTaskProgressBar = document.getElementById('realTaskProgressBar');
+        const realTaskCounts = document.getElementById('realTaskCounts');
+        const hoursPlannedMetric = document.getElementById('hoursPlannedMetric');
+        const hoursRealMetric = document.getElementById('hoursRealMetric');
+        const historicalDeviationContainer = document.getElementById('historicalDeviationContainer');
+        const historicalDeviationValue = document.getElementById('historicalDeviationValue');
+
+        if (state.tasks.length === 0) {
+            realTaskProgress.textContent = "0%";
+            realTaskProgressBar.style.width = "0%";
+            realTaskCounts.textContent = "0 de 0 tareas completadas";
+            hoursPlannedMetric.textContent = "0h";
+            hoursRealMetric.textContent = "0h";
+            historicalDeviationValue.textContent = "0 horas";
+            historicalDeviationContainer.className = "p-3 rounded-xl flex items-center justify-between text-xs font-semibold bg-zinc-100 text-zinc-600";
+            return;
+        }
+
+        const totalTasks = state.tasks.length;
+        const completedTasks = state.tasks.filter(t => t.completed).length;
+        const progressPct = Math.round((completedTasks / totalTasks) * 100);
+
+        realTaskProgress.textContent = `${progressPct}%`;
+        realTaskProgressBar.style.width = `${progressPct}%`;
+        realTaskCounts.textContent = `${completedTasks} de ${totalTasks} tareas completadas`;
+
+        let totalEstimatedHours = 0;
+        let totalRealHours = 0;
+
+        state.tasks.forEach(t => {
+            totalEstimatedHours += parseFloat(t.duration || 0);
+            const realDuration = t.durationReal !== null ? parseFloat(t.durationReal) : parseFloat(t.duration || 0);
+            totalRealHours += realDuration;
+        });
+
+        hoursPlannedMetric.textContent = `${totalEstimatedHours}h`;
+        hoursRealMetric.textContent = `${totalRealHours}h`;
+
+        const deviation = totalRealHours - totalEstimatedHours;
+        if (deviation > 0) {
+            historicalDeviationValue.textContent = `+${deviation} horas`;
+            historicalDeviationContainer.className = "p-3 rounded-xl flex items-center justify-between text-xs font-bold bg-rose-50 text-rose-700 border border-rose-100";
+        } else if (deviation < 0) {
+            historicalDeviationValue.textContent = `${deviation} horas`;
+            historicalDeviationContainer.className = "p-3 rounded-xl flex items-center justify-between text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-100";
+        } else {
+            historicalDeviationValue.textContent = "0 horas";
+            historicalDeviationContainer.className = "p-3 rounded-xl flex items-center justify-between text-xs font-semibold bg-zinc-50 text-zinc-600 border border-zinc-200";
+        }
+    }
+
+    function renderTasks() {
+        const grid = document.getElementById('tasksGrid');
+        grid.innerHTML = '';
+
+        if (state.tasks.length === 0) {
+            grid.innerHTML = `
+                <div class="col-span-2 text-center py-12 bg-white rounded-2xl border border-zinc-200">
+                    <p class="text-zinc-400 text-sm">No hay tareas creadas todavía. Comienza añadiendo una.</p>
+                </div>
+            `;
+            return;
+        }
+
+        state.tasks.forEach(task => {
+            const card = document.createElement('div');
+            const borderClass = task.isMilestone 
+                ? 'border-amber-400 bg-amber-50/10' 
+                : (task.completed ? 'border-emerald-200 bg-emerald-50/5' : 'border-zinc-200 bg-white');
+            
+            card.className = `p-5 rounded-2xl border ${borderClass} shadow-sm flex flex-col justify-between gap-4 transition relative`;
+            
+            const isCritical = state.criticalPathIds && state.criticalPathIds.includes(task.id);
+            const criticalBadge = isCritical ? `
+                <span class="bg-rose-100 text-rose-800 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-0.5">
+                    ⚠️ Crítico
+                </span>
+            ` : '';
+
+            card.innerHTML = `
+                <div class="space-y-2">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center gap-1.5 min-w-0">
+                            <span class="shrink-0">${task.isMilestone ? '⭐' : '📋'}</span>
+                            <h4 class="font-bold text-zinc-900 leading-snug truncate" title="${task.title}">${task.title}</h4>
+                        </div>
+                        <div class="flex gap-1 shrink-0 ml-2">
+                            ${criticalBadge}
+                            ${task.isMilestone ? '<span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-full">Hito</span>' : ''}
+                        </div>
+                    </div>
+                    
+                    <p class="text-xs text-zinc-500 line-clamp-2">${task.description || 'Sin descripción.'}</p>
+                    
+                    <div class="grid grid-cols-2 gap-2 text-xs text-zinc-600 bg-zinc-50 p-2.5 rounded-xl border border-zinc-100">
+                        <div class="truncate"><strong class="text-zinc-400">Responsable:</strong> ${task.responsible || 'Sin asignar'}</div>
+                        <div class="truncate"><strong class="text-zinc-400">Previsto:</strong> ${task.startDate}</div>
+                        <div><strong class="text-zinc-400">Estimado:</strong> ${task.duration}h</div>
+                        <div><strong class="text-zinc-400">Real:</strong> ${task.durationReal !== null ? task.durationReal : task.duration}h</div>
+                    </div>
+
+                    ${task.successCriteria ? `
+                        <div class="text-xs text-zinc-600">
+                            <span class="font-bold text-ethazi-dark">Meta:</span> ${task.successCriteria}
+                        </div>
+                    ` : ''}
+                </div>
+
+                <div class="flex items-center justify-between border-t border-zinc-100 pt-3 mt-1">
+                    <label class="flex items-center gap-2 cursor-pointer select-none">
+                        <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTaskComplete('${task.id}')" class="w-4 h-4 text-ethazi-dark border-zinc-300 rounded focus:ring-ethazi-brand">
+                        <span class="text-xs font-semibold ${task.completed ? 'text-emerald-600 line-through' : 'text-zinc-600'}">Realizada</span>
+                    </label>
+                    
+                    <div class="flex gap-2">
+                        <button onclick="editTask('${task.id}')" class="p-1.5 hover:bg-zinc-100 rounded-lg text-zinc-500 hover:text-zinc-800 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                            </svg>
+                        </button>
+                        <button onclick="deleteTask('${task.id}')" class="p-1.5 hover:bg-zinc-100 rounded-lg text-zinc-500 hover:text-rose-600 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function openTaskModal() {
+        document.getElementById('editTaskId').value = '';
+        document.getElementById('modalTitle').textContent = 'Nueva Tarea / Hito';
+        document.getElementById('taskTitle').value = '';
+        document.getElementById('taskResponsible').value = '';
+        document.getElementById('taskIsMilestone').checked = false;
+        document.getElementById('taskDuration').value = '2';
+        document.getElementById('taskDurationReal').value = '';
+        document.getElementById('taskStartDate').value = new Date().toISOString().substring(0, 10);
+        document.getElementById('taskStartTime').value = '08:00';
+        document.getElementById('taskSuccessCriteria').value = '';
+        document.getElementById('taskDescription').value = '';
+        document.getElementById('taskNotes').value = '';
+        
+        renderDependenciesCheckboxes();
+        document.getElementById('taskModal').classList.remove('hidden');
+    }
+
+    function renderDependenciesCheckboxes(currentTaskId = null) {
+        const container = document.getElementById('taskDependenciesList');
+        container.innerHTML = '';
+        
+        const available = state.tasks.filter(t => !currentTaskId || t.id !== currentTaskId);
+        
+        if (available.length === 0) {
+            container.innerHTML = '<p class="text-xs text-zinc-400 italic py-1">No hay tareas predecesoras disponibles.</p>';
+            return;
+        }
+
+        available.forEach(task => {
+            const div = document.createElement('div');
+            div.className = "flex items-center gap-1.5 bg-white px-2 py-1 rounded-md border border-zinc-200 text-xs text-zinc-700";
+            div.innerHTML = `
+                <input type="checkbox" value="${task.id}" id="dep-${task.id}" class="rounded text-ethazi-brand focus:ring-ethazi-brand">
+                <label class="truncate max-w-[150px]" for="dep-${task.id}" title="${task.title}">${task.title}</label>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    function closeTaskModal() {
+        document.getElementById('taskModal').classList.add('hidden');
+    }
+
+    function saveTask() {
+        const id = document.getElementById('editTaskId').value;
+        const title = document.getElementById('taskTitle').value.trim();
+        const responsible = document.getElementById('taskResponsible').value;
+        const isMilestone = document.getElementById('taskIsMilestone').checked;
+        const duration = parseFloat(document.getElementById('taskDuration').value) || 0;
+        const durationRealInput = document.getElementById('taskDurationReal').value;
+        const durationReal = durationRealInput !== "" ? parseFloat(durationRealInput) : null;
+        const startDate = document.getElementById('taskStartDate').value;
+        const startTime = document.getElementById('taskStartTime').value;
+        const successCriteria = document.getElementById('taskSuccessCriteria').value.trim();
+        const description = document.getElementById('taskDescription').value.trim();
+        const notes = document.getElementById('taskNotes').value.trim();
+
+        if (!title || !responsible || !startDate || !startTime || !successCriteria) {
+            showToast("Por favor, rellena todos los campos obligatorios (*).", "warning");
+            return;
+        }
+
+        const depCheckboxes = document.querySelectorAll('#taskDependenciesList input[type="checkbox"]:checked');
+        const dependencies = Array.from(depCheckboxes).map(cb => cb.value);
+
+        if (id) {
+            const task = state.tasks.find(t => t.id === id);
+            if (task) {
+                let changes = [];
+                if (task.duration !== duration) changes.push(`Duración: ${task.duration}h ➜ ${duration}h`);
+                if (task.startDate !== startDate) changes.push(`Fecha: ${task.startDate} ➜ ${startDate}`);
+                if (task.responsible !== responsible) changes.push(`Responsable: ${task.responsible} ➜ ${responsible}`);
+                if (task.durationReal !== durationReal) changes.push(`Duración Real: ${task.durationReal !== null ? task.durationReal : 'S/A'}h ➜ ${durationReal !== null ? durationReal : 'S/A'}h`);
+                
+                task.title = title;
+                task.responsible = responsible;
+                task.isMilestone = isMilestone;
+                task.duration = duration;
+                task.durationReal = durationReal;
+                task.startDate = startDate;
+                task.startTime = startTime;
+                task.successCriteria = successCriteria;
+                task.description = description;
+                task.notes = notes;
+                task.dependencies = dependencies;
+
+                if (changes.length > 0) {
+                    addLog("PLANIFICACIÓN", `Modificada tarea [${title}]: ${changes.join(', ')}`);
+                }
+                showToast("Tarea actualizada correctamente", "success");
+            }
+        } else {
+            const newTask = {
+                id: 'task_' + Date.now(),
+                title,
+                responsible,
+                isMilestone,
+                duration,
+                durationReal,
+                startDate,
+                startTime,
+                successCriteria,
+                description,
+                notes,
+                dependencies,
+                completed: false
+            };
+            state.tasks.push(newTask);
+            addLog("PLANIFICACIÓN", `Creada nueva tarea o hito: [${title}] asignado a ${responsible}`);
+            showToast("Nueva tarea añadida", "success");
+        }
+
+        closeTaskModal();
+        saveToLocalStorage();
+        renderAll();
+
+        // Disparar aviso visual mediante toast si existen colisiones temporales inmediatas
+        const conflicts = checkDependencyConflicts();
+        if (conflicts.length > 0) {
+            showToast("La tarea se guardó, pero tiene inconsistencias de dependencias. Revisa el panel de advertencia superior.", "warning");
+        }
+    }
+
+    function editTask(id) {
+        const task = state.tasks.find(t => t.id === id);
+        if (!task) return;
+
+        document.getElementById('editTaskId').value = task.id;
+        document.getElementById('modalTitle').textContent = 'Editar Tarea / Hito';
+        document.getElementById('taskTitle').value = task.title;
+        document.getElementById('taskResponsible').value = task.responsible;
+        document.getElementById('taskIsMilestone').checked = task.isMilestone || false;
+        document.getElementById('taskDuration').value = task.duration;
+        document.getElementById('taskDurationReal').value = task.durationReal !== null ? task.durationReal : '';
+        document.getElementById('taskStartDate').value = task.startDate;
+        document.getElementById('taskStartTime').value = task.startTime;
+        document.getElementById('taskSuccessCriteria').value = task.successCriteria;
+        document.getElementById('taskDescription').value = task.description || '';
+        document.getElementById('taskNotes').value = task.notes || '';
+
+        renderDependenciesCheckboxes(task.id);
+        
+        if (task.dependencies) {
+            task.dependencies.forEach(depId => {
+                const cb = document.getElementById(`dep-${depId}`);
+                if (cb) cb.checked = true;
+            });
+        }
+
+        document.getElementById('taskModal').classList.remove('hidden');
+    }
+
+    function deleteTask(id) {
+        const task = state.tasks.find(t => t.id === id);
+        if (!task) return;
+
+        state.tasks.forEach(t => {
+            if (t.dependencies) {
+                t.dependencies = t.dependencies.filter(dId => dId !== id);
+            }
+        });
+
+        state.tasks = state.tasks.filter(t => t.id !== id);
+        addLog("PLANIFICACIÓN", `Eliminada la tarea: [${task.title}]`);
+        saveToLocalStorage();
+        renderAll();
+        showToast("Tarea eliminada", "info");
+    }
+
+    function toggleTaskComplete(id) {
+        const task = state.tasks.find(t => t.id === id);
+        if (!task) return;
+        task.completed = !task.completed;
+        const msg = task.completed ? "Marcada como completada" : "Desmarcada de completada";
+        addLog("SEGUIMIENTO", `Tarea [${task.title}]: ${msg}`);
+        saveToLocalStorage();
+        renderAll();
+        showToast(`Tarea '${task.title}' actualizada.`, "success");
+    }
+
+    /**
+     * Comprueba inconsistencias cronológicas de precedencias.
+     * Si la fecha/hora de inicio programada para una tarea dependiente es anterior
+     * a la finalización teórica de su predecesora, se registra un conflicto.
+     */
+    function checkDependencyConflicts() {
+        const conflicts = [];
+        state.tasks.forEach(task => {
+            if (!task.dependencies || task.dependencies.length === 0) return;
+
+            const taskStart = new Date(task.startDate + 'T' + task.startTime);
+            if (isNaN(taskStart.getTime())) return;
+
+            task.dependencies.forEach(depId => {
+                const predecessor = state.tasks.find(t => t.id === depId);
+                if (!predecessor) return;
+
+                const predStart = new Date(predecessor.startDate + 'T' + predecessor.startTime);
+                if (isNaN(predStart.getTime())) return;
+
+                // Finalización teórica = Inicio de la predecesora + duración estimada en horas
+                const predDuration = parseFloat(predecessor.duration) || 0;
+                const predEnd = new Date(predStart.getTime() + (predDuration * 3600 * 1000));
+
+                if (taskStart < predEnd) {
+                    conflicts.push({
+                        task,
+                        predecessor,
+                        taskStart,
+                        predecessorEnd: predEnd
+                    });
+                }
+            });
+        });
+        return conflicts;
+    }
+
+    /**
+     * Dibuja y gestiona el panel dinámico superior de alertas sobre conflictos de secuenciación.
+     */
+    function renderDependencyWarnings() {
+        const container = document.getElementById('dependencyWarningsContainer');
+        if (!container) return;
+
+        const conflicts = checkDependencyConflicts();
+        if (conflicts.length === 0) {
+            container.classList.add('hidden');
+            container.innerHTML = '';
+            return;
+        }
+
+        container.classList.remove('hidden');
+        
+        let warningsHtml = '';
+        conflicts.forEach(c => {
+            const formatOpts = { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' };
+            const startStr = c.taskStart.toLocaleString('es-ES', formatOpts);
+            const endStr = c.predecessorEnd.toLocaleString('es-ES', formatOpts);
+            
+            warningsHtml += `
+                <div class="bg-white/90 border border-amber-300 rounded-xl p-3 flex flex-col gap-1 text-[11px] text-amber-900 shadow-sm transition-all">
+                    <div class="flex items-center gap-1.5 font-bold">
+                        <span class="text-amber-600">⚠️ Solapamiento de Tiempos</span>
+                        <span class="text-amber-300">&middot;</span>
+                        <span class="truncate max-w-[180px] text-zinc-900 font-semibold" title="${c.task.title}">${c.task.title}</span>
+                    </div>
+                    <p class="leading-relaxed">
+                        Inicia el <strong class="text-rose-600 font-bold">${startStr}</strong>, pero su predecesora <strong class="font-bold text-zinc-800">"${c.predecessor.title}"</strong> finaliza teóricamente el <strong class="text-emerald-700 font-bold">${endStr}</strong>.
+                    </p>
+                    <span class="text-[10px] text-amber-700 italic font-medium mt-1">Acción requerida: Retrasa la fecha/hora de inicio de la tarea dependiente o reduce las horas estimadas de la tarea predecesora.</span>
+                </div>
+            `;
+        });
+
+        container.innerHTML = `
+            <div class="flex items-start gap-3">
+                <div class="p-2 bg-amber-500/10 text-amber-600 rounded-xl border border-amber-200 shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 animate-pulse">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-xs font-black uppercase tracking-wider text-amber-800">Inconsistencia Crítica en Cronograma</h3>
+                    <p class="text-[11px] text-amber-700 mt-0.5">Se han programado tareas dependientes para iniciar antes de la finalización teórica de su precedente. El sistema permite guardar la planificación, pero insiste en que se corrijan las siguientes colisiones:</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-3">
+                ${warningsHtml}
+            </div>
+        `;
+    }
+
+    // Algoritmo CPM aumentado con Nodos Virtuales de Inicio y Fin
+    function calculateCPM() {
+        if (state.tasks.length === 0) {
+            return { duration: 0, criticalPathIds: [], tasksMap: {}, augmentedTasks: [] };
+        }
+
+        let augmented = JSON.parse(JSON.stringify(state.tasks));
+
+        augmented.forEach(t => {
+            if (!t.dependencies || t.dependencies.length === 0) {
+                t.dependencies = ['start'];
+            }
+        });
+
+        const startNode = {
+            id: 'start',
+            title: 'Inicio',
+            responsible: 'Sistema',
+            isMilestone: true,
+            duration: 0,
+            durationReal: 0,
+            dependencies: [],
+            completed: true
+        };
+
+        const referencedAsPredecessor = new Set();
+        augmented.forEach(t => {
+            t.dependencies.forEach(depId => referencedAsPredecessor.add(depId));
+        });
+
+        const leaves = augmented.filter(t => !referencedAsPredecessor.has(t.id));
+        
+        const endNode = {
+            id: 'end',
+            title: 'Fin',
+            responsible: 'Sistema',
+            isMilestone: true,
+            duration: 0,
+            durationReal: 0,
+            dependencies: leaves.map(l => l.id),
+            completed: false
+        };
+
+        augmented.unshift(startNode);
+        augmented.push(endNode);
+
+        const tasksMap = {};
+        augmented.forEach(t => {
+            tasksMap[t.id] = {
+                id: t.id,
+                title: t.title,
+                responsible: t.responsible,
+                isMilestone: t.isMilestone,
+                completed: t.completed,
+                duration: parseFloat(t.durationReal !== null ? t.durationReal : t.duration) || 0,
+                dependencies: t.dependencies,
+                es: 0,
+                ef: 0,
+                ls: 0,
+                lf: 0,
+                slack: 0
+            };
+        });
+
+        // Forward Pass (ES & EF)
+        let changed = true;
+        let iter = 0;
+        const maxIter = augmented.length * 2;
+        while (changed && iter < maxIter) {
+            changed = false;
+            augmented.forEach(t => {
+                const node = tasksMap[t.id];
+                let maxDepEF = 0;
+                node.dependencies.forEach(depId => {
+                    if (tasksMap[depId]) {
+                        maxDepEF = Math.max(maxDepEF, tasksMap[depId].ef);
+                    }
+                });
+
+                if (node.es !== maxDepEF || node.ef === 0) {
+                    node.es = maxDepEF;
+                    node.ef = node.es + node.duration;
+                    changed = true;
+                }
+            });
+            iter++;
+        }
+
+        const projectDuration = tasksMap['end'].ef;
+
+        // Backward Pass (LF & LS)
+        augmented.forEach(t => {
+            tasksMap[t.id].lf = projectDuration;
+            tasksMap[t.id].ls = projectDuration - tasksMap[t.id].duration;
+        });
+
+        iter = 0;
+        changed = true;
+        while (changed && iter < maxIter) {
+            changed = false;
+            augmented.forEach(t => {
+                const node = tasksMap[t.id];
+                const successors = augmented.filter(s => s.dependencies.includes(t.id));
+                if (successors.length > 0) {
+                    let minSuccLS = Infinity;
+                    successors.forEach(s => {
+                        minSuccLS = Math.min(minSuccLS, tasksMap[s.id].ls);
+                    });
+
+                    if (node.lf !== minSuccLS) {
+                        node.lf = minSuccLS;
+                        node.ls = node.lf - node.duration;
+                        changed = true;
+                    }
+                }
+            });
+            iter++;
+        }
+
+        const criticalPathIds = [];
+        augmented.forEach(t => {
+            const node = tasksMap[t.id];
+            node.slack = Math.max(0, node.lf - node.ef);
+            if (Math.abs(node.slack) < 0.01) {
+                criticalPathIds.push(t.id);
+            }
+        });
+
+        return {
+            projectDuration,
+            criticalPathIds,
+            tasksMap,
+            augmentedTasks: augmented
+        };
+    }
+
+    function recalculateCPM() {
+        const targetInput = document.getElementById('targetDuration');
+        state.targetDuration = parseFloat(targetInput.value) || 40;
+        saveToLocalStorage();
+
+        const cpmResults = calculateCPM();
+        state.criticalPathIds = cpmResults.criticalPathIds;
+
+        const pertProjDuration = document.getElementById('pertProjDuration');
+        const pertSlack = document.getElementById('pertSlack');
+
+        if (pertProjDuration) pertProjDuration.textContent = `${cpmResults.projectDuration} horas`;
+        
+        const slackLeft = state.targetDuration - cpmResults.projectDuration;
+        if (pertSlack) {
+            pertSlack.textContent = `${slackLeft} horas`;
+            if (slackLeft < 0) {
+                pertSlack.className = "text-lg font-extrabold text-rose-600";
+            } else {
+                pertSlack.className = "text-lg font-extrabold text-emerald-600";
+            }
+        }
+
+        const optimizerAlerts = document.getElementById('optimizerAlerts');
+        if (optimizerAlerts) {
+            if (slackLeft < 0) {
+                optimizerAlerts.classList.remove('hidden');
+                optimizerAlerts.className = "p-3.5 rounded-xl border border-rose-200 bg-rose-50 text-rose-800 flex flex-col gap-1.5 text-xs shadow-sm";
+                optimizerAlerts.innerHTML = `
+                    <div class="flex items-center gap-1.5 font-bold text-sm">
+                        <span>🚨 ¡Duración excedida!</span>
+                    </div>
+                    <p>La duración calculada actual (${cpmResults.projectDuration}h) supera la duración objetivo (${state.targetDuration}h) por <strong>${Math.abs(slackLeft)} horas</strong>.</p>
+                    <div class="mt-1 space-y-1">
+                        <p class="font-bold">Consejos de optimización:</p>
+                        <ul class="list-disc list-inside space-y-0.5 text-[11px] text-rose-700">
+                            <li>Revisa la duración de las tareas críticas (marcadas en rosa/rojo).</li>
+                            <li>Ejecuta tareas críticas en paralelo reasignando alumnos libres.</li>
+                            <li>Divide los hitos más largos en microtareas de ejecución rápida.</li>
+                        </ul>
+                    </div>
+                `;
+            } else {
+                optimizerAlerts.classList.remove('hidden');
+                optimizerAlerts.className = "p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/50 text-emerald-800 flex flex-col gap-1 text-xs shadow-sm";
+                optimizerAlerts.innerHTML = `
+                    <div class="flex items-center gap-1.5 font-bold">
+                        <span>✅ Planificación Correcta</span>
+                    </div>
+                    <p>El proyecto entra en los tiempos del reto. Tienes una holgura positiva de <strong>${slackLeft} horas</strong> para resolver imprevistos.</p>
+                `;
+            }
+        }
+    }
+
+    // Renderizado Estructural del Grafo PERT aplicando las coordenadas guardadas en el Layout Manager
+    function renderPERTGraph() {
+        const nodesContainer = document.getElementById('pertNodesContainer');
+        const svgCanvas = document.getElementById('pertSvgCanvas');
+        const transContainer = document.getElementById('pertTransformContainer');
+        if (!nodesContainer || !svgCanvas || !transContainer) return;
+
+        nodesContainer.innerHTML = '';
+        
+        if (state.tasks.length === 0) {
+            nodesContainer.innerHTML = `<div class="text-zinc-500 m-auto text-sm">Añade tareas para visualizar el grafo PERT con sus nodos de Inicio y Fin.</div>`;
+            svgCanvas.innerHTML = '';
+            return;
+        }
+
+        const cpm = calculateCPM();
+        const augmented = cpm.augmentedTasks;
+
+        const layers = {};
+        function computeLayer(id) {
+            if (layers[id] !== undefined) return layers[id];
+            const t = augmented.find(x => x.id === id);
+            if (!t || !t.dependencies || t.dependencies.length === 0) {
+                layers[id] = 0;
+                return 0;
+            }
+            let maxDep = -1;
+            t.dependencies.forEach(depId => {
+                maxDep = Math.max(maxDep, computeLayer(depId));
+            });
+            layers[id] = maxDep + 1;
+            return layers[id];
+        }
+
+        augmented.forEach(t => computeLayer(t.id));
+
+        const leafLayers = augmented.filter(t => t.id !== 'end').map(t => layers[t.id]);
+        const maxLeafLayer = leafLayers.length > 0 ? Math.max(...leafLayers) : 0;
+        layers['end'] = maxLeafLayer + 1;
+
+        const columns = {};
+        augmented.forEach(t => {
+            const l = layers[t.id];
+            if (!columns[l]) columns[l] = [];
+            columns[l].push(t);
+        });
+
+        const maxCols = Math.max(...Object.keys(columns).map(Number)) + 1;
+        const colWidth = 260;
+        const totalWidth = Math.max(1400, maxCols * colWidth + 200);
+        
+        transContainer.style.width = `${totalWidth}px`;
+        svgCanvas.style.width = `${totalWidth}px`;
+        nodesContainer.style.width = `${totalWidth}px`;
+
+        for (let col = 0; col < maxCols; col++) {
+            const colDiv = document.createElement('div');
+            colDiv.className = "flex flex-col justify-center gap-8 shrink-0 w-56 pointer-events-auto";
+            
+            if (columns[col]) {
+                columns[col].forEach(task => {
+                    const nodeData = cpm.tasksMap[task.id];
+                    const isCritical = cpm.criticalPathIds.includes(task.id);
+                    const isCompleted = task.completed;
+                    const isVirtual = task.id === 'start' || task.id === 'end';
+                    
+                    let borderClass = 'border-zinc-700';
+                    let bgClass = 'bg-zinc-800 text-zinc-100';
+                    
+                    if (isVirtual) {
+                        borderClass = 'border-dashed border-sky-500';
+                        bgClass = 'bg-sky-950/40 text-sky-200';
+                    } else if (isCritical) {
+                        borderClass = 'border-rose-500 ring-2 ring-rose-500/20';
+                        bgClass = 'bg-rose-950/40 text-rose-100';
+                    } else if (isCompleted) {
+                        borderClass = 'border-emerald-500';
+                        bgClass = 'bg-emerald-950/20 text-emerald-100';
+                    }
+
+                    const node = document.createElement('div');
+                    node.id = `pert-node-${task.id}`;
+                    node.className = `p-3.5 rounded-2xl border ${borderClass} ${bgClass} shadow-md text-xs transition-none select-none cursor-grab active:cursor-grabbing pointer-events-auto`;
+                    
+                    // Aplicar el transform de arrastre guardado en el Layout Manager (si existe)
+                    if (state.layout && state.layout[task.id]) {
+                        const offset = state.layout[task.id];
+                        node.style.transform = `translate(${offset.x}px, ${offset.y}px)`;
+                    }
+
+                    if (isVirtual) {
+                        node.innerHTML = `
+                            <div class="font-extrabold text-center text-sm tracking-wider uppercase">${task.title}</div>
+                            <div class="text-[10px] text-zinc-400 mt-1 text-center">Nodo de Control</div>
+                            <div class="grid grid-cols-2 gap-1 mt-2.5 p-1.5 bg-zinc-950/60 rounded text-[9px] font-mono text-zinc-300">
+                                <div>ES: ${nodeData.es}h</div>
+                                <div>EF: ${nodeData.ef}h</div>
+                            </div>
+                        `;
+                    } else {
+                        node.innerHTML = `
+                            <div class="font-bold truncate" title="${task.title}">${task.title}</div>
+                            <div class="text-[10px] text-zinc-400 mt-1 flex justify-between">
+                                <span class="truncate pr-1">Resp: <strong>${task.responsible || 'N/A'}</strong></span>
+                                <span>${task.isMilestone ? '⭐' : '📋'}</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-1 mt-2 p-1.5 bg-zinc-950/60 rounded text-[9px] font-mono text-zinc-300">
+                                <div>ES: ${nodeData.es}h</div>
+                                <div>EF: ${nodeData.ef}h</div>
+                                <div>LS: ${nodeData.ls}h</div>
+                                <div>LF: ${nodeData.lf}h</div>
+                            </div>
+                            <div class="flex justify-between items-center mt-2 text-[9px] text-zinc-400">
+                                <span>Duración: ${nodeData.duration}h</span>
+                                <span class="${nodeData.slack === 0 ? 'text-rose-400 font-bold' : 'text-emerald-400'}">Holgura: ${nodeData.slack}h</span>
+                            </div>
+                        `;
+                    }
+                    colDiv.appendChild(node);
+                });
+            }
+            nodesContainer.appendChild(colDiv);
+        }
+
+        // Programar trazado inicial de conexiones
+        setTimeout(drawConnections, 150);
+    }
+
+    // Redibujado selectivo y dinámico de conexiones SVG leyendo las cajas reales del DOM (getBoundingClientRect)
+    function drawConnections() {
+        const svgCanvas = document.getElementById('pertSvgCanvas');
+        const transContainer = document.getElementById('pertTransformContainer');
+        if (!svgCanvas || !transContainer) return;
+
+        svgCanvas.innerHTML = '';
+        const containerRect = transContainer.getBoundingClientRect();
+        
+        const cpm = calculateCPM();
+        const augmented = cpm.augmentedTasks;
+
+        augmented.forEach(task => {
+            if (!task.dependencies) return;
+            
+            const targetNode = document.getElementById(`pert-node-${task.id}`);
+            if (!targetNode) return;
+            const targetRect = targetNode.getBoundingClientRect();
+
+            // Entrada izquierda del nodo destino (X2, Y2)
+            const x2 = (targetRect.left - containerRect.left) / pertZoom;
+            const y2 = ((targetRect.top - containerRect.top) / pertZoom) + ((targetRect.height / 2) / pertZoom);
+
+            task.dependencies.forEach(depId => {
+                const sourceNode = document.getElementById(`pert-node-${depId}`);
+                if (!sourceNode) return;
+                const sourceRect = sourceNode.getBoundingClientRect();
+
+                // Salida derecha del nodo origen (X1, Y1)
+                const x1 = (sourceRect.right - containerRect.left) / pertZoom;
+                const y1 = ((sourceRect.top - containerRect.top) / pertZoom) + ((sourceRect.height / 2) / pertZoom);
+
+                const isLinkCritical = cpm.criticalPathIds.includes(task.id) && cpm.criticalPathIds.includes(depId);
+                const strokeColor = isLinkCritical ? '#f43f5e' : '#52525b';
+                const strokeWidth = isLinkCritical ? '2.5' : '1.25';
+
+                // Curva Bézier cúbica de unión
+                const controlOffset = Math.abs(x2 - x1) * 0.45;
+                const d = `M ${x1} ${y1} C ${x1 + controlOffset} ${y1}, ${x2 - controlOffset} ${y2}, ${x2} ${y2}`;
+
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', d);
+                path.setAttribute('stroke', strokeColor);
+                path.setAttribute('stroke-width', strokeWidth);
+                path.setAttribute('fill', 'none');
+
+                // Flecha indicadora de dirección en la punta destino
+                const marker = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                marker.setAttribute('d', `M ${x2-8} ${y2-4.5} L ${x2} ${y2} L ${x2-8} ${y2+4.5} Z`);
+                marker.setAttribute('fill', strokeColor);
+
+                svgCanvas.appendChild(path);
+                svgCanvas.appendChild(marker);
+            });
+        });
+    }
+
+    // Alertas en Gantt basado en Fecha de Control
+    function updateGanttAlerts(controlDateStr) {
+        const alertContainer = document.getElementById('ganttStatusAlert');
+        if (!alertContainer) return;
+
+        if (state.tasks.length === 0) {
+            alertContainer.className = "hidden";
+            return;
+        }
+
+        alertContainer.classList.remove('hidden');
+        const controlDate = new Date(controlDateStr);
+
+        let overdueCriticalCount = 0;
+        let overdueNormalCount = 0;
+        let totalDeviationHours = 0;
+        let cpmResults = calculateCPM();
+
+        state.tasks.forEach(t => {
+            const plannedStart = new Date(t.startDate);
+            const isCritical = cpmResults.criticalPathIds.includes(t.id);
+
+            if (plannedStart <= controlDate && !t.completed) {
+                if (isCritical) {
+                    overdueCriticalCount++;
+                } else {
+                    overdueNormalCount++;
+                }
+            }
+
+            if (t.durationReal !== null) {
+                totalDeviationHours += (t.durationReal - t.duration);
+            }
+        });
+
+        let status = "green"; 
+        let title = "Progreso del Reto Óptimo";
+        let message = "Todas las tareas programadas hasta la fecha de control están al día. No hay desvíos en el camino crítico.";
+        let adviceList = [
+            "Mantener el ritmo actual de trabajo y las reuniones diarias (Daily Standups).",
+            "Documentar el éxito de los hitos alcanzados para la entrega final.",
+            "Aprovechar la holgura existente para perfeccionar detalles del prototipo o la memoria."
+        ];
+
+        if (overdueCriticalCount > 0 || totalDeviationHours > (state.targetDuration * 0.15)) {
+            status = "red";
+            title = "¡Retraso Crítico en la Ejecución!";
+            message = `Se han detectado ${overdueCriticalCount} tareas críticas vencidas e incompletas y una desviación acumulada de ${totalDeviationHours} horas. El Hito final está comprometido.`;
+            adviceList = [
+                "**URGENTE:** Reasignar inmediatamente alumnos que lideren tareas con holgura a las tareas críticas atascadas.",
+                "Rediseñar el alcance de los entregables no esenciales que no afecten al núcleo del reto.",
+                "Establecer una reunión de emergencia con el profesor-tutor para ajustar la duración objetivo o buscar asistencia técnica."
+            ];
+        } else if (overdueNormalCount > 0 || totalDeviationHours > 0) {
+            status = "yellow";
+            title = "Desviación Moderada detectada";
+            message = `Hay ${overdueNormalCount} tareas normales retrasadas respecto a la fecha de control y un desvío total de +${totalDeviationHours} horas de trabajo real.`;
+            adviceList = [
+                "Reajustar el calendario de las tareas secundarias aprovechando su holgura calculada en el PERT.",
+                "Balancear la carga de trabajo: el gráfico de horas muestra asimetrías que pueden solucionarse hoy.",
+                "Registrar el imprevisto en el diario de evolución explicando la causa técnica y la corrección tomada."
+            ];
+        }
+
+        let statusBg, textTitle, textMsg, borderCol, icon;
+        if (status === "red") {
+            statusBg = "bg-rose-50 border-rose-200";
+            textTitle = "text-rose-800";
+            textMsg = "text-rose-700";
+            borderCol = "border-rose-100";
+            icon = `
+                <div class="p-3 bg-rose-500 text-white rounded-2xl animate-pulse">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+            `;
+        } else if (status === "yellow") {
+            statusBg = "bg-amber-50 border-amber-200";
+            textTitle = "text-amber-800";
+            textMsg = "text-amber-700";
+            borderCol = "border-amber-100";
+            icon = `
+                <div class="p-3 bg-amber-500 text-white rounded-2xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+            `;
+        } else {
+            statusBg = "bg-emerald-50 border-emerald-200";
+            textTitle = "text-emerald-800";
+            textMsg = "text-emerald-700";
+            borderCol = "border-emerald-100";
+            icon = `
+                <div class="p-3 bg-emerald-500 text-white rounded-2xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+            `;
+        }
+
+        alertContainer.className = `p-5 rounded-2xl border ${statusBg} flex flex-col md:flex-row md:items-start gap-4 transition-all duration-300`;
+        alertContainer.innerHTML = `
+            <div class="flex items-start gap-3 flex-1">
+                ${icon}
+                <div class="space-y-1">
+                    <h4 class="font-extrabold text-sm sm:text-base ${textTitle}">${title}</h4>
+                    <p class="text-xs ${textMsg}">${message}</p>
+                </div>
+            </div>
+            <div class="md:w-96 p-3.5 bg-white/70 rounded-xl border ${borderCol} text-xs space-y-2 self-stretch flex flex-col justify-center">
+                <span class="font-bold text-zinc-700 block uppercase tracking-wider text-[10px]">Plan de Acción ETHAZI:</span>
+                <ul class="list-disc list-inside space-y-1 text-zinc-600 font-medium">
+                    ${adviceList.map(adv => `<li>${adv}</li>`).join('')}
+                </ul>
+            </div>
+        `;
+    }
+
+    function renderGanttChart() {
+        const container = document.getElementById('ganttTimelineContainer');
+        if (!container) return;
+        container.innerHTML = '';
+
+        if (state.tasks.length === 0) {
+            container.innerHTML = `<div class="text-zinc-400 italic text-sm text-center py-6">Añade tareas para ver el Gantt.</div>`;
+            return;
+        }
+
+        const simDateInput = document.getElementById('simulationDate');
+        const controlDateStr = simDateInput ? simDateInput.value : new Date().toISOString().substring(0, 10);
+
+        updateGanttAlerts(controlDateStr);
+
+        let minDate = null;
+        let maxDate = null;
+
+        state.tasks.forEach(t => {
+            const date = new Date(t.startDate);
+            if (!minDate || date < minDate) minDate = date;
+            if (!maxDate || date > maxDate) maxDate = date;
+        });
+
+        if (!minDate) {
+            minDate = new Date();
+            maxDate = new Date();
+        }
+
+        const timelineStart = new Date(minDate);
+        timelineStart.setDate(timelineStart.getDate() - 1);
+        
+        const timelineEnd = new Date(maxDate);
+        timelineEnd.setDate(timelineEnd.getDate() + 5); 
+
+        const totalDays = Math.ceil((timelineEnd - timelineStart) / (1000 * 60 * 60 * 24));
+        const dayWidth = 60; 
+
+        let headerHtml = `<div class="flex border-b border-zinc-200 pb-2 mb-4" style="width: ${totalDays * dayWidth + 240}px">`;
+        headerHtml += `<div class="w-60 font-bold text-xs text-zinc-500 shrink-0">TAREAS / HITOS</div>`;
+        
+        for (let i = 0; i < totalDays; i++) {
+            const current = new Date(timelineStart);
+            current.setDate(current.getDate() + i);
+            const dayStr = current.getDate();
+            const monthStr = current.toLocaleDateString('es-ES', { month: 'short' });
+            
+            const isControlDay = current.toISOString().substring(0, 10) === controlDateStr;
+            const bgClass = isControlDay ? 'bg-ethazi-light/40 rounded-t-lg border-x border-ethazi-brand/30' : '';
+
+            headerHtml += `
+                <div class="text-center shrink-0 flex flex-col justify-end py-1 ${bgClass}" style="width: ${dayWidth}px">
+                    <span class="text-[9px] font-semibold text-zinc-400 uppercase">${monthStr}</span>
+                    <span class="text-xs font-bold ${isControlDay ? 'text-ethazi-navy font-black underline' : 'text-zinc-700'}">${dayStr}</span>
+                </div>
+            `;
+        }
+        headerHtml += `</div>`;
+
+        let rowsHtml = `<div class="space-y-4 relative" style="width: ${totalDays * dayWidth + 240}px">`;
+
+        const daysToControl = (new Date(controlDateStr) - timelineStart) / (1000 * 60 * 60 * 24);
+        const controlLineLeft = 240 + (daysToControl * dayWidth);
+        
+        if (daysToControl >= 0 && daysToControl <= totalDays) {
+            rowsHtml += `
+                <div class="absolute border-l-2 border-dashed border-ethazi-dark h-full z-10 pointer-events-none" 
+                     style="left: ${controlLineLeft}px; top: 0;"
+                     title="Línea de fecha de seguimiento/control">
+                     <span class="bg-ethazi-dark text-white text-[8px] font-extrabold px-1 rounded absolute -top-4 -left-10 w-20 text-center">SEGUIMIENTO</span>
+                </div>
+            `;
+        }
+
+        state.tasks.forEach(task => {
+            const taskStart = new Date(task.startDate);
+            const daysPlanned = Math.max(0.4, (parseFloat(task.duration) || 2) / 8); 
+            const daysReal = Math.max(0.4, (parseFloat(task.durationReal !== null ? task.durationReal : task.duration) || 2) / 8);
+
+            const offsetDaysPlanned = (taskStart - timelineStart) / (1000 * 60 * 60 * 24);
+            const leftPlanned = offsetDaysPlanned * dayWidth;
+            const widthPlanned = daysPlanned * dayWidth;
+
+            const leftReal = offsetDaysPlanned * dayWidth;
+            const widthReal = daysReal * dayWidth;
+
+            const isDelayed = task.durationReal !== null && task.durationReal > task.duration;
+            const milestoneBorder = task.isMilestone ? 'border border-dashed border-amber-500' : '';
+
+            const widthBaseExecution = isDelayed ? widthPlanned : widthReal;
+            const executionRadius = isDelayed ? 'rounded-l' : 'rounded';
+
+            rowsHtml += `
+                <div class="flex items-center">
+                    <div class="w-60 pr-4 shrink-0">
+                        <div class="font-semibold text-xs text-zinc-800 truncate">${task.title}</div>
+                        <div class="text-[10px] text-zinc-400 truncate">${task.responsible} &middot; Plan: ${task.duration}h / Real: ${task.durationReal !== null ? task.durationReal : task.duration}h</div>
+                    </div>
+
+                    <div class="relative flex-1 h-9 bg-zinc-100/40 rounded-lg overflow-hidden border border-zinc-100" style="height: 36px;">
+                        
+                        <!-- Barra Línea Base Planificada (Arriba, delgada gris) -->
+                        <div class="absolute bg-zinc-300 rounded" 
+                             style="left: ${leftPlanned}px; width: ${widthPlanned}px; top: 4px; height: 6px;"
+                             title="Planificado Originalmente: ${task.duration}h"></div>
+                        
+                        <!-- Barra Progreso Real / Realizado a Tiempo (Abajo, verde o azul) -->
+                        <div class="absolute ${task.completed ? 'bg-emerald-500' : 'bg-ethazi-brand'} ${executionRadius} flex items-center justify-end px-1 overflow-hidden ${milestoneBorder}" 
+                             style="left: ${leftReal}px; width: ${widthBaseExecution}px; bottom: 4px; height: 16px;"
+                             title="Realizado a tiempo: ${isDelayed ? task.duration : (task.durationReal || task.duration)}h">
+                        </div>
+                        
+                        <!-- Segmento Desviación / Retraso real (SÓLIDO ROJO) -->
+                        ${isDelayed ? `
+                            <div class="absolute bg-rose-500 rounded-r flex items-center justify-center border-l border-white/20" 
+                                 style="left: ${leftReal + widthPlanned}px; width: ${widthReal - widthPlanned}px; bottom: 4px; height: 16px;"
+                                 title="Desviación de retraso: +${task.durationReal - task.duration}h real de retraso">
+                                 <span class="text-[8px] text-white font-extrabold px-1">!</span>
+                            </div>
+                        ` : ''}
+
+                    </div>
+                </div>
+            `;
+        });
+
+        rowsHtml += `</div>`;
+        container.innerHTML = headerHtml + rowsHtml;
+    }
+
+    function renderLogs() {
+        const body = document.getElementById('auditLogsBody');
+        if (!body) return;
+        body.innerHTML = '';
+
+        if (state.logs.length === 0) {
+            body.innerHTML = `
+                <tr>
+                    <td colspan="3" class="px-6 py-8 text-center text-zinc-400 italic">No se han registrado cambios aún. El log se poblará automáticamente.</td>
+                </tr>
+            `;
+            return;
+        }
+
+        const reversedLogs = [...state.logs].reverse();
+
+        reversedLogs.forEach(log => {
+            let badgeClass = "bg-zinc-100 text-zinc-800";
+            if (log.category === "PLANIFICACIÓN") badgeClass = "bg-sky-100 text-sky-800";
+            if (log.category === "EQUIPO") badgeClass = "bg-purple-100 text-purple-800";
+            if (log.category === "SEGUIMIENTO") badgeClass = "bg-emerald-100 text-emerald-800";
+
+            const tr = document.createElement('tr');
+            tr.className = "hover:bg-zinc-50/50 transition";
+            tr.innerHTML = `
+                <td class="px-6 py-3 whitespace-nowrap text-xs text-zinc-500 font-mono">${log.timestamp}</td>
+                <td class="px-6 py-3 whitespace-nowrap">
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${badgeClass}">${log.category}</span>
+                </td>
+                <td class="px-6 py-3 text-xs text-zinc-700 font-medium">${log.message}</td>
+            `;
+            body.appendChild(tr);
+        });
+    }
+
+    function addLog(category, message) {
+        const newLog = {
+            timestamp: new Date().toLocaleString('es-ES'),
+            category,
+            message
+        };
+        state.logs.push(newLog);
+        saveToLocalStorage();
+    }
+
+    function loadDemoData(silent = false) {
+        state = {
+            members: ["Aner Lekue", "Maite Zugasti", "Jon Ander", "Elene Garmendia"],
+            targetDuration: 45,
+            layout: {}, // Inicializar Layout Manager vacío para demo
+            tasks: [
+                {
+                    id: "task_1",
+                    title: "Búsqueda de Información y Análisis",
+                    responsible: "Aner Lekue",
+                    isMilestone: false,
+                    duration: 6,
+                    durationReal: 8,
+                    startDate: new Date().toISOString().substring(0, 10),
+                    startTime: "08:30",
+                    successCriteria: "Mapa de empatía y estado del arte completados en Drive.",
+                    description: "Investigación previa de competidores y normativa técnica vigente para el desarrollo del reto de robótica colaborativa.",
+                    notes: "Tardamos 2 horas más de lo previsto porque la base de datos de patentes estuvo caída.",
+                    dependencies: [],
+                    completed: true
+                },
+                {
+                    id: "task_2",
+                    title: "Diseño 3D de Componentes Mecánicos",
+                    responsible: "Maite Zugasti",
+                    isMilestone: false,
+                    duration: 12,
+                    durationReal: 12,
+                    startDate: new Date(Date.now() + 86400000).toISOString().substring(0, 10),
+                    startTime: "09:00",
+                    successCriteria: "Planos CAD exportados en formato STEP.",
+                    description: "Modelado tridimensional del chasis móvil y los soportes de los sensores utilizando SolidWorks.",
+                    notes: "Diseño validado por el tutor técnico en la revisión intermedia.",
+                    dependencies: ["task_1"],
+                    completed: true
+                },
+                {
+                    id: "task_3",
+                    title: "Esquema Eléctrico y PCB preliminar",
+                    responsible: "Jon Ander",
+                    isMilestone: false,
+                    duration: 10,
+                    durationReal: 14,
+                    startDate: new Date(Date.now() + 86400000).toISOString().substring(0, 10),
+                    startTime: "09:00",
+                    successCriteria: "Esquema finalizado en Altium sin errores de DRC.",
+                    description: "Diseño del circuito electrónico de control de motores, alimentación regulada y filtrado de señales de sensores.",
+                    notes: "Se modificó la disposición de los integrados para mejorar la disipación térmica, requiriendo 4h extra.",
+                    dependencies: ["task_1"],
+                    completed: true
+                },
+                {
+                    id: "task_4",
+                    title: "Montaje Mecánico Hito 1",
+                    responsible: "Elene Garmendia",
+                    isMilestone: true,
+                    duration: 4,
+                    durationReal: 4,
+                    startDate: new Date(Date.now() + 172800000).toISOString().substring(0, 10),
+                    startTime: "12:00",
+                    successCriteria: "Estructura unida y motores acoplados mecánicamente.",
+                    description: "Ensamblaje del chasis de aluminio, ruedas, reductoras y servomotores.",
+                    notes: "Hito alcanzado a tiempo sin desviaciones en el montaje físico.",
+                    dependencies: ["task_2"],
+                    completed: false
+                },
+                {
+                    id: "task_5",
+                    title: "Pruebas de Integración y Firmware",
+                    responsible: "Jon Ander",
+                    isMilestone: false,
+                    duration: 12,
+                    durationReal: null,
+                    startDate: new Date(Date.now() + 259200000).toISOString().substring(0, 10),
+                    startTime: "08:30",
+                    successCriteria: "Código cargado y telemetría recibida por consola.",
+                    description: "Desarrollo del firmware de control del microcontrolador y testeo del puente en H.",
+                    notes: "",
+                    dependencies: ["task_3", "task_4"],
+                    completed: false
+                }
+            ],
+            logs: [
+                { timestamp: new Date().toLocaleString('es-ES'), category: "EQUIPO", message: "Inicializado equipo ETHAZI de 4 miembros" },
+                { timestamp: new Date().toLocaleString('es-ES'), category: "PLANIFICACIÓN", message: "Añadida tarea inicial de Búsqueda de Información" },
+                { timestamp: new Date().toLocaleString('es-ES'), category: "PLANIFICACIÓN", message: "Modificada tarea [Esquema Eléctrico]: Duración: 10h ➜ 14h debido a rediseño térmico" },
+                { timestamp: new Date().toLocaleString('es-ES'), category: "SEGUIMIENTO", message: "Tarea [Búsqueda de Información y Análisis]: Marcada como completada" }
+            ]
+        };
+
+        saveToLocalStorage();
+        renderAll();
+        if (!silent) showToast("Datos de demostración cargados exitosamente.", "info");
+    }
+
+    function switchTab(tabId) {
+        const tabs = ['wbs', 'gantt', 'pert', 'audit'];
+        tabs.forEach(t => {
+            const btn = document.getElementById(`tab-${t}`);
+            const view = document.getElementById(`view-${t}`);
+            
+            if (btn) {
+                btn.className = "flex-1 min-w-[100px] py-2 px-3 text-xs sm:text-sm font-semibold rounded-lg hover:bg-zinc-100 text-zinc-600 transition flex items-center justify-center gap-1.5";
+            }
+            if (view) {
+                view.classList.add('hidden');
+            }
+        });
+
+        const activeBtn = document.getElementById(`tab-${tabId}`);
+        const activeView = document.getElementById(`view-${tabId}`);
+        
+        if (activeBtn) {
+            activeBtn.className = "flex-1 min-w-[100px] py-2 px-3 text-xs sm:text-sm font-semibold rounded-lg bg-ethazi-light text-ethazi-navy transition flex items-center justify-center gap-1.5";
+        }
+        if (activeView) {
+            activeView.classList.remove('hidden');
+        }
+
+        if (tabId === 'pert') {
+            resetPertPan();
+            renderPERTGraph();
+        } else if (tabId === 'gantt') {
+            renderGanttChart();
+        } else if (tabId === 'audit') {
+            renderLogs();
+        }
+    }
+
+    function renderAll() {
+        renderMembers();
+        renderTasks();
+        recalculateCPM();
+        renderExecutionStatusCard();
+        renderDependencyWarnings(); // Ejecutar el análisis cronológico en tiempo real
+        
+        if (!document.getElementById('view-pert').classList.contains('hidden')) renderPERTGraph();
+        if (!document.getElementById('view-gantt').classList.contains('hidden')) renderGanttChart();
+        if (!document.getElementById('view-audit').classList.contains('hidden')) renderLogs();
+    }
+
+    function exportProject() {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", `ETHAZI_Planificacion_Grupo.json`);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+        showToast("JSON exportado para el portafolios del reto.", "success");
+    }
+
+    function importProject(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const parsed = JSON.parse(e.target.result);
+                if (parsed.tasks && parsed.members) {
+                    state = parsed;
+                    if (!state.layout) state.layout = {};
+                    document.getElementById('targetDuration').value = state.targetDuration || 40;
+                    saveToLocalStorage();
+                    renderAll();
+                    showToast("Planificación importada correctamente", "success");
+                } else {
+                    showToast("Formato de JSON incorrecto.", "error");
+                }
+            } catch (err) {
+                showToast("Error al procesar el archivo.", "error");
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    function showToast(message, type = "info") {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = "p-4 rounded-xl shadow-lg border text-xs font-semibold flex items-center gap-2 max-w-sm pointer-events-auto transition-all duration-300 transform translate-x-12 opacity-0";
+        
+        let icon = '';
+        if (type === "success") {
+            toast.className += " bg-emerald-50 border-emerald-200 text-emerald-800";
+            icon = '✅';
+        } else if (type === "warning") {
+            toast.className += " bg-amber-50 border-amber-200 text-amber-800 animate-bounce";
+            icon = '⚠️';
+        } else if (type === "error") {
+            toast.className += " bg-rose-50 border-rose-200 text-rose-800";
+            icon = '❌';
+        } else {
+            toast.className += " bg-sky-50 border-sky-200 text-sky-800";
+            icon = 'ℹ️';
+        }
+
+        toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
+        container.appendChild(toast);
+
+        setTimeout(() => {
+            toast.classList.remove('translate-x-12', 'opacity-0');
+        }, 10);
+
+        setTimeout(() => {
+            toast.classList.add('translate-x-12', 'opacity-0');
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
+        }, 4000);
+    }
+</script>
+</body>
+</html>
